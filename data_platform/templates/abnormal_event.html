@@ -1,0 +1,97 @@
+{% load static %}
+{% include "head.html" %}
+<body>
+<!-- 侧边栏 -->
+    <div class="ui  inverted left vertical sidebar menu">
+        <div class="item">
+            <h2 class="ui blue header">dataplatform</h2>
+        </div>
+        <div class="item">
+            <a class="header" href="{% url 'data_platform:index' %}">主页</a>
+        </div>
+                
+        <div class="item">
+            <div class="header">异常事件</div>
+            <br>
+            <div class="menu">
+                <a href="{% url 'data_platform:engine_air_stop_record_list_all' %}" class="item">发动机空中停车记录</a>
+                <br>
+                <a href="{% url 'data_platform:failure_report_record_list_all' %}" class="item">故障报告记录</a>
+                <br>
+                <a href="{% url 'data_platform:abnormal_flight_report_list_all' %}" class="item">航班不正常报告</a>
+                <br>
+                <a href="{% url 'data_platform:use_difficult_report_list_all' %}" class="item">使用困难报告</a>
+            </div>
+        </div>                        
+    </div>
+    <br><br><br><br>
+    <!-- 侧边栏图形 -->
+    <i class = "big sidebar icon" id="sidebar"></i>
+    
+    <!-- 面包屑导航 -->
+    <div class="ui breadcrumb">
+        <a class="section" href="{% url 'data_platform:index' %}">主页</a>
+        <i class="right angle icon divider"></i>
+        <a class="section" href="{% url 'data_platform:similarity_plane' %}">相似机型数据</a>
+        <i class="right angle icon divider"></i>
+        <div class="active section">异常事件</div>
+    </div>
+    <br>
+    <br>
+    <div class="ui container">
+            <h1 style="text-align:center">异常事件</h1>
+    </div>
+    <br> 
+    <br> 
+    <br> 
+    <br> 
+    <!-- 利用card展示不同的表格信息 -->
+    <div class="ui five centered cards">
+        <div class="blue card">
+            <a class="content" href="{% url 'data_platform:engine_air_stop_record_list_all' %}" style="display: block; text-align: center;">
+                <i class='blue massive download icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:engine_air_stop_record_list_all' %}" class="header" style="display: block; text-align: center;">
+                    发动机空中停车记录
+                </a>
+            </div>
+            
+        </div>
+        <div class="blue card">
+            <a class="content" href="{% url 'data_platform:failure_report_record_list_all' %}" style="display: block; text-align: center;">
+                <i class='blue massive edit outline icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:failure_report_record_list_all' %}" class="header" style="display: block; text-align: center;">故障报告记录</a>
+            </div>
+           
+        </div>
+        <div class="blue card">
+            <a class="content" href="{% url 'data_platform:abnormal_flight_report_list_all' %}" style="display: block; text-align: center;">
+                 <i class='blue massive file alternate outline icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:abnormal_flight_report_list_all' %}" class="header" style="display: block; text-align: center;">航班不正常报告</a>
+            </div>
+            
+        </div>
+        <div class="blue card">
+            <a class="content" href="{% url 'data_platform:use_difficult_report_list_all' %}" style="display: block; text-align: center;">
+                    <i class='blue massive table icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:use_difficult_report_list_all' %}" class="header" style="display: block; text-align: center;">使用困难报告</a>
+            </div>
+            
+            </div>
+    </div>
+<!--Semantic ui sidebar display-->
+<script>
+    $('#sidebar').click(function(){
+
+        $('.ui.sidebar').sidebar('toggle');
+    });
+</script>
+</body>
+{% include "foot.html" %}

@@ -1,0 +1,164 @@
+{% load static %}
+{% include "head.html" %}
+<body>
+<!-- Sidebar Menu -->
+<div class="ui invisible inverted left vertical sidebar menu">
+  <a class="item">
+      <img class="ui avatar image" src="{% static 'images/icons/imac.svg' %}">
+    &#8195;&#8194;预留
+  </a>
+  <a class="item">
+      <img class="ui avatar image" src="{% static 'images/icons/clipboard.svg' %}">
+    &#8195;&#8194;预留
+  </a>
+  <div class="item">
+    <img class="ui avatar image" src="{% static 'images/icons/goal.svg' %}">
+      &#8195;&#8194;预留
+    <div class="menu">
+        <a class="item">&#8195;&#8195;&#8195;&#8195;&#8195;预留</a>
+        <a class="item">&#8195;&#8195;&#8195;&#8195;&#8195;预留</a>
+    </div>
+  </div>
+</div>
+<!-- Page Contents -->
+<div class="ui main container">
+  <div class="column">
+    <div class="ui grid">
+        <div class = "row">
+          <div class = "one wide column">
+            <div class="pusher">
+                <div class="ui container">
+                <div id = "toggle" class="ui small basic icon buttons">
+                <div class="ui button"><i class = "sidebar icon"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ui basic buttons">
+            <div class="ui button"><a class="section" href="{% url 'data_platform:index' %}">主页</a></div>
+            <div class="ui button">相似机型</div>
+            <div class="ui button">事故事件数据库</div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="ui divider"></div>
+    <div class="ui basic segment pushable">
+          <table id="accident" class="ui striped table">
+              <thead>
+              <tr>
+                <th>事件名称</th>
+                <th>发生时间</th>
+                <th>事故机型</th>
+                <th>详细情况</th>
+              </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>事件名称</th>
+                  <th>发生时间</th>
+                  <th>事故机型</th>
+                  <th>详细情况</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                {% for accident in accident_list %}
+                  <tr>
+                    <td>{{accident.title}}</td>
+                    <td>{{accident.date}}</td>
+                    <td>{{accident.acmodel}}</td>
+                    <td>{{accident.content}}</td>
+                 </tr>
+               {% endfor %}
+              </tbody>
+          </table>
+          <p>
+            <button id="addRow" class = "ui button">添加行</button>
+            <button id="delRow" class = "ui button">删除选中的行</button>
+          </p>
+    </div>
+  </div>
+<!-- 脚本部分用来处理表格样式等内容, 整个datatables用两个部分来控制, table部分控制数据和交互, script部分控制展试, 分页和搜索等功能-->
+<!-- Js for datatables. -->
+<script type="text/javascript">
+    $(document).ready(function() {
+      var table = $('#accident').DataTable({
+          "language": {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+          }
+     });
+
+    //分列查找内容
+    // Setup - add a text input to each footer cell
+    $('#accident tfoot th').each( function () {
+        var title = $('#accident thead th').eq( $(this).index() ).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    });
+
+    // Apply the search
+    table.columns().eq( 0 ).each( function ( colIdx ) {
+        $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+            table.column( colIdx ).search( this.value ).draw();
+        });
+    });
+    //将tfoot挪到表格上方
+    $('#accident tfoot tr').appendTo('#accident thead');
+
+    //高亮鼠标停留的行和列
+    var lastIdx = null;
+    $('#accident tbody')
+        .on( 'mouseover', 'td', function () {
+            var colIdx = table.cell(this).index().column;
+            if ( colIdx !== lastIdx ) {
+                $( table.cells().nodes() ).removeClass( 'highlight' );
+                $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
+            }
+        } )
+        .on( 'mouseleave',  function () {
+            $( table.cells().nodes() ).removeClass( 'highlight' );
+        } );
+
+
+    } );
+</script>
+
+ <!-- css for datatables. -->
+<style type="text/css">
+    .highlight {
+        background-color: skyblue!important;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      $('#accident').DataTable(
+      );
+      });
+
+    $('#toggle').click(function(){
+        $('.ui.sidebar').sidebar('toggle');
+    });
+</script>
+</body>
+{% include "foot.html" %}

@@ -1,0 +1,185 @@
+{% load static %}
+{% include "head.html" %}
+    <!-- Sidebar Menu -->
+    <div class="ui invisible inverted left vertical sidebar menu">
+      <div class="item">
+      	<h4 class="ui blue header">三大型号数据表下载</h4>
+      </div>
+      <div class="item">
+      <div class="ui inverted transparent icon input">
+      	<i class="search icon"></i>
+      	<input type="text" placeholder="搜索...">
+      </div>
+      </div>
+      <div class="item">
+      	<div class="header">分类</div>
+      	<div class="menu">
+          {% for ca in categories %}
+      		<a class="item" href="{% url 'data_platform:get_file_list' ca.slug %}">{{ca.name}}</a>
+          {% endfor %}
+      	</div>
+      </div>
+    </div>
+    <!-- Page Contents -->
+    <div class = "ui grid">
+        <div class = "row">
+            <p></p>
+        </div>
+        <div class = "row">
+            <p></p>
+        </div>
+        <div class = "sixteen wide column">
+            <div class="ui teal inverted vertical masthead center aligned segment">
+                <div class = "ui grid">
+                    <div class = "two column row">
+                        <div class = "column">
+                            <div class="pusher">
+                                <div class="ui small basic icon buttons" id="sidebar">
+                                  <div class="ui button"><i class = "sidebar icon"></i>其他数据</div>
+                                </div>
+                            </div>
+                        </div>
+<!--
+                        <div class = "column">
+                            <button class="circular ui icon button" onclick="show_acmodel()">
+                              <i class="icon angle right"></i>
+                            </button>
+                        </div>
+-->
+                    </div>
+                </div>
+
+            <div class="ui text container">
+              <h1 class="ui inverted header">
+                {{category.name}}
+              </h1>
+              <h2>  {{category.content | safe}}</h2>
+              <!--下载链接尚未配置, 暂时隐藏-->
+              <!--<div class="ui yellow huge  button">下载 <i class="right arrow icon"></i></div>-->
+            </div>
+            </div>
+        </div>
+        <div class = 'column centered row'>
+            <div class = 'thirteen wide column'>
+            <table id="accident" class="ui striped table">
+                  <thead>
+                  <tr>
+                    <th>发布日期</th>
+                    <th>说明</th>
+                    <th>下载</th>
+                  </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>发布日期</th>
+                      <th>说明</th>
+                      <th>下载</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    {% for file in files %}
+                      <tr>
+                        <td>{{file.date}}</td>
+                        <td>{{file.content | safe}}</td>
+                        <td><a class="section" href="{{file.file.url}}">下载</a></td>
+                     </tr>
+                   {% endfor %}
+                  </tbody>
+              </table>
+              <p>
+                <button id="addRow" class = "ui button">添加行</button>
+                <button id="delRow" class = "ui button">删除选中的行</button>
+              </p>
+            </div>
+        </div>
+    </div>
+
+<!-- Always Put Js and Css before the closing tag </body> to maintain consistency. Don't put before the tag <body>, or it won't make any use.-->
+ <!-- Js for datatables. -->
+<script type="text/javascript">
+    $(document).ready(function() {
+      var table = $('#accident').DataTable({
+          "language": {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+          }
+     });
+
+    //分列查找内容
+    // Setup - add a text input to each footer cell
+    $('#accident tfoot th').each( function () {
+        var title = $('#accident thead th').eq( $(this).index() ).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    });
+
+    // Apply the search
+    table.columns().eq( 0 ).each( function ( colIdx ) {
+        $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+            table.column( colIdx ).search( this.value ).draw();
+        });
+    });
+    //将tfoot挪到表格上方
+    $('#accident tfoot tr').appendTo('#accident thead');
+
+    //高亮鼠标停留的行和列
+    var lastIdx = null;
+    $('#accident tbody')
+        .on( 'mouseover', 'td', function () {
+            var colIdx = table.cell(this).index().column;
+            if ( colIdx !== lastIdx ) {
+                $( table.cells().nodes() ).removeClass( 'highlight' );
+                $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
+            }
+        } )
+        .on( 'mouseleave',  function () {
+            $( table.cells().nodes() ).removeClass( 'highlight' );
+        } );
+
+
+    } );
+</script>
+
+<!-- css for datatables. -->
+<style type="text/css">
+    .highlight {
+        background-color: skyblue!important;
+    }
+</style>
+
+<!--Semantic ui sidebar display-->
+<script>
+    $('#sidebar').click(function(){
+
+        $('.ui.sidebar').sidebar('toggle');
+    });
+</script>
+
+<style type = "text/css">
+       .masthead.segment {
+      min-height: 300px;
+      padding: 1em 0em;
+    }
+</style>
+
+</body>
+{% include "foot.html" %}

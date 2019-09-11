@@ -1,0 +1,57 @@
+{% load static %}
+
+{% include "head.html" %}
+<!-- 侧边栏 -->
+    <div class="ui inverted left vertical sidebar menu">
+        <div class="item">
+            <h2 class="ui blue header">dataplatform</h2>
+        </div>
+        <div class="item">
+            <a class="header" href="{% url 'data_platform:index' %}">主页</a>
+        </div>
+                
+        <div class="item">
+            <div class="header">C919故障问题</div>
+        </div>                        
+    </div>
+    <br><br><br><br>
+    <!-- 侧边栏图形 -->
+    <i class = "big sidebar icon" id="sidebar"></i>
+    
+    <!-- 面包屑导航 -->
+    <div class="ui breadcrumb">
+        <a class="section" href="{% url 'data_platform:index' %}">主页</a>
+        <i class="right angle icon divider"></i>
+        <i class="right angle icon divider"></i>
+        <div class="active section">型号飞机数据</div>
+    </div>
+    <br>
+    <br>
+    <div class="ui container">
+            <h1 style="text-align:center">型号飞机数据</h1>
+    </div>
+    <br> 
+    <br> 
+    <br> 
+    <br> 
+    <!-- 利用card展示不同的表格信息 -->
+    <div class="ui two centered cards">
+        <div class="blue card">
+            <a class="content" href="{% url 'data_platform:engine_air_stop_record_list_all' %}" style="display: block; text-align: center;">
+                <i class='blue massive  download icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:engine_air_stop_record_list_all' %}" class="header" style="display: block; text-align: center;">
+                    C919故障问题
+                </a>
+            </div>
+        </div>
+    </div>
+<!--Semantic ui sidebar display-->
+<script>
+    $('#sidebar').click(function(){
+
+        $('.ui.sidebar').sidebar('toggle');
+    });
+</script>
+{% include "foot.html" %}

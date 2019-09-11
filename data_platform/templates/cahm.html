@@ -1,0 +1,26 @@
+{% load static %}
+{% include "head.html" %}
+    <div class="ui main container">
+        <div class="ui center aligned grid">
+          <div class = "row">
+            <div class = "two wide column">
+              <h1>
+                CAHM</br>
+              </h1>
+              <div>
+                <p>C919飞机健康监控单机软件</p>
+                <a class="ui button blue" href="/media/cahm" target = "_blank">了解更多</a>
+              </div>
+            </div>
+            <div class="ten wide column">
+              <img src="{% static '20190710-002.jpg' %}" class="img-fluid" alt="Responsive image">
+            </div>
+          </div>
+          <div class = "row">
+            <div class = "twelve wide column">
+            <img src="{% static '1.png' %}" class="img-fluid" alt="Responsive image">
+            </div>
+          </div>
+        </div>
+    </div>
+{% include "foot.html" %}

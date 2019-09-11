@@ -1,0 +1,226 @@
+{% load static %}
+{% include "head.html" %}
+<body>
+    <!-- Sidebar Menu -->
+    <div class="ui  inverted left vertical sidebar menu">
+        <div class="item">
+            <h2 class="ui blue header">机型筛选</h2>
+        </div>
+        <div class="item">    
+          <a class="item" href="{% url 'data_platform:flight_data_list_all'}">全部</a>
+          {% for at in aircraft_types %}
+            <a class="item" href="{% url 'data_platform:flight_data_list' at %}">{{at}}</a>
+          {% endfor %}
+        </div>
+    </div>
+    <br><br><br><br>              
+    <!-- 侧边栏图形 -->
+    <i class = "big sidebar icon" id="sidebar"></i>
+    <!-- 面包屑导航 -->
+    <div class="ui breadcrumb">
+        <a class="section" style=color:black href="{% url 'data_platform:index' %}">主页</a>
+        <i class="right angle icon divider"></i>
+        <a class="section" style=color:black href="{% url 'data_platform:similarity_plane' %}">相似机型数据</a>
+        <i class="right angle icon divider"></i>
+        <a class="section" style=color:black href="{% url 'data_platform:operation_data' %}">运营数据</a>
+            <i class="right angle icon divider"></i>
+            <a class="active section" style=color:black>航班总数据</a>
+    </div>
+    <div class="ui divider"></div>
+        <div class="ui container">
+          <table id="accident" class="ui striped table" >
+              <thead>
+              <tr>
+                <th>基本型号</th>
+                <th>航班号</th>
+                <th>日期</th>
+                <th>性质</th>
+                <th>座舱布局</th>
+                <th>旅客人数</th>
+                <th>起飞机场</th>
+                <th>到达机场</th>
+                <th>计划离岗</th>
+                <th>实际离岗</th>
+                <th>航班起飞</th>
+                <th>航班到达</th>
+                <th>计划到港</th>
+                <th>实际到港</th>
+                <th>关舱时间</th>
+                <th>开舱时间</th>
+              </tr>
+              </thead>
+              <tbody>
+                {% for ls in flight_data_list %}
+                  <tr>
+                    <td>{{ls.acmodel}}</td>
+                    <td>{{ls.flight_number}}</td>
+                    <td>{{ls.date}}</td>
+                    <td>{{ls.character}}</td>
+                    <td>{{ls.cockpit_layout}}</td>
+                    <td>{{ls.passenger_amounts}}</td>
+                    <td>{{ls.airport_of_departure}}</td>
+                    <td>{{ls.airport_of_destination}}</td>
+                    <td>{{ls.scheduled_departure_hours}}</td>
+                    <td>{{ls.actual_departure_hours}}</td>
+                    <td>{{ls.flight_departure}}</td>
+                    <td>{{ls.flight_arrival}}</td>
+                    <td>{{ls.scheduled_arrival_hours}}</td>
+                    <td>{{ls.actual_arrival_hours}}</td>
+                    <td>{{ls.door_closing_hours}}</td>
+                    <td>{{ls.door_opening_hours}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+              <tr>
+                <th>基本型号</th>
+                <th>航班号</th>
+                <th>日期</th>
+                <th>性质</th>
+                <th>座舱布局</th>
+                <th>旅客人数</th>
+                <th>起飞机场</th>
+                <th>到达机场</th>
+                <th>计划离岗</th>
+                <th>实际离岗</th>
+                <th>航班起飞</th>
+                <th>航班到达</th>
+                <th>计划到港</th>
+                <th>实际到港</th>
+                <th>关舱时间</th>
+                <th>开舱时间</th>
+              </tr>
+              </tfoot>
+          </table>
+        </div>
+</body>
+{% include "foot.html" %}
+<!-- 脚本部分用来处理表格样式等内容, 整个datatables用两个部分来控制, table部分控制数据和交互, script部分控制展试, 分页和搜索等功能-->
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      var table = $('#accident').DataTable({
+          //添加copy、CSV、Excel、PDF、Print按钮
+          dom:"Bflrtip",
+          //dom控制控件顺序,l-length changing input control,f-filtering input,t-table,i-table information summary,p-pagination control,r-processing display element,B-buttons,R-ColReorder,S-select,默认lfrtip
+          buttons:[
+            'copy','excel','print'
+          ],
+          "language": {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            },
+          },
+     });
+    //分列查找内容
+    // Setup - add a text input to each footer cell
+    $('#accident tfoot th').each( function () {
+        var title = $('#accident thead th').eq( $(this).index() ).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    });
+    // Apply the search
+    table.columns().eq( 0 ).each( function ( colIdx ) {
+        $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+            table.column( colIdx ).search( this.value ).draw();
+        });
+    });
+    //将tfoot挪到表格上方
+    $('#accident tfoot tr').appendTo('#accident thead');
+    //高亮鼠标停留的行和列
+    //高亮鼠标停留的列
+    var lastIdx = null;
+    $('#accident tbody')
+        .on( 'mouseover', 'td', function () {
+            var colIdx = table.cell(this).index().column;
+            if ( colIdx !== lastIdx ) {
+                $( table.cells().nodes() ).removeClass( 'highlight' );
+                $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
+            }
+        } )
+        .on( 'mouseleave',  function () {
+            $( table.cells().nodes() ).removeClass( 'highlight' );
+        } );
+        
+    //高亮鼠标停留的行
+    $('#accident tbody')
+        .on( 'mouseover', 'tr', function () {
+            if ( !$(this).hasClass('highlight')) {
+                $(this).addClass( 'highlight' );
+            }
+        } )
+        .on( 'mouseleave', 'tr', function () {
+            if ( $(this).hasClass('highlight')) {
+                $(this).removeClass( 'highlight' );
+            }
+        })
+    
+//    修改设置搜索框、显示框等位置
+    $('#accident_length').addClass('lengthToLeft')
+    $('#accident_filter').addClass('filterToLeft')
+    $('#accident_paginate').addClass('paginateToLeft')
+        
+//  设置横向滚动条
+$("#accident").wrapAll("<div style='overflow-x:auto'>");
+        
+ });
+</script>
+
+<!-- css for datatables. -->
+<style type="text/css">
+/*    设置高亮style*/
+    .highlight {
+        background-color: skyblue!important;
+    }
+    
+/*    设置搜索框、显示框等位置*/
+    .lengthToLeft{
+        position:relative;
+        top:-35px;
+        left:0px;
+    }
+    .filterToLeft{
+        position:relative;
+        top:0px;
+        left:950px;
+    }
+    .buttonToLeft{
+        position:relative;
+        top:35px;
+        left:auto;
+    }
+    .paginateToLeft{
+        position:relative;
+        top:-25px;
+        left:750px;
+    }
+    
+/*   调整表头的宽度显示长度*/
+/*    th, td { white-space: nowrap;}*/
+</style>
+
+<!--Semantic ui sidebar display-->
+<script>
+        $('#sidebar').click(function(){
+    
+            $('.ui.sidebar').sidebar('toggle');
+        });
+</script>

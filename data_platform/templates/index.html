@@ -1,0 +1,54 @@
+﻿{% load static %}
+{% include "head.html" %}
+  <div class="ui main container">
+    <h1>特性工程大数据平台</h1>
+    <div class="ui text container">
+      <p>特性工程大数据平台提供特性工程各专业在型号研制全寿命周期中的数据基础.</p>
+      <p>现在是: {{ text.nowtime | date }} </p>
+      <p>欢迎...</p>
+    </div>
+    <br>
+    <br>
+    <div class="container">
+      <div class='ui two centered cards'>  
+        <div class="ui card">
+            <div class="content">
+              <div class="header" style=color:deepskyblue >特性大数据平台更新了</div>
+              <br>
+              <div class="ui test container">
+                <div class="ui ordered list">
+                  <div class="item">新上线了特性术语，可以在参考数据>术语定义中查看</div>
+                  <br/>
+                  <div class="item">一大波相似机型数据也已上线</div>
+                </div>
+                <br/>
+                <br/>
+                <div>详细更新信息请点击下方了解更多</div>
+              </div>
+            </div>
+            <div class="extra content">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <div class="ui blue button">
+              <a href="{% url 'data_platform:update_notes' %}" style=color:white>了解更多</a> 
+              </div>
+                <div class="right floated author">
+                  <img class="ui avatar image" src="{% static 'images/login/icon.png' %}"> SIA
+                </div>
+          </div>
+        </div>
+      </div>    
+    </div>
+  <p><strong class="Afghanistan flag"> </strong></p>
+</div>
+{% include "foot.html" %}
+<!--以下是只在本页面中适用的css和js等内容-->
+<style type="text/css">
+  .ui.text.container  {
+    text-align: center;
+    font-weight: normal;
+  }
+</style>

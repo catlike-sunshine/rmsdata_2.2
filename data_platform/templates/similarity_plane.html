@@ -1,0 +1,131 @@
+{% load static %}
+{% include "head.html" %}
+<body>
+    <!-- Sidebar Menu -->
+    <div class="ui  inverted left vertical sidebar menu">
+        <div class="item">
+            <h2 class="ui blue header">dataplatform</h2>
+        </div>
+                <div class="item">
+                  <a class="header" href="{% url 'data_platform:index' %}">主页</a>
+                </div>
+                <div class="item">
+                    <div class="header">相似机型数据</div>
+                    <div class="item">
+                        <a class="header" href="{% url 'data_platform:operation_data' %}">运营数据</a>
+                        <div class="menu">
+                            <a href="{% url 'data_platform:aircraft_info_list_all' %}" class="item">航空器信息</a>
+                            <a href="{% url 'data_platform:engine_using_record_list_all' %}" class="item">发动机使用记录</a>
+                            <a href="{% url 'data_platform:apu_using_record_list_all' %}" class="item">APU使用记录</a>
+                            <a href="{% url 'data_platform:aircraft_info_change_list_all' %}" class="item">航空器信息变化表</a>
+                            <a href="{% url 'data_platform:engine_info_change_list_all' %}" class="item">发动机信息变化表</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <a class="header" href="{% url 'data_platform:part_replacement' %}">部件拆换</a>
+                        <div class="menu">
+                            <a href="{% url 'data_platform:record_of_engine_replaced_list_all' %}" class="item">发动机拆换记录</a>
+                            <a href="{% url 'data_platform:record_of_part_replaced_list_all' %}" class="item">部件拆换记录</a>
+                            <a href="{% url 'data_platform:record_of_scheduled_maintenance_list_all' %}" class="item">计划维修记录</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <a class="header" href="{% url 'data_platform:abnormal_event' %}">异常事件</a>
+                            <div class="menu">
+                                <a href="{% url 'data_platform:engine_air_stop_record_list_all' %}" class="item">发动机空中停车记录</a>
+                                <a href="{% url 'data_platform:failure_report_record_list_all' %}" class="item">故障报告记录</a>
+                                <a href="{% url 'data_platform:abnormal_flight_report_list_all' %}" class="item">航班不正常报告</a>
+                                <a href="{% url 'data_platform:use_difficult_report_list_all' %}" class="item">使用困难报告</a>
+                            </div>
+                    </div>
+                    <div class="item">
+                            <a class="header" href="{% url 'data_platform:failure_mode_bank_list_all' %}">故障模式库</a>
+                        </div>
+                </div>              
+    </div>
+    <br><br><br><br>
+    <!-- 侧边栏图形 -->
+    <i class = "big sidebar icon" id="sidebar"></i>
+    <!-- 面包屑导航 -->
+    <div class="ui breadcrumb">
+            <a class="section" href="{% url 'data_platform:index' %}">主页</a>
+            <i class="right angle icon divider"></i>
+            <a class="active section" style=color:black>相似机型数据</a>
+    </div>
+    <br> 
+    <br> 
+    <div class="ui container">
+            <h1 style="text-align:center">波音与空客运行数据展示</h1>
+    </div>
+    <br> 
+    <br> 
+    <br> 
+    <br> 
+    <br> 
+    <br> 
+    <div class="ui six centered cards">
+        <div class="card">
+            <a class="content" href="{% url 'data_platform:operation_data' %}" style="display: block; text-align: center;">
+                <i class='massive plane icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:operation_data' %}" class="header" style="display: block; text-align: center;">运营数据</a>
+            </div>
+            <div class="description">
+                <a href="{% url 'data_platform:operation_data' %}" style='color:black'>
+                    <p>运营数据包括航空器信息、发动机使用记录、APU使用记录、航空器信息变化表和发动机信息变化表</p>
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <a class="content" href="{% url 'data_platform:part_replacement' %}" style="display: block; text-align: center;">
+                <i class=' massive warehouse  icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:part_replacement' %}" class="header" style="display: block; text-align: center;">部件拆换</a>
+            </div>
+            <div class="description">
+                <a href="{% url 'data_platform:part_replacement' %}" style='color:black'>
+                   <p>部件拆换包括发动机拆换记录、部件拆换记录和计划维修记录</p> 
+                   <p></p>
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <a class="content" href="{% url 'data_platform:abnormal_event' %}" style="display: block; text-align: center;">
+                <i class="massive exclamation triangle icon"></i>  
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:abnormal_event' %}" class="header" style="display: block; text-align: center;">异常事件</a>
+            </div>
+            <div class="description">
+                <a href="{% url 'data_platform:abnormal_event' %}" style='color:black'>
+                    <p>异常事件包括发动机空中停车记录、故障报告记录、航班不正常报告和使用困难报告</p>
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <a class="content" href="{% url 'data_platform:failure_mode_bank_list_all' %}" style="display: block; text-align: center;">
+                <i class="massive stethoscope icon"></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:failure_mode_bank_list_all' %}" class="header" style="display: block; text-align: center;">故障模式库</a>
+            </div>
+            <div class="description">
+                <a href="{% url 'data_platform:failure_mode_bank_list_all' %}" style='color:black'>
+                    <p>故障模式库包含故障模式库表</p>
+                    <p><br></p>
+                   
+                </a>
+            </div>
+        </div>
+    </div>
+    <!--Semantic ui sidebar display-->
+    <script>
+        $('#sidebar').click(function(){
+    
+            $('.ui.sidebar').sidebar('toggle');
+        });
+    </script>
+</body>
+{% include "foot.html" %}

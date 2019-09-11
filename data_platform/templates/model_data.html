@@ -1,0 +1,167 @@
+{% load static %}
+{% include "head.html" %}
+
+<body>
+    <!-- Sidebar Menu -->
+    <div class="ui invisible inverted left vertical sidebar menu">
+        <a class="item">
+            <img class="ui avatar image" src="{% static 'images/icons/imac.svg' %}">
+          &#8195;&#8194;监控面板
+        </a>
+        <a class="item">
+            <img class="ui avatar image" src="{% static 'images/icons/clipboard.svg' %}">
+          &#8195;&#8194;问题管理
+        </a>
+        <div class="item">
+            <img class="ui avatar image" src="{% static 'images/icons/goal.svg' %}">
+              &#8195;&#8194;我的任务
+            <div class="menu">
+                  <a class="item">&#8195;&#8195;&#8195;&#8195;&#8195;待处理的任务</a>
+                  <a class="item">&#8195;&#8195;&#8195;&#8195;&#8195;已处理的任务</a>
+            </div>
+        </div>
+    </div>
+    <!-- Page Contents -->  
+    <div class = "ui grid">
+        <div class = "row">
+            <p></p>        
+        </div>
+        <div class = "row">
+            <p></p>        
+        </div>
+        <div class = "sixteen wide column">
+            <div class="ui teal inverted vertical masthead center aligned segment">
+                <div class = "ui grid">
+                    <div class = "two column row">
+                        <div class = "column">
+                        <button class="circular ui icon button">
+                          <i class="icon angle right"></i>
+                        </button>
+                        </div>
+                    </div>
+                </div>
+            <div class="ui text container">
+              <h1 class="ui inverted header">
+                c919数据表
+              </h1>
+            </div>
+            </div>
+        </div>
+        <div class = 'column centered row'>
+            <div class = 'thirteen wide column'>
+            <table id="accident" class="ui striped table">
+                  <thead>
+                  <tr>
+                    <th>发布版本</th>
+                    <th>发布日期</th>
+                    <th>下载</th>
+                    <th>数据来源</th>
+                  </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>发布版本</th>
+                      <th>发布日期</th>
+                      <th>下载</th>
+                      <th>数据来源</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    {% for accident in accident_list %}
+                      <tr>
+                        <td>{{accident.title}}</td>
+                        <td>{{accident.date}}</td>
+                        <td>{{accident.acmodel}}</td>
+                        <td>{{accident.content}}</td>
+                     </tr>
+                   {% endfor %}
+                  </tbody>
+              </table>
+              <p>
+                <button id="addRow">添加行</button>
+                <button id="delRow">删除选中的行</button>
+              </p>
+            </div>
+        </div>
+    </div> 
+    
+<!-- Semantic ui style css. -->
+    <style type = "text/css">
+           .masthead.segment {
+          min-height: 300px;
+          padding: 1em 0em;
+        }
+    </style>
+    
+    <!-- Js for datatables. -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+      var table = $('#accident').DataTable({
+          "language": {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+          }
+     });
+        
+    //分列查找内容
+    // Setup - add a text input to each footer cell
+    $('#accident tfoot th').each( function () {
+        var title = $('#accident thead th').eq( $(this).index() ).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    });
+        
+    // Apply the search
+    table.columns().eq( 0 ).each( function ( colIdx ) {
+        $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+            table.column( colIdx ).search( this.value ).draw();
+        });
+    });
+    //将tfoot挪到表格上方
+    $('#accident tfoot tr').appendTo('#accident thead');
+
+    //高亮鼠标停留的行和列
+    var lastIdx = null;
+    $('#accident tbody')
+        .on( 'mouseover', 'td', function () {
+            var colIdx = table.cell(this).index().column;
+            if ( colIdx !== lastIdx ) {
+                $( table.cells().nodes() ).removeClass( 'highlight' );
+                $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
+            }
+        } )
+        .on( 'mouseleave',  function () {
+            $( table.cells().nodes() ).removeClass( 'highlight' );
+        } );
+        
+ 
+    } );
+    </script>
+
+    <!--设置高亮的style in  datatables-->
+    <style type="text/css">
+        .highlight {
+            background-color: skyblue!important;
+        }
+    </style>
+</body>
+{% include "foot.html" %}

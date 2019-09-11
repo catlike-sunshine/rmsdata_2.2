@@ -1,0 +1,109 @@
+{% load static %}
+{% include "head.html" %}
+<body>
+<!-- 侧边栏 -->
+    <div class="ui  inverted left vertical sidebar menu">
+        <div class="item">
+            <h2 class="ui blue header">dataplatform</h2>
+        </div>
+        <div class="item">
+            <a class="header" href="{% url 'data_platform:index' %}">主页</a>
+        </div>
+                
+        <div class="item">
+            <div class="header">运营数据</div>
+            <br>
+            <div class="menu">
+                <a href="{% url 'data_platform:aircraft_info_list_all' %}" class="item">航空器信息</a>
+                <br>
+                <a href="{% url 'data_platform:engine_using_record_list_all' %}" class="item">发动机使用记录</a>
+                <br>
+                <a href="{% url 'data_platform:apu_using_record_list_all' %}" class="item">APU使用记录</a>
+                <br>
+                <a href="{% url 'data_platform:aircraft_info_change_list_all' %}" class="item">航空器信息变化表</a>
+                <br>
+                <a href="{% url 'data_platform:engine_info_change_list_all' %}" class="item">发动机信息变化表</a>
+            </div>
+        </div>                        
+    </div>
+    <br><br><br><br>
+    <!-- 侧边栏图形 -->
+    <i class = "big sidebar icon" id="sidebar"></i>
+    
+    <!-- 面包屑导航 -->
+    <div class="ui breadcrumb">
+        <a class="section" href="{% url 'data_platform:index' %}">主页</a>
+        <i class="right angle icon divider"></i>
+        <a class="section" href="{% url 'data_platform:similarity_plane' %}">相似机型数据</a>
+        <i class="right angle icon divider"></i>
+        <div class="active section">运营数据</div>
+    </div>
+    <br>
+    <br>
+    <div class="ui container">
+            <h1 style="text-align:center">运营数据</h1>
+    </div>
+    <br> 
+    <br> 
+    <!-- 利用card展示不同的表格信息 -->
+    <div class="ui five centered cards">
+        <div class="blue card">
+            <a class="content" href="{% url 'data_platform:aircraft_info_list_all' %}" style="display: block; text-align: center;">
+                <i class='blue massive  download icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:aircraft_info_list_all' %}" class="header" style="display: block; text-align: center;">
+                    航空器信息
+                </a>
+            </div>
+           
+        </div>
+        <div class="blue card">
+            <a class="content" href="{% url 'data_platform:engine_using_record_list_all' %}" style="display: block; text-align: center;">
+                <i class='blue massive edit outline icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:engine_using_record_list_all' %}" class="header" style="display: block; text-align: center;">发动机使用记录</a>
+            </div>
+            
+        </div>
+        <div class="blue card">
+            <a class="content" href="{% url 'data_platform:apu_using_record_list_all' %}" style="display: block; text-align: center;">
+                 <i class='blue massive file alternate outline icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:apu_using_record_list_all' %}" class="header" style="display: block; text-align: center;">APU使用记录</a>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="ui five centered cards">
+        <div class="blue card">
+            <a class="content" href="{% url 'data_platform:aircraft_info_change_list_all' %}" style="display: block; text-align: center;">
+                <i class='bule massive table icon'></i>   
+            </a>
+            <div class="content">
+                <a href="{% url 'data_platform:aircraft_info_change_list_all' %}" class="header" style="display: block; text-align: center;">航空器信息变化表</a>
+            </div>
+            
+        </div>
+        <div class="blue card">
+                <a class="content" href="{% url 'data_platform:engine_info_change_list_all' %}" style="display: block; text-align: center;">
+                    <i class='blue massive table icon'></i>   
+                </a>
+            <div class="content">
+                <a href="{% url 'data_platform:engine_info_change_list_all' %}" class="header" style="display: block; text-align: center;">发动机信息变化表</a>
+            </div>
+            
+        </div>
+    </div>
+<!--Semantic ui sidebar display-->
+<script>
+    $('#sidebar').click(function(){
+
+        $('.ui.sidebar').sidebar('toggle');
+    });
+</script>
+</body>
+{% include "foot.html" %}

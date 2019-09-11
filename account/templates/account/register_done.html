@@ -1,0 +1,15 @@
+{% include "head.html" %} 
+ 
+
+<div class="ui main container">
+    <h1 class="ui teal image header">
+        <div class="content">Welcome {{ new_user.first_name }}!</div>
+    </h1>
+    <div class="ui text container">
+        <p>Your account has been successfully created. Now you can <a href="{% url 'account:login' %}">log in</a>.</p>
+    </div>
+</div>
+<div class="ui text container">
+    <p>Your account has been successfully created. Now you can
+    <button class = "ui blue button" onclick="location.href='{% url 'account:login' %}'" type = "button">log in</button></p>
+</div>
