@@ -8,17 +8,11 @@ from django.views.generic.detail import DetailView
 #import markdown
 import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-from data_platform.models import accident
 from term.models import term
 from term.models import acronym
-from data_platform.models import data_source
-from data_platform.models import data_address
 from type_data.models import failure_mode_bank
 from dlfile.models import file, file_category
-
 from data_platform.models import acmodel
-
 from type_data.models import *
 
 #from django_datatables_view.base_datatable_view import BaseDatatableView
@@ -33,11 +27,6 @@ class index_view(ListView):
 		now = datetime.datetime.now()
 		text={'hello':'Hello world!','name':'J','nowtime':now}
 		return(text)
-
-class get_accident_list(LoginRequiredMixin,ListView):
-	model = accident
-	template_name = "accident_list.html"
-	context_object_name = "accident_list"
     
 class get_term_list(LoginRequiredMixin,View):
 	model = term
@@ -66,18 +55,6 @@ class get_model_data(ListView):
         now = datetime.datetime.now()
         text={'hello':'Hello world!','name':'J','nowtime':now}
         return(text)
-#    all_models_dict = {
-#         "template_name": "download.html",
-#        "context" : {"data_source" : data_source.objects.all(),
-#                     "data_address": data_address.objects.all(),
-#                    }
-#    }
-#    context_object_name =  'download'
-#
-#    def get_queryset(self):
-#        now = datetime.datetime.now()
-#        text={'hello':'Hello world!','name':'J','nowtime':now}
-#        return(text)
 
 #获取下载文件列表及相关的介绍信息
 class get_file_list(LoginRequiredMixin,View):

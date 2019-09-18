@@ -574,3 +574,37 @@ class work_package_information(models.Model):
 		ordering = ('achievement_hours',)
 		verbose_name = '工作包信息'
 		verbose_name_plural = verbose_name
+        
+#事故事件
+class accident(models.Model):
+    id = models.AutoField(primary_key = True)
+    aircraft = models.ForeignKey(aircraft, related_name='accident_aircraft', 
+										 on_delete= models.CASCADE)
+    title = models.TextField("事故名称")
+    flight_number = models.TextField("航班号")
+    manufacture_country = models.TextField("运营商所属国家")
+    operator = models.TextField("运营商")
+    occurrence_time = models.DateField("事故时间", max_length=8)
+    flight_type = models.TextField("飞行性质")
+    flight_phase = models.TextField("阶段")
+    death_toll = models.DecimalField("死亡人数", max_digits = 6, decimal_places = 2)
+    occurrence_region = models.TextField("事故地区")
+    occurrence_place = models.TextField("事故地点")
+    departure = models.TextField("出发地")
+    destination = models.TextField("目的地")
+    accident_factor = models.TextField("事故因素分类")
+    accident_level = models.TextField("事故等级")
+    description = models.TextField("事故描述")
+    reason = models.TextField("原因分析")
+    measurement = models.TextField("采取的措施")
+    design_suggestion = models.TextField("设计建议")
+    safety_suggestion = models.TextField("安全性建议")
+    
+    def __str__(self):
+        return (self.title)
+    
+
+    class Meta:
+        ordering = ('title','death_toll')
+        verbose_name = '事故事件'
+        verbose_name_plural = verbose_name

@@ -8,7 +8,6 @@ from django.views.generic import TemplateView
 app_name = "data_platform"
 urlpatterns = [
     url(r'^$', views.index_view.as_view(), name="index"),
-    url(r'^accident_list/',views.get_accident_list.as_view(), name="accident_list"),
     url(r'^term_list/(?P<acmodel_aircraft_type>\w+)$',views.get_term_list.as_view(), name="get_term_list"),
     url(r'^term_list/',views.get_term_list.as_view(), name="get_term_list_all"),
     url(r'^term/(?P<term_id>\d+)$', views.get_term_detail.as_view(), name="term_detail"),

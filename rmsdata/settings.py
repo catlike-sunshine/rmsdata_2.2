@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^aa4hnxp8*fg__wpun=68o8$h=i!l(f$z4@kxa%^qs1_^=#=xs'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['rmsdata.comac.intra','127.0.0.1']
 

@@ -1,30 +1,6 @@
 from extra_apps import xadmin 
-from .models import accident
 from .models import acmodel
-from .models import data_source
-from .models import data_address
 from type_data.models import *
-
-
-class accident_Admin(object):
-    list_display = ('title','date','content','acmodel')
-    list_filter = ('date','acmodel')
-    search_fields = ('title','content')
-    date_hierarchy = 'date'
-    ordering = ('date','acmodel')
-xadmin.site.register(accident,accident_Admin)
-
-class data_source_Admin(object):
-    list_display = ('title', 'acmodel', 'source_interpretation')
-    list_filter = ('title',)
-    search_fields = ('title','source_interpretation')
-xadmin.site.register(data_source,data_source_Admin)
-
-class data_address_Admin(object):
-    list_display = ('title', 'date', 'data_source')
-    list_filter = ('title',)
-    search_fields = ('title',)
-xadmin.site.register(data_address,data_address_Admin)
     
 class acmodel_Admin(object):
     list_display = ('aircraft_type', 'aircraft_serial_number')
@@ -32,6 +8,8 @@ class acmodel_Admin(object):
     search_fields = ('aircraft_type',)
 xadmin.site.register(acmodel, acmodel_Admin)
 
+
+#-------------------------------第二次相似机型数据-----------------------------------------------------
 #飞行时间和起落次数表
 class flight_hours_and_upAndDown_amounts_table_Admin(object):
     list_display = ('aircraft', 'total_flight_hours','total_flight_cycles', 'total_flight_hours', 
