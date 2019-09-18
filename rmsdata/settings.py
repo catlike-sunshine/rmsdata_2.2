@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'dlfile',
     'xadmin',
     'crispy_forms',
+    'intra_type_data.apps.IntraTypeDataConfig',
 ]
 
 MIDDLEWARE = [
