@@ -63,4 +63,6 @@ urlpatterns = [
     url(r'^model_aircraft_data/', TemplateView.as_view(template_name="model_aircraft_data.html"), 
         name="model_aircraft_data"),
     url(r'^update_notes/', TemplateView.as_view(template_name="update_notes.html"), name="update_notes"),
+    ##相似机型第三期------------------------------
+    url(r'^accident_list/',views.get_accident_list.as_view(), name="accident_list"),
 ]

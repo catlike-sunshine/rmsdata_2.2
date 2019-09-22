@@ -47,7 +47,7 @@ class aircraft_info(models.Model):
         verbose_name_plural = verbose_name
 
  #事件清单
-class event_list(models.Model):
+class event_info(models.Model):
     internal_number = models.TextField('内部编号', primary_key = True)
     attachment_info = models.TextField('附件信息')
     corrective_action = models.TextField('纠正文本')

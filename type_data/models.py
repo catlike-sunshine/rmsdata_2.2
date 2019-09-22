@@ -561,7 +561,7 @@ class work_package_information(models.Model):
 										 on_delete= models.CASCADE)
 	work_package_name = models.CharField("工作包名称", max_length = 100)
 	work_package_type = models.CharField("工作包类型", max_length = 100)
-	achievement_hours = models.DateField("完工时间", max_length=8)
+	achievement_hours = models.DateField("完工时间")
 	working_hour_amounts = models.DecimalField('工时数', max_digits = 9, decimal_places = 2)
 	aviation_material_price = models.DecimalField('航材定价', max_digits = 9, decimal_places = 2)
 	    
@@ -578,8 +578,8 @@ class work_package_information(models.Model):
 #事故事件
 class accident(models.Model):
     id = models.AutoField(primary_key = True)
-    aircraft = models.ForeignKey(aircraft, related_name='accident_aircraft', 
-										 on_delete= models.CASCADE)
+    aircraft_registration_number =  models.TextField("航班注册号")
+    aircraft_type =  models.TextField("机型")
     title = models.TextField("事故名称")
     flight_number = models.TextField("航班号")
     manufacture_country = models.TextField("运营商所属国家")

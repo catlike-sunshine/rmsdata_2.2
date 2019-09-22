@@ -173,3 +173,10 @@ class failure_mode_bank_Admin(object):
 
 
 xadmin.site.register(failure_mode_bank,failure_mode_bank_Admin)
+
+class accident_Admin(object):
+    list_display = ('title','operator','aircraft','flight_number','manufacture_country','operator','occurrence_time','flight_type',
+                   'flight_phase','death_toll','occurrence_region','occurrence_place','departure','destination','accident_factor',
+                   'level','description','reason','measurement','design_suggestion','safety_suggestion')
+    list_filter = ('title','operator','occurrence_time')
+    search_fields = ('title','operator','occurrence_time')

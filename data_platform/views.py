@@ -10,7 +10,6 @@ import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from term.models import term
 from term.models import acronym
-from type_data.models import failure_mode_bank
 from dlfile.models import file, file_category
 from data_platform.models import acmodel
 from type_data.models import *
@@ -617,3 +616,9 @@ class model_aircraft_data_index_view(ListView):
     
 class update_notes_index_view(ListView):
 	template_name = "update_notes_index.html"
+    
+
+class get_accident_list(LoginRequiredMixin,ListView):
+	model = accident
+	template_name = "accident_list.html"
+	context_object_name =  "accident_list"
