@@ -14,33 +14,39 @@
                     <div class="item">
                         <a class="header" href="{% url 'data_platform:operation_data' %}">运营数据</a>
                         <div class="menu">
-                            <a href="{% url 'data_platform:aircraft_info_list_all' %}" class="item">航空器信息</a>
-                            <a href="{% url 'data_platform:engine_using_record_list_all' %}" class="item">发动机使用记录</a>
-                            <a href="{% url 'data_platform:apu_using_record_list_all' %}" class="item">APU使用记录</a>
-                            <a href="{% url 'data_platform:aircraft_info_change_list_all' %}" class="item">航空器信息变化表</a>
-                            <a href="{% url 'data_platform:engine_info_change_list_all' %}" class="item">发动机信息变化表</a>
+                            <a class="item" href="{% url 'data_platform:aircraft_info_list' 'ALL' %}">航空器信息</a>
+                            <a class="item" href="{% url 'data_platform:engine_using_record_list' 'ALL' %}">发动机使用记录</a>
+                            <a class="item" href="{% url 'data_platform:apu_using_record_list' 'ALL' %}">APU使用记录</a>
+                            <a class="item" href="{% url 'data_platform:aircraft_info_change_list' 'ALL' %}">航空器信息变化表</a>
+                            <a class="item" href="{% url 'data_platform:engine_info_change_list' 'ALL' %}">发动机信息变化表</a>
+                            <a class="item" href="{% url 'data_platform:flight_hours_and_upAndDown_amounts_table_list' 'ALL' %}">飞行时间和起落次数表</a>
+                            <a class="item" href="{% url 'data_platform:flight_data_list' 'ALL' %}">航班总数据</a>
                         </div>
                     </div>
                     <div class="item">
                         <a class="header" href="{% url 'data_platform:part_replacement' %}">部件拆换</a>
                         <div class="menu">
-                            <a href="{% url 'data_platform:record_of_engine_replaced_list_all' %}" class="item">发动机拆换记录</a>
-                            <a href="{% url 'data_platform:record_of_part_replaced_list_all' %}" class="item">部件拆换记录</a>
-                            <a href="{% url 'data_platform:record_of_scheduled_maintenance_list_all' %}" class="item">计划维修记录</a>
+                            <a class="item" href="{% url 'data_platform:record_of_engine_replaced_list' 'ALL' %}">发动机拆换记录</a>
+                            <a class="item" href="{% url 'data_platform:record_of_part_replaced_list' 'ALL' %}">部件拆换记录</a>
+                            <a class="item" href="{% url 'data_platform:record_of_scheduled_maintenance_list' 'ALL' %}">计划维修记录</a>
+                            <a class="item" href="{% url 'data_platform:unscheduled_replacement_record_list' 'ALL' %}">非计划拆换记录</a>
+                            <a class="item" href="{% url 'data_platform:MTBUR_list' 'ALL' %}">平均非计划拆换时间</a>
+                            <a class="item" href="{% url 'data_platform:airline_maintenance_hours_statistics_list' 'ALL' %}">航线维修工时统计 </a>
                         </div>
                     </div>
                     <div class="item">
                         <a class="header" href="{% url 'data_platform:abnormal_event' %}">异常事件</a>
                             <div class="menu">
-                                <a href="{% url 'data_platform:engine_air_stop_record_list_all' %}" class="item">发动机空中停车记录</a>
-                                <a href="{% url 'data_platform:failure_report_record_list_all' %}" class="item">故障报告记录</a>
-                                <a href="{% url 'data_platform:abnormal_flight_report_list_all' %}" class="item">航班不正常报告</a>
-                                <a href="{% url 'data_platform:use_difficult_report_list_all' %}" class="item">使用困难报告</a>
+                                <a class="item" href="{% url 'data_platform:engine_air_stop_record_list' 'ALL' %}">发动机空中停车记录</a>
+                                <a class="item" href="{% url 'data_platform:failure_report_record_list' 'ALL' %}">故障报告记录</a>
+                                <a class="item" href="{% url 'data_platform:abnormal_flight_report_list' 'ALL' %}">航班不正常报告</a>
+                                <a class="item" href="{% url 'data_platform:use_difficult_report_list' 'ALL' %}">使用困难报告</a>
+                                <a class="item" href="{% url 'data_platform:accident_list' %}">事故事件</a>
                             </div>
                     </div>
                     <div class="item">
-                            <a class="header" href="{% url 'data_platform:failure_mode_bank_list_all' %}">故障模式库</a>
-                        </div>
+                         <a href="{% url 'data_platform:failure_mode_bank_list' 'ALL' %}" style="color:black">故障模式库</a>
+                    </div>
                 </div>              
     </div>
     <br><br><br><br>
@@ -105,17 +111,16 @@
             </div>
         </div>
         <div class="card">
-            <a class="content" href="{% url 'data_platform:failure_mode_bank_list_all' %}" style="display: block; text-align: center;">
+            <a class="content" href="{% url 'data_platform:failure_mode_bank_list' 'ALL' %}" style="display: block; text-align: center;">
                 <i class="massive stethoscope icon"></i>   
             </a>
             <div class="content">
-                <a href="{% url 'data_platform:failure_mode_bank_list_all' %}" class="header" style="display: block; text-align: center;">故障模式库</a>
+                <a href="{% url 'data_platform:failure_mode_bank_list' 'ALL' %}" class="header" style="display: block; text-align: center;">故障模式库</a>
             </div>
             <div class="description">
-                <a href="{% url 'data_platform:failure_mode_bank_list_all' %}" style='color:black'>
+                <a href="{% url 'data_platform:failure_mode_bank_list' 'ALL' %}" style='color:black'>
                     <p>故障模式库包含故障模式库表</p>
-                    <p><br></p>
-                   
+                    <p><br></p> 
                 </a>
             </div>
         </div>

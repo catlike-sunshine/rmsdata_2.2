@@ -6,8 +6,7 @@
         <div class="item">
             <h2 class="ui blue header">机型筛选</h2>
         </div>
-        <div class="item">    
-          <a class="item" href="{% url 'data_platform:failure_mode_bank_list_all' %}">全部</a>
+        <div class="item">
           {% for at in aircraft_types %}
             <a class="item" href="{% url 'data_platform:failure_mode_bank_list' at %}">{{at}}</a>
           {% endfor %}
@@ -26,6 +25,7 @@
     </div>
     <div class="ui divider"></div>
         <div class="ui container">
+<!--          <button id='mydownload'>下载</button>-->
           <table id="accident" class="ui striped table">
               <thead>
               <tr>
@@ -39,17 +39,6 @@
               </tr>
               </thead>
               <tbody>
-                {% for fm in failure_mode_bank_list %}
-                  <tr>
-                    <td>{{fm.failure_mode}}</td>
-                    <td>{{fm.acmodel}}</td>
-                    <td>{{fm.ata.chapter}}</td>
-                    <td>{{fm.ata.zh_title}}</td>
-                    <td>{{fm.failure_consequence}}</td>
-                    <td>{{fm.failure_reason}}</td>
-                    <td>{{fm.failure_troubleshooting}}</td>
-                  </tr>
-                {% endfor %}
               </tbody>
               <tfoot>
               <tr>
@@ -70,75 +59,71 @@
 <!-- 脚本部分用来处理表格样式等内容, 整个datatables用两个部分来控制, table部分控制数据和交互, script部分控制展试, 分页和搜索等功能-->
 
 <script type="text/javascript">
-    $(document).ready(function() {
-      var table = $('#accident').DataTable({
-//          searching:false,
-//          destroy:true,
-//          "serverSide":true,//开启服务器模式
-//          "Processing":true,//开启读取服务器数据时显示正在加载中......
-//          "ajax":{
-//              "url":"{% url 'data_platform:failure_mode_bank_list_all' %}",//给服务器发请求的url
-//              "type":"POST",
-////              "data":function(d){
-////                  return $.extend({},d,{
-////                      "failure_mode":document.getElementsById('failure_mode_bank_list.failure_mode').value, 
-////                      "acmodel":document.getElementByClassName('failure_mode_bank_list.acmodel').value, 
-////                      "ata_chapter":document.getElementByClassName('failure_mode_bank_list.ata_chapter').value
-////                  });
-//              }
-//          },
-//          columns:[
-//              {},
-//              {
-//                  data:"fm.failure_mode for fm in failure_mode_bank_list",
-//              },
-//              {
-//                  data:"fm.acmodel for fm in failure_mode_bank_list",
-//              },
-//              {
-//                  data:"fm.ata_chapter for fm in failure_mode_bank_list",
-//              },
-//          ],
-//          'columnDefs': [{
-//                'targets': 0,
-//                'searchable': false,
-//                'orderable': false,
-//                'className': 'select-checkbox',
-//                'render': function (data, type, full, meta){
-//                return  '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="checkboxes" value="1"/><span></span></label>'
-//                }
-//          }],
-          //添加copy、CSV、Excel、PDF、Print按钮
-          dom:"Bflrtip",
-          //dom控制控件顺序,l-length changing input control,f-filtering input,t-table,i-table information summary,p-pagination control,r-processing display element,B-buttons,R-ColReorder,S-select,默认lfrtip
-          buttons:[
-            'copy','excel','print'
-          ],
-          "language": {
-            "sProcessing": "处理中...",
-            "sLengthMenu": "显示 _MENU_ 项结果",
-            "sZeroRecords": "没有匹配结果",
-            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-            "sInfoPostFix": "",
-            "sSearch": "搜索:",
-            "sUrl": "",
-            "sEmptyTable": "表中数据为空",
-            "sLoadingRecords": "载入中...",
-            "sInfoThousands": ",",
-            "oPaginate": {
-                "sFirst": "首页",
-                "sPrevious": "上页",
-                "sNext": "下页",
-                "sLast": "末页"
-            },
-            "oAria": {
-                "sSortAscending": ": 以升序排列此列",
-                "sSortDescending": ": 以降序排列此列"
-            },
-          },         
-     });
+//设置初始化ajax的datatable的函数 
+
+    
+$(document).ready(function(){
+    var lengthMenuParam = 
+        '<div class="btn-group">'
+        '</div>';
+
+    //获取url中的参数，从而获得变量urlParam
+    //url为http://127.0.0.1:8000/data_platform/failure_mode_bank_list/ALL
+    //获取的是failure_mode_bank_list后的参数
+    var str = getQueryString("failure_mode_bank_list");
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        var q = window.location.pathname.substr(1).match(reg_rewrite);
+        if(r != null){
+            return unescape(r[2]);
+        }else if(q != null){
+            return unescape(q[2]);
+        }else{
+            return null;
+        }
+    }
+//    console.log(str)
+    if(str == "ALL"){
+        var urlParam = "{% url 'data_platform:failure_mode_bank_list' 'ALL' %}";
+    }else if(str == "A319"){
+        var urlParam = "{% url 'data_platform:failure_mode_bank_list' 'A319' %}";
+    }else if(str == "A320"){
+        var urlParam = "{% url 'data_platform:failure_mode_bank_list' 'A320' %}";
+    }else if(str == "A321"){
+        var urlParam = "{% url 'data_platform:failure_mode_bank_list' 'A321' %}";
+    }else if(str == "A330"){
+        var urlParam = "{% url 'data_platform:failure_mode_bank_list' 'A330' %}";
+    }else if(str == "B737"){
+        var urlParam = "{% url 'data_platform:failure_mode_bank_list' 'B737' %}";
+    }else if(str == "B787"){
+        var urlParam = "{% url 'data_platform:failure_mode_bank_list' 'B787' %}";
+    }
+
+    var columnsParam = [
+        {data:"failure_mode"},
+        {data:"acmodel"},
+        {data:"ata_chapter"},
+        {data:"ata_zh_title"},
+        {data:"failure_consequence"},
+        {data:"failure_reason"},
+        {data:"failure_troubleshooting"}, 
+    ];
+    var table = $("#accident").DataTable(initDataTable(lengthMenuParam, urlParam, columnsParam));
+
+//    $('#myDownload').click(function(){
+//        $.ajax({
+//            "type":"post",
+//            "url":"{% url 'data_platform:failure_mode_bank_list' 'A319' %}",
+//            "data":{"action":'download'},
+//            "success":function(data){
+//                return data;
+//            },
+//        });
+//    });
+
+
     //分列查找内容
     // Setup - add a text input to each footer cell
     $('#accident tfoot th').each( function () {
@@ -167,7 +152,7 @@
         .on( 'mouseleave',  function () {
             $( table.cells().nodes() ).removeClass( 'highlight' );
         } );
-        
+
     //高亮鼠标停留的行
     $('#accident tbody')
         .on( 'mouseover', 'tr', function () {
@@ -180,57 +165,20 @@
                 $(this).removeClass( 'highlight' );
             }
         })
-    
+
 //    修改设置搜索框、显示框等位置
     $('#accident_length').addClass('lengthToLeft')
     $('#accident_filter').addClass('filterToLeft')
     $('#accident_paginate').addClass('paginateToLeft')
-        
+
 //  设置横向滚动条
-$("#accident").wrapAll("<div style='overflow-x:auto'>");
-
- });
-
+    $("#accident").wrapAll("<div style='overflow-x:auto'>");
+});
+    
+// 在整个页面左侧添加侧边栏
+$('#sidebar').click(function(){
+    $('.ui.sidebar').sidebar('toggle');
+});
+    
 </script>
-<!-- css for datatables. -->
-<style type="text/css">
-/*    设置高亮style*/
-    .highlight {
-        background-color: skyblue!important;
-    }
-    
-/*    设置搜索框、显示框等位置*/
-    .lengthToLeft{
-        position:relative;
-        top:-35px;
-        left:0px;
-    }
-    .filterToLeft{
-        position:relative;
-        top:0px;
-        left:900px;
-    }
-    .buttonToLeft{
-        position:relative;
-        top:35px;
-        left:auto;
-    }
-    .paginateToLeft{
-        position:relative;
-        top:-25px;
-        left:700px;
-    }
-    
-    
-    /*   调整表头的宽度显示长度*/
-/*    th,td { white-space: nowrap; }*/
 
-</style>
-
-<!--添加侧边栏-->
-<script>
-    $('#sidebar').click(function(){
-
-        $('.ui.sidebar').sidebar('toggle');
-    });
-</script>

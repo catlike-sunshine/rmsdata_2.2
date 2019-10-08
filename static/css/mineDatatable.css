@@ -1,0 +1,35 @@
+/*    设置高亮style*/
+    .highlight {
+        background-color: skyblue!important;
+    }
+    
+/*    设置搜索框、显示框等位置*/
+    .lengthToLeft{
+        position:relative;
+        top:-35px;
+        left:0px;
+    }
+    .filterToLeft{
+        position:relative;
+        top:0px;
+        left:900px;
+    }
+    .buttonToLeft{
+        position:relative;
+        top:35px;
+        left:auto;
+    }
+    .paginateToLeft{
+        position:relative;
+        top:-25px;
+        left:700px;
+    }
+
+/*
+strong {
+    color:blue;
+}
+*/
+
+/*   调整表头的宽度显示长度*/
+/*    th, td { white-space: nowrap; }*/

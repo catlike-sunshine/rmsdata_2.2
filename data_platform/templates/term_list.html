@@ -12,14 +12,6 @@
     <div class="item">
         <h2 class="ui blue header">预留</h2>
     </div>
-<!--
-    <div class="item">    
-      <a class="item" href="{% url 'data_platform:get_term_list_all'}">全部</a>
-      {% for ac in acmodels %}
-        <a class="item" href="{% url 'data_platform:get_term_list' ac.id %}">{{ac}}</a>
-      {% endfor %} 
-    </div>
--->
 </div>
 <br><br><br><br>
 <!-- 侧边栏图形 -->
@@ -48,13 +40,6 @@
                 </tr>
                 </tfoot>
                 <tbody>
-                    {% for term in term_list %}
-                        <tr>
-                          <td><a class="text-dark" href="{% url 'data_platform:term_detail' term.id %}">{{term.title}}</a></td>
-                          <td>{{term.acmodel}}</td>
-                          <td>{{term.content | striptags |truncatewords:20}}</td>
-                        </tr>
-                    {% endfor %}
                 </tbody>
             </table>
 
@@ -68,39 +53,20 @@
 <!-- 脚本部分用来处理表格样式等内容, 整个datatables用两个部分来控制, table部分控制数据和交互, script部分控制展试, 分页和搜索等功能-->
 <!-- Js for datatables. -->
 <script type="text/javascript">
-    $(document).ready(function() {
-      var table = $('#accident').DataTable({
-          //添加copy、CSV、Excel、PDF、Print按钮
-          dom:"Bflrtip",
-          //dom控制控件顺序,l-length changing input control,f-filtering input,t-table,i-table information summary,p-pagination control,r-processing display element,B-buttons,R-ColReorder,S-select,默认lfrtip
-          buttons:[
-            'copy','excel','print'
-          ],
-          "language": {
-            "sProcessing": "处理中...",
-            "sLengthMenu": "显示 _MENU_ 项结果",
-            "sZeroRecords": "没有匹配结果",
-            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-            "sInfoPostFix": "",
-            "sSearch": "搜索:",
-            "sUrl": "",
-            "sEmptyTable": "表中数据为空",
-            "sLoadingRecords": "载入中...",
-            "sInfoThousands": ",",
-            "oPaginate": {
-                "sFirst": "首页",
-                "sPrevious": "上页",
-                "sNext": "下页",
-                "sLast": "末页"
-            },
-            "oAria": {
-                "sSortAscending": ": 以升序排列此列",
-                "sSortDescending": ": 以降序排列此列"
-            },
-          },
-     });
+//设置初始化ajax的datatable的函数 
+    
+$(document).ready(function(){
+    var lengthMenuParam = 
+        '<div class="btn-group">'
+        '</div>';  
+    var urlParam = "{% url 'data_platform:get_term_list'%}";
+    var columnsParam = [
+        {data:"title"},
+        {data:"acmodel"},
+        {data:"content"}
+    ];
+    var table = $("#accident").DataTable(initDataTable(lengthMenuParam, urlParam, columnsParam));
+
     //分列查找内容
     // Setup - add a text input to each footer cell
     $('#accident tfoot th').each( function () {
@@ -129,7 +95,7 @@
         .on( 'mouseleave',  function () {
             $( table.cells().nodes() ).removeClass( 'highlight' );
         } );
-        
+
     //高亮鼠标停留的行
     $('#accident tbody')
         .on( 'mouseover', 'tr', function () {
@@ -142,57 +108,20 @@
                 $(this).removeClass( 'highlight' );
             }
         })
-    
+
 //    修改设置搜索框、显示框等位置
     $('#accident_length').addClass('lengthToLeft')
     $('#accident_filter').addClass('filterToLeft')
     $('#accident_paginate').addClass('paginateToLeft')
 
 //  设置横向滚动条
-$("#accident").wrapAll("<div style='overflow-x:auto'>");
-        
- });
-</script>
-
-<!-- css for datatables. -->
-<style type="text/css">
-/*    设置高亮style*/
-    .highlight {
-        background-color: skyblue!important;
-    }
+    $("#accident").wrapAll("<div style='overflow-x:auto'>");
+});
     
-/*    设置搜索框、显示框等位置*/
-    .lengthToLeft{
-        position:relative;
-        top:-35px;
-        left:0px;
-    }
-    .filterToLeft{
-        position:relative;
-        top:0px;
-        left:900px;
-    }
-    .buttonToLeft{
-        position:relative;
-        top:35px;
-        left:auto;
-    }
-    .paginateToLeft{
-        position:relative;
-        top:-25px;
-        left:700px;
-    }
+// 在整个页面左侧添加侧边栏
+$('#sidebar').click(function(){
+    $('.ui.sidebar').sidebar('toggle');
+});
     
-/*   调整表头的宽度显示长度*/
-/*    th, td { white-space: nowrap; }*/
-</style>
-
-
-<!--添加侧边栏-->
-<script>
-    $('#sidebar').click(function(){
-
-        $('.ui.sidebar').sidebar('toggle');
-    });
 </script>
 

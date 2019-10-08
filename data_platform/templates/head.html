@@ -10,12 +10,16 @@
   <!-- Loading semantic_ui and datatables css files================================-->
   <link href="{% static 'css/semantic.min.css' %}" rel="stylesheet">
   <link href="{% static 'css/datatables.min.css' %}" rel = "stylesheet">
+<!--引入datatable的css-->
+  <link href="{% static 'css/mineDatatable.css' %}" rel = "stylesheet">
+  
 <!--  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">-->
   <!-- Loading semantic_ui and datatables javascript files================================-->
   <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/semantic.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/mineDatatable.js' %}"></script>
 
 <!--  <script type="text/javascript" src="{% static 'js/dataTables.scroller.min.js"></script>-->
   <!--[if lt IE 9]>
@@ -54,10 +58,10 @@
           特性Big Data
       </a>
       <div class="ui simple dropdown item">
-        <a href="{% url 'data_platform:model_aircraft_data' %}">型号飞机数据</a> 
+        <a href="#">型号飞机数据</a> 
         <i class="dropdown icon"></i>
         <div class="menu">
-          <a class="item" href="#">C919故障问题</a>
+          <a class="item" href="#">C919</a>
         </div>
       </div>
       <div class="ui simple dropdown item">
@@ -70,47 +74,47 @@
             <i class="dropdown icon"></i>
             <a href="{% url 'data_platform:operation_data' %}" style="color:black">运营数据</a>
             <div class="menu">
-              <a class="item" href="{% url 'data_platform:aircraft_info_list_all' %}">航空器信息</a>
-              <a class="item" href="{% url 'data_platform:engine_using_record_list_all' %}">发动机使用记录</a>
-              <a class="item" href="{% url 'data_platform:apu_using_record_list_all' %}">APU使用记录</a>
-              <a class="item" href="{% url 'data_platform:aircraft_info_change_list_all' %}">航空器信息变化表</a>
-              <a class="item" href="{% url 'data_platform:engine_info_change_list_all' %}">发动机信息变化表</a>
-              <a class="item" href="{% url 'data_platform:flight_hours_and_upAndDown_amounts_table_list_all' %}">飞行时间和起落次数表</a>
-              <a class="item" href="{% url 'data_platform:flight_data_list_all' %}">航班总数据</a>
+              <a class="item" href="{% url 'data_platform:aircraft_info_list' 'ALL' %}">航空器信息</a>
+              <a class="item" href="{% url 'data_platform:engine_using_record_list' 'ALL' %}">发动机使用记录</a>
+              <a class="item" href="{% url 'data_platform:apu_using_record_list' 'ALL' %}">APU使用记录</a>
+              <a class="item" href="{% url 'data_platform:aircraft_info_change_list' 'ALL' %}">航空器信息变化表</a>
+              <a class="item" href="{% url 'data_platform:engine_info_change_list' 'ALL' %}">发动机信息变化表</a>
+              <a class="item" href="{% url 'data_platform:flight_hours_and_upAndDown_amounts_table_list' 'ALL' %}">飞行时间和起落次数表</a>
+              <a class="item" href="{% url 'data_platform:flight_data_list' 'ALL' %}">航班总数据</a>
             </div>
           </div>
           <div class="item">
             <i class="dropdown icon"></i>
             <a href="{% url 'data_platform:part_replacement' %}" style="color:black">部件拆换</a>
             <div class="menu">
-              <a class="item" href="{% url 'data_platform:record_of_engine_replaced_list_all' %}">发动机拆换记录</a>
-              <a class="item" href="{% url 'data_platform:record_of_part_replaced_list_all' %}">部件拆换记录</a>
-              <a class="item" href="{% url 'data_platform:record_of_scheduled_maintenance_list_all' %}">计划维修记录</a>
-              <a class="item" href="{% url 'data_platform:unscheduled_replacement_record_list_all' %}">非计划拆换记录</a>
-              <a class="item" href="{% url 'data_platform:MTBUR_list_all' %}">平均非计划拆换时间</a>
-              <a class="item" href="{% url 'data_platform:airline_maintenance_hours_statistics_list_all' %}">航线维修工时统计 </a>
+              <a class="item" href="{% url 'data_platform:record_of_engine_replaced_list' 'ALL' %}">发动机拆换记录</a>
+              <a class="item" href="{% url 'data_platform:record_of_part_replaced_list' 'ALL' %}">部件拆换记录</a>
+              <a class="item" href="{% url 'data_platform:record_of_scheduled_maintenance_list' 'ALL' %}">计划维修记录</a>
+              <a class="item" href="{% url 'data_platform:unscheduled_replacement_record_list' 'ALL' %}">非计划拆换记录</a>
+              <a class="item" href="{% url 'data_platform:MTBUR_list' 'ALL' %}">平均非计划拆换时间</a>
+              <a class="item" href="{% url 'data_platform:airline_maintenance_hours_statistics_list' 'ALL' %}">航线维修工时统计 </a>
             </div>
           </div>
           <div class="item">
             <i class="dropdown icon"></i>
             <a href="{% url 'data_platform:abnormal_event' %}" style="color:black">异常事件</a>
             <div class="menu">
-              <a class="item" href="{% url 'data_platform:engine_air_stop_record_list_all' %}">发动机空中停车记录</a>
-              <a class="item" href="{% url 'data_platform:failure_report_record_list_all' %}">故障报告记录</a>
-              <a class="item" href="{% url 'data_platform:abnormal_flight_report_list_all' %}">航班不正常报告</a>
-              <a class="item" href="{% url 'data_platform:use_difficult_report_list_all' %}">使用困难报告</a>
-              <a class="item" href="{% url 'data_platform:accident_list' %}">事故事件</a> 
+              <a class="item" href="{% url 'data_platform:engine_air_stop_record_list' 'ALL' %}">发动机空中停车记录</a>
+              <a class="item" href="{% url 'data_platform:failure_report_record_list' 'ALL' %}">故障报告记录</a>
+              <a class="item" href="{% url 'data_platform:abnormal_flight_report_list' 'ALL' %}">航班不正常报告</a>
+              <a class="item" href="{% url 'data_platform:use_difficult_report_list' 'ALL' %}">使用困难报告</a>
+              <a class="item" href="{% url 'data_platform:accident_list' %}">事故事件</a>
             </div>
           </div>
           <div class="item">
-              <a href="{% url 'data_platform:failure_mode_bank_list_all' %}" style="color:black">故障模式库</a>
+              <a href="{% url 'data_platform:failure_mode_bank_list' 'ALL' %}" style="color:black">故障模式库</a>
           </div>
         </div>
       </div>
       <div class="ui simple dropdown item">
         参考数据 <i class="dropdown icon"></i>
         <div class="menu">
-          <a href="{% url 'data_platform:get_term_list_all' %}" class="item">术语定义</a>
+          <a href="{% url 'data_platform:get_term_list' %}" class="item">术语定义</a>
           <a href="{% url 'data_platform:get_arc_list' %}" class="item">缩略语</a>
           <div class="divider"></div>
           <a class="item" href="#">预留</a>

@@ -14,15 +14,15 @@
             <div class="header">运营数据</div>
             <br>
             <div class="menu">
-                <a href="{% url 'data_platform:aircraft_info_list_all' %}" class="item">航空器信息</a>
+                <a href="{% url 'data_platform:aircraft_info_list' 'ALL' %}" class="item">航空器信息</a>
                 <br>
-                <a href="{% url 'data_platform:engine_using_record_list_all' %}" class="item">发动机使用记录</a>
+                <a href="{% url 'data_platform:engine_using_record_list' 'ALL' %}" class="item">发动机使用记录</a>
                 <br>
-                <a href="{% url 'data_platform:apu_using_record_list_all' %}" class="item">APU使用记录</a>
+                <a href="{% url 'data_platform:apu_using_record_list' 'ALL' %}" class="item">APU使用记录</a>
                 <br>
-                <a href="{% url 'data_platform:aircraft_info_change_list_all' %}" class="item">航空器信息变化表</a>
+                <a href="{% url 'data_platform:aircraft_info_change_list' 'ALL' %}" class="item">航空器信息变化表</a>
                 <br>
-                <a href="{% url 'data_platform:engine_info_change_list_all' %}" class="item">发动机信息变化表</a>
+                <a href="{% url 'data_platform:engine_info_change_list' 'ALL' %}" class="item">发动机信息变化表</a>
             </div>
         </div>                        
     </div>
@@ -48,31 +48,31 @@
     <!-- 利用card展示不同的表格信息 -->
     <div class="ui five centered cards">
         <div class="blue card">
-            <a class="content" href="{% url 'data_platform:aircraft_info_list_all' %}" style="display: block; text-align: center;">
+            <a class="content" href="{% url 'data_platform:aircraft_info_list' 'ALL' %}" style="display: block; text-align: center;">
                 <i class='blue massive  download icon'></i>   
             </a>
             <div class="content">
-                <a href="{% url 'data_platform:aircraft_info_list_all' %}" class="header" style="display: block; text-align: center;">
+                <a href="{% url 'data_platform:aircraft_info_list' 'ALL' %}" class="header" style="display: block; text-align: center;">
                     航空器信息
                 </a>
             </div>
            
         </div>
         <div class="blue card">
-            <a class="content" href="{% url 'data_platform:engine_using_record_list_all' %}" style="display: block; text-align: center;">
+            <a class="content" href="{% url 'data_platform:engine_using_record_list' 'ALL' %}" style="display: block; text-align: center;">
                 <i class='blue massive edit outline icon'></i>   
             </a>
             <div class="content">
-                <a href="{% url 'data_platform:engine_using_record_list_all' %}" class="header" style="display: block; text-align: center;">发动机使用记录</a>
+                <a href="{% url 'data_platform:engine_using_record_list' 'ALL' %}" class="header" style="display: block; text-align: center;">发动机使用记录</a>
             </div>
             
         </div>
         <div class="blue card">
-            <a class="content" href="{% url 'data_platform:apu_using_record_list_all' %}" style="display: block; text-align: center;">
+            <a class="content" href="{% url 'data_platform:apu_using_record_list' 'ALL' %}" style="display: block; text-align: center;">
                  <i class='blue massive file alternate outline icon'></i>   
             </a>
             <div class="content">
-                <a href="{% url 'data_platform:apu_using_record_list_all' %}" class="header" style="display: block; text-align: center;">APU使用记录</a>
+                <a href="{% url 'data_platform:apu_using_record_list' 'ALL' %}" class="header" style="display: block; text-align: center;">APU使用记录</a>
             </div>
             
         </div>
@@ -80,20 +80,20 @@
 
     <div class="ui five centered cards">
         <div class="blue card">
-            <a class="content" href="{% url 'data_platform:aircraft_info_change_list_all' %}" style="display: block; text-align: center;">
+            <a class="content" href="{% url 'data_platform:aircraft_info_change_list' 'ALL' %}" style="display: block; text-align: center;">
                 <i class='bule massive table icon'></i>   
             </a>
             <div class="content">
-                <a href="{% url 'data_platform:aircraft_info_change_list_all' %}" class="header" style="display: block; text-align: center;">航空器信息变化表</a>
+                <a href="{% url 'data_platform:aircraft_info_change_list' 'ALL' %}" class="header" style="display: block; text-align: center;">航空器信息变化表</a>
             </div>
             
         </div>
         <div class="blue card">
-                <a class="content" href="{% url 'data_platform:engine_info_change_list_all' %}" style="display: block; text-align: center;">
+                <a class="content" href="{% url 'data_platform:engine_info_change_list' 'ALL' %}" style="display: block; text-align: center;">
                     <i class='blue massive table icon'></i>   
                 </a>
             <div class="content">
-                <a href="{% url 'data_platform:engine_info_change_list_all' %}" class="header" style="display: block; text-align: center;">发动机信息变化表</a>
+                <a href="{% url 'data_platform:engine_info_change_list' 'ALL' %}" class="header" style="display: block; text-align: center;">发动机信息变化表</a>
             </div>
             
         </div>

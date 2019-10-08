@@ -14,11 +14,11 @@
             <a class="header" >部件拆换</a>
             <br>
             <div class="menu">
-                <a href="{% url 'data_platform:record_of_engine_replaced_list_all' %}" class="item">发动机拆换记录</a>
+                <a href="{% url 'data_platform:record_of_engine_replaced_list' 'ALL' %}" class="item">发动机拆换记录</a>
                 <br>
-                <a href="{% url 'data_platform:record_of_part_replaced_list_all' %}" class="item">部件拆换记录</a>
+                <a href="{% url 'data_platform:record_of_part_replaced_list' 'ALL' %}" class="item">部件拆换记录</a>
                 <br>
-                <a href="{% url 'data_platform:record_of_scheduled_maintenance_list_all' %}" class="item">计划维修记录</a>
+                <a href="{% url 'data_platform:record_of_scheduled_maintenance_list' 'ALL' %}" class="item">计划维修记录</a>
             </div>
         </div>                        
     </div>
@@ -47,29 +47,29 @@
     <!-- 利用card展示不同的表格信息 -->
     <div class="ui five centered cards">
         <div class="blue card">
-            <a class="content" href="{% url 'data_platform:record_of_engine_replaced_list_all' %}" style="display: block; text-align: center;">
+            <a class="content" href="{% url 'data_platform:record_of_engine_replaced_list' 'ALL' %}" style="display: block; text-align: center;">
                 <i class='blue massive download icon'></i>   
             </a>
             <div class="content">
-                <a href="{% url 'data_platform:record_of_engine_replaced_list_all' %}" class="header" style="display: block; text-align: center;">
+                <a href="{% url 'data_platform:record_of_engine_replaced_list' 'ALL' %}" class="header" style="display: block; text-align: center;">
                     发动机拆换记录
                 </a>
             </div>
         </div>
         <div class="blue card">
-            <a class="content" href="{% url 'data_platform:record_of_part_replaced_list_all' %}" style="display: block; text-align: center;">
+            <a class="content" href="{% url 'data_platform:record_of_part_replaced_list' 'ALL' %}" style="display: block; text-align: center;">
                 <i class='blue massive edit outline icon'></i>   
             </a>
             <div class="content">
-                <a href="{% url 'data_platform:record_of_part_replaced_list_all' %}" class="header" style="display: block; text-align: center;">部件拆换记录</a>
+                <a href="{% url 'data_platform:record_of_part_replaced_list' 'ALL' %}" class="header" style="display: block; text-align: center;">部件拆换记录</a>
             </div>
         </div>
         <div class="blue card">
-            <a class="content" href="{% url 'data_platform:record_of_scheduled_maintenance_list_all' %}" style="display: block; text-align: center;">
+            <a class="content" href="{% url 'data_platform:record_of_scheduled_maintenance_list' 'ALL' %}" style="display: block; text-align: center;">
                  <i class='blue massive file alternate outline icon'></i>   
             </a>
             <div class="content">
-                <a href="{% url 'data_platform:record_of_scheduled_maintenance_list_all' %}" class="header" style="display: block; text-align: center;">计划维修记录</a>
+                <a href="{% url 'data_platform:record_of_scheduled_maintenance_list' 'ALL' %}" class="header" style="display: block; text-align: center;">计划维修记录</a>
             </div>
         </div>
     </div>

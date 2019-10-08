@@ -7,7 +7,6 @@
             <h2 class="ui blue header">机型筛选</h2>
         </div>
         <div class="item">    
-          <a class="item" href="{% url 'data_platform:record_of_part_replaced_list_all'}">全部</a>
           {% for at in aircraft_types %}
             <a class="item" href="{% url 'data_platform:record_of_part_replaced_list' at %}">{{at}}</a>
           {% endfor %}  
@@ -52,28 +51,6 @@
               </tr>
               </thead>
               <tbody>
-                {% for ls in record_of_part_replaced_list %}
-                  <tr>
-                    <td>{{ls.aircraft}}</td>
-                    <td>{{ls.ata.chapter}}</td>
-                    <td>{{ls.ata.zh_title}}</td>
-                    <td>{{ls.flight_number}}</td>
-                    <td>{{ls.date}}</td>
-                    <td>{{ls.replacement_type}}</td>
-                    <td>{{ls.replacement_reason}}</td>
-                    <td>{{ls.failure_discovery}}</td>
-                    <td>{{ls.failure_confirmation}}</td>
-                    <td>{{ls.part_replaced_name}}</td>
-                    <td>{{ls.part_replaced_numbers}}</td>
-                    <td>{{ls.part_installed_numbers}}</td>
-                    <td>{{ls.part_removed_serial_number}}</td>
-                    <td>{{ls.part_installed_serial_number}}</td>
-                    <td>{{ls.replacement_work_type}}</td>
-                    <td>{{ls.maintenance_level}}</td>
-                    <td>{{ls.advanced_device}}</td>
-                    <td>{{ls.failure_handling}}</td>
-                  </tr>
-                {% endfor %}
               </tbody>
               <tfoot>
               <tr>
@@ -104,39 +81,70 @@
 <!-- 脚本部分用来处理表格样式等内容, 整个datatables用两个部分来控制, table部分控制数据和交互, script部分控制展试, 分页和搜索等功能-->
 
 <script type="text/javascript">
-    $(document).ready(function() {
-      var table = $('#accident').DataTable({
-          //添加copy、CSV、Excel、PDF、Print按钮
-          dom:"Bflrtip",
-          //dom控制控件顺序,l-length changing input control,f-filtering input,t-table,i-table information summary,p-pagination control,r-processing display element,B-buttons,R-ColReorder,S-select,默认lfrtip
-          buttons:[
-            'copy','excel','print'
-          ],
-          "language": {
-            "sProcessing": "处理中...",
-            "sLengthMenu": "显示 _MENU_ 项结果",
-            "sZeroRecords": "没有匹配结果",
-            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-            "sInfoPostFix": "",
-            "sSearch": "搜索:",
-            "sUrl": "",
-            "sEmptyTable": "表中数据为空",
-            "sLoadingRecords": "载入中...",
-            "sInfoThousands": ",",
-            "oPaginate": {
-                "sFirst": "首页",
-                "sPrevious": "上页",
-                "sNext": "下页",
-                "sLast": "末页"
-            },
-            "oAria": {
-                "sSortAscending": ": 以升序排列此列",
-                "sSortDescending": ": 以降序排列此列"
-            },
-          },
-     });
+//设置初始化ajax的datatable的函数 
+
+    
+$(document).ready(function(){
+    var lengthMenuParam = 
+        '<div class="btn-group">'
+        '</div>';
+
+    //获取url中的参数，从而获得变量urlParam
+    var str = getQueryString("record_of_part_replaced_list");
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        var q = window.location.pathname.substr(1).match(reg_rewrite);
+        if(r != null){
+            return unescape(r[2]);
+        }else if(q != null){
+            return unescape(q[2]);
+        }else{
+            return null;
+        }
+    }
+//    console.log(str)
+    if(str == "ALL"){
+        var urlParam = "{% url 'data_platform:record_of_part_replaced_list' 'ALL' %}";
+    }else if(str == "A319"){
+        var urlParam = "{% url 'data_platform:record_of_part_replaced_list' 'A319' %}";
+    }else if(str == "A320"){
+        var urlParam = "{% url 'data_platform:record_of_part_replaced_list' 'A320' %}";
+    }else if(str == "A321"){
+        var urlParam = "{% url 'data_platform:record_of_part_replaced_list' 'A321' %}";
+    }else if(str == "A330"){
+        var urlParam = "{% url 'data_platform:record_of_part_replaced_list' 'A330' %}";
+    }else if(str == "B737"){
+        var urlParam = "{% url 'data_platform:record_of_part_replaced_list' 'B737' %}";
+    }else if(str == "B787"){
+        var urlParam = "{% url 'data_platform:record_of_part_replaced_list' 'B787' %}";
+    }
+
+    var columnsParam = [
+        {data:"aircraft"},
+        {data:"ata_chapter"},
+        {data:"ata_zh_title"},
+        {data:"flight_number"},
+        {data:"date"},
+        {data:"replacement_type"}, 
+        {data:"replacement_reason"}, 
+        {data:"failure_discovery"}, 
+        {data:"failure_confirmation"},
+        {data:"part_replaced_name"}, 
+        {data:"part_replaced_numbers"}, 
+        {data:"part_installed_numbers"}, 
+        {data:"part_removed_serial_number"}, 
+        {data:"part_installed_serial_number"}, 
+        {data:"replacement_work_type"}, 
+        {data:"maintenance_level"}, 
+        {data:"advanced_device"}, 
+        {data:"failure_handling"}, 
+    ];
+    var table = $("#accident").DataTable(initDataTable(lengthMenuParam, urlParam, columnsParam));
+
+
+
     //分列查找内容
     // Setup - add a text input to each footer cell
     $('#accident tfoot th').each( function () {
@@ -165,7 +173,7 @@
         .on( 'mouseleave',  function () {
             $( table.cells().nodes() ).removeClass( 'highlight' );
         } );
-        
+
     //高亮鼠标停留的行
     $('#accident tbody')
         .on( 'mouseover', 'tr', function () {
@@ -178,55 +186,19 @@
                 $(this).removeClass( 'highlight' );
             }
         })
-    
+
 //    修改设置搜索框、显示框等位置
     $('#accident_length').addClass('lengthToLeft')
     $('#accident_filter').addClass('filterToLeft')
     $('#accident_paginate').addClass('paginateToLeft')
-      
+
 //  设置横向滚动条
-$("#accident").wrapAll("<div style='overflow-x:auto'>");
-        
- });
-</script>
-
-<!-- css for datatables. -->
-<style type="text/css">
-/*    设置高亮style*/
-    .highlight {
-        background-color: skyblue!important;
-    }
+    $("#accident").wrapAll("<div style='overflow-x:auto'>");
+});
     
-/*    设置搜索框、显示框等位置*/
-    .lengthToLeft{
-        position:relative;
-        top:-35px;
-        left:0px;
-    }
-    .filterToLeft{
-        position:relative;
-        top:0px;
-        left:950px;
-    }
-    .buttonToLeft{
-        position:relative;
-        top:35px;
-        left:auto;
-    }
-    .paginateToLeft{
-        position:relative;
-        top:-25px;
-        left:750px;
-    }
+// 在整个页面左侧添加侧边栏
+$('#sidebar').click(function(){
+    $('.ui.sidebar').sidebar('toggle');
+});
     
-/*   调整表头的宽度显示长度*/
-/*    th, td { white-space: nowrap;}*/
-</style>
-
-<!--Semantic ui sidebar display-->
-<script>
-        $('#sidebar').click(function(){
-    
-            $('.ui.sidebar').sidebar('toggle');
-        });
 </script>

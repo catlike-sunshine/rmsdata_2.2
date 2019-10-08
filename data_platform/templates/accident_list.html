@@ -2,58 +2,27 @@
 {% include "head.html" %}
 <body>
     <!-- Sidebar Menu -->
-    <div class="ui  inverted left vertical sidebar menu">
-        <div class="item">
-            <h2 class="ui blue header">机型筛选</h2>
-        </div>
-        <div class="item">    
-          <a class="item" href="{% url 'data_platform:accident_list'}">全部</a> 
-        </div>
-    </div>  
-    <br><br><br><br>            
+    <br><br><br><br>             
     <!-- 侧边栏图形 -->
     <i class = "big sidebar icon" id="sidebar"></i>
     <!-- 面包屑导航 -->
     <div class="ui breadcrumb">
-            <a class="section" style=color:black href="{% url 'data_platform:index' %}">主页</a>
-            <i class="right angle icon divider"></i>
-            <a class="section" style=color:black href="{% url 'data_platform:similarity_plane' %}">相似机型数据</a>
-            <i class="right angle icon divider"></i>
-            <a class="section" style=color:black href="{% url 'data_platform:abnormal_event' %}">异常事件</a>
+        <a class="section" style=color:black href="{% url 'data_platform:index' %}">主页</a>
+        <i class="right angle icon divider"></i>
+        <a class="section" style=color:black href="{% url 'data_platform:similarity_plane' %}">相似机型数据</a>
+        <i class="right angle icon divider"></i>
+        <a class="section" style=color:black href="{% url 'data_platform:abnormal_event' %}">异常事件</a>
             <i class="right angle icon divider"></i>
             <a class="active section" style=color:black>事故事件</a>
     </div>
-<!--
-     aircraft = models.ForeignKey(aircraft, related_name='accident_aircraft', 
-										 on_delete= models.CASCADE)
-    title = models.TextField("事故名称")
-    flight_number = models.TextField("航班号")
-    manufacture_country = models.TextField("运营商所属国家")
-    operator = models.TextField("运营商")
-    occurrence_time = models.DateField("事故时间")
-    flight_type = models.TextField("飞行性质")
-    flight_phase = models.TextField("阶段")
-    death_toll = models.DecimalField("死亡人数", max_digits = 6, decimal_places = 0)
-    occurrence_region = models.TextField("事故地区")
-    occurrence_place = models.TextField("事故地点")
-    departure = models.TextField("出发地")
-    destination = models.TextField("目的地")
-    accident_factor = models.TextField("事故因素分类")
-    accident_level = models.TextField("事故等级")
-    description = models.TextField("事故描述")
-    reason = models.TextField("原因分析")
-    measurement = models.TextField("采取的措施")
-    design_suggestion = models.TextField("设计建议")
-    safety_suggestion = models.TextField("安全性建议")
--->
-    <div class="ui divider"></div>
-        <div class="ui container">
-          <table id="accident" class="ui striped table" >
+  <div class="ui divider"></div>
+    <div class="ui container">
+          <table id="accident" class="ui striped table">
               <thead>
               <tr>
-                <th>事故名称</th>
-                <th>航空器注册号</th>
+                <th>航班注册号</th>
                 <th>机型</th>
+                <th>事故名称</th>
                 <th>航班号</th>
                 <th>运营商所属国家</th>
                 <th>运营商</th>
@@ -61,11 +30,11 @@
                 <th>飞行性质</th>
                 <th>阶段</th>
                 <th>死亡人数</th>
-                <th>事故地区</th>
                 <th>事故地点</th>
                 <th>出发地</th>
                 <th>目的地</th>
                 <th>事故因素分类</th>
+                <th>事故等级</th>
                 <th>事故描述</th>
                 <th>原因分析</th>
                 <th>采取措施</th>
@@ -74,102 +43,93 @@
               </tr>
               </thead>
               <tbody>
-                {% for ls in accident_list %}
-                  <tr>
-                    <td>{{ls.title}}</td>
-                    <td>{{ls.aircraft_registration_number}}</td>
-                    <td>{{ls.aircraft_type}}</td>
-                    <td>{{ls.flight_number}}</td>
-                    <td>{{ls.manufacture_country}}</td>
-                    <td>{{ls.operator}}</td>
-                    <td>{{ls.occurrence_time}}</td>
-                    <td>{{ls.flight_time}}</td>
-                    <td>{{ls.flight_phase}}</td>
-                    <td>{{ls.death_toll}}</td>
-                    <td>{{ls.occurrence_place}}</td>
-                    <td>{{ls.occurrence_region}}</td>
-                    <td>{{ls.departure}}</td>
-                    <td>{{ls.destination}}</td>
-                    <td>{{ls.accident_factor}}</td>
-                    <td>{{ls.accident_level}}</td>
-                    <td>{{ls.description}}</td>
-                    <td>{{ls.reason}}</td>
-                    <td>{{ls.measurement}}</td>
-                    <td>{{ls.design_suggestion}}</td>
-                    <td>{{ls.safety_suggestion}}</td>
-                  </tr>
-                {% endfor %}
               </tbody>
               <tfoot>
-              <tr>
-                <th>事故名称</th>
-                <th>航空器注册号</th>
-                <th>机型</th>
-                <th>航班号</th>
-                <th>运营商所属国家</th>
-                <th>运营商</th>
-                <th>事故时间</th>
-                <th>飞行性质</th>
-                <th>阶段</th>
-                <th>死亡人数</th>
-                <th>事故地区</th>
-                <th>事故地点</th>
-                <th>出发地</th>
-                <th>目的地</th>
-                <th>事故因素分类</th>
-                <th>事故描述</th>
-                <th>原因分析</th>
-                <th>采取措施</th>
-                <th>设计建议</th>
-                <th>安全性建议</th>
-              </tr>
+                <tr>
+                    <th>航班注册号</th>
+                    <th>机型</th>
+                    <th>事故名称</th>
+                    <th>航班号</th>
+                    <th>运营商所属国家</th>
+                    <th>运营商</th>
+                    <th>事故时间</th>
+                    <th>飞行性质</th>
+                    <th>阶段</th>
+                    <th>死亡人数</th>
+                    <th>事故地点</th>
+                    <th>出发地</th>
+                    <th>目的地</th>
+                    <th>事故因素分类</th>
+                    <th>事故等级</th>
+                    <th>事故描述</th>
+                    <th>原因分析</th>
+                    <th>采取措施</th>
+                    <th>设计建议</th>
+                    <th>安全性建议</th>
+                </tr>
               </tfoot>
           </table>
-        </div>
+    </div>
 </body>
 {% include "foot.html" %}
 <!-- 脚本部分用来处理表格样式等内容, 整个datatables用两个部分来控制, table部分控制数据和交互, script部分控制展试, 分页和搜索等功能-->
-
+<!-- Js for datatables. -->
 <script type="text/javascript">
-    $(document).ready(function() {
-      var table = $('#accident').DataTable({
-          //添加copy、CSV、Excel、PDF、Print按钮
-          dom:"Bflrtip",
-          //dom控制控件顺序,l-length changing input control,f-filtering input,t-table,i-table information summary,p-pagination control,r-processing display element,B-buttons,R-ColReorder,S-select,默认lfrtip
-          buttons:[
-            'copy','excel','print'
-          ],
-          "language": {
-            "sProcessing": "处理中...",
-            "sLengthMenu": "显示 _MENU_ 项结果",
-            "sZeroRecords": "没有匹配结果",
-            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-            "sInfoPostFix": "",
-            "sSearch": "搜索:",
-            "sUrl": "",
-            "sEmptyTable": "表中数据为空",
-            "sLoadingRecords": "载入中...",
-            "sInfoThousands": ",",
-            "oPaginate": {
-                "sFirst": "首页",
-                "sPrevious": "上页",
-                "sNext": "下页",
-                "sLast": "末页"
-            },
-            "oAria": {
-                "sSortAscending": ": 以升序排列此列",
-                "sSortDescending": ": 以降序排列此列"
-            },
-          },
-     });
+//设置初始化ajax的datatable的函数     
+$(document).ready(function(){
+    var lengthMenuParam = 
+        '<div class="btn-group">'
+        '</div>';
+    //获取url中的参数，从而获得变量urlParam
+    //url为http://127.0.0.1:8000/data_platform/failure_mode_bank_list/ALL
+    //获取的是failure_mode_bank_list后的参数
+    var str = getQueryString("accident_list");
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        var q = window.location.pathname.substr(1).match(reg_rewrite);
+        if(r != null){
+            return unescape(r[2]);
+        }else if(q != null){
+            return unescape(q[2]);
+        }else{
+            return null;
+        }
+    }
+
+    var columnsParam = [
+        {data:"aircraft_registration_number"},
+        {data:"aircraft_type"},
+        {data:"title"},
+        {data:"flight_number"},
+        {data:"manufacture_country"},
+        {data:"operator"},
+        {data:"occurrence_time"}, 
+        {data:"flight_type"},
+        {data:"flight_phase"},
+        {data:"death_toll"},
+        {data:"occurrence_region"},
+        {data:"occurrence_place"},
+        {data:"departure"},
+        {data:"destination"},
+        {data:"accident_factor"},
+        {data:"accident_level"}, 
+        {data:"description"},
+        {data:"reason"},
+        {data:"measurement"}, 
+        {data:"design_suggestion"},
+        {data:"safety_suggestion"},
+    ];
+    var table = $("#accident").DataTable(initDataTable(lengthMenuParam, urlParam, columnsParam));
+
     //分列查找内容
     // Setup - add a text input to each footer cell
     $('#accident tfoot th').each( function () {
         var title = $('#accident thead th').eq( $(this).index() ).text();
         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
     });
+
     // Apply the search
     table.columns().eq( 0 ).each( function ( colIdx ) {
         $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
@@ -191,69 +151,30 @@
         } )
         .on( 'mouseleave',  function () {
             $( table.cells().nodes() ).removeClass( 'highlight' );
-        } );
-        
+        });
     //高亮鼠标停留的行
     $('#accident tbody')
         .on( 'mouseover', 'tr', function () {
             if ( !$(this).hasClass('highlight')) {
                 $(this).addClass( 'highlight' );
             }
-        } )
+        })
         .on( 'mouseleave', 'tr', function () {
             if ( $(this).hasClass('highlight')) {
                 $(this).removeClass( 'highlight' );
             }
         })
-    
 //    修改设置搜索框、显示框等位置
     $('#accident_length').addClass('lengthToLeft')
     $('#accident_filter').addClass('filterToLeft')
     $('#accident_paginate').addClass('paginateToLeft')
-   
 //  设置横向滚动条
-$("#accident").wrapAll("<div style='overflow-x:auto'>");
-        
- });
+    $("#accident").wrapAll("<div style='overflow-x:auto'>");
+});
+// 在整个页面左侧添加侧边栏
+$('#sidebar').click(function(){
+    $('.ui.sidebar').sidebar('toggle');
+});
 </script>
 
-<!-- css for datatables. -->
-<style type="text/css">
-/*    设置高亮style*/
-    .highlight {
-        background-color: skyblue!important;
-    }
-    
-/*    设置搜索框、显示框等位置*/
-    .lengthToLeft{
-        position:relative;
-        top:-35px;
-        left:0px;
-    }
-    .filterToLeft{
-        position:relative;
-        top:0px;
-        left:950px;
-    }
-    .buttonToLeft{
-        position:relative;
-        top:35px;
-        left:auto;
-    }
-    .paginateToLeft{
-        position:relative;
-        top:-25px;
-        left:750px;
-    }
-    
-/*   调整表头的宽度显示长度*/
-/*    th, td { white-space: nowrap;}*/
-</style>
 
-<!--Semantic ui sidebar display-->
-<script>
-        $('#sidebar').click(function(){
-    
-            $('.ui.sidebar').sidebar('toggle');
-        });
-</script>
