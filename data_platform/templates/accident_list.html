@@ -2,7 +2,12 @@
 {% include "head.html" %}
 <body>
     <!-- Sidebar Menu -->
-    <br><br><br><br>             
+    <div class="ui  inverted left vertical sidebar menu">
+        <div class="item">
+            <h2 class="ui blue header">预留</h2>
+        </div>
+    </div>
+    <br><br><br><br>              
     <!-- 侧边栏图形 -->
     <i class = "big sidebar icon" id="sidebar"></i>
     <!-- 面包屑导航 -->
@@ -15,7 +20,7 @@
             <i class="right angle icon divider"></i>
             <a class="active section" style=color:black>事故事件</a>
     </div>
-  <div class="ui divider"></div>
+    <div class="ui divider"></div>
     <div class="ui container">
           <table id="accident" class="ui striped table">
               <thead>
@@ -30,6 +35,7 @@
                 <th>飞行性质</th>
                 <th>阶段</th>
                 <th>死亡人数</th>
+                <th>事故地区</th>
                 <th>事故地点</th>
                 <th>出发地</th>
                 <th>目的地</th>
@@ -56,6 +62,7 @@
                     <th>飞行性质</th>
                     <th>阶段</th>
                     <th>死亡人数</th>
+                    <th>事故地区</th>
                     <th>事故地点</th>
                     <th>出发地</th>
                     <th>目的地</th>
@@ -75,28 +82,15 @@
 <!-- 脚本部分用来处理表格样式等内容, 整个datatables用两个部分来控制, table部分控制数据和交互, script部分控制展试, 分页和搜索等功能-->
 <!-- Js for datatables. -->
 <script type="text/javascript">
-//设置初始化ajax的datatable的函数     
+//设置初始化ajax的datatable的函数 
+
+    
 $(document).ready(function(){
     var lengthMenuParam = 
         '<div class="btn-group">'
         '</div>';
-    //获取url中的参数，从而获得变量urlParam
-    //url为http://127.0.0.1:8000/data_platform/failure_mode_bank_list/ALL
-    //获取的是failure_mode_bank_list后的参数
-    var str = getQueryString("accident_list");
-    function getQueryString(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
-        var r = window.location.search.substr(1).match(reg);
-        var q = window.location.pathname.substr(1).match(reg_rewrite);
-        if(r != null){
-            return unescape(r[2]);
-        }else if(q != null){
-            return unescape(q[2]);
-        }else{
-            return null;
-        }
-    }
+
+    var urlParam = "{% url 'data_platform:accident_list' %}";
 
     var columnsParam = [
         {data:"aircraft_registration_number"},
@@ -123,13 +117,13 @@ $(document).ready(function(){
     ];
     var table = $("#accident").DataTable(initDataTable(lengthMenuParam, urlParam, columnsParam));
 
+
     //分列查找内容
     // Setup - add a text input to each footer cell
     $('#accident tfoot th').each( function () {
         var title = $('#accident thead th').eq( $(this).index() ).text();
         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
     });
-
     // Apply the search
     table.columns().eq( 0 ).each( function ( colIdx ) {
         $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
@@ -151,30 +145,35 @@ $(document).ready(function(){
         } )
         .on( 'mouseleave',  function () {
             $( table.cells().nodes() ).removeClass( 'highlight' );
-        });
+        } );
+
     //高亮鼠标停留的行
     $('#accident tbody')
         .on( 'mouseover', 'tr', function () {
             if ( !$(this).hasClass('highlight')) {
                 $(this).addClass( 'highlight' );
             }
-        })
+        } )
         .on( 'mouseleave', 'tr', function () {
             if ( $(this).hasClass('highlight')) {
                 $(this).removeClass( 'highlight' );
             }
         })
+
 //    修改设置搜索框、显示框等位置
     $('#accident_length').addClass('lengthToLeft')
     $('#accident_filter').addClass('filterToLeft')
     $('#accident_paginate').addClass('paginateToLeft')
+
 //  设置横向滚动条
     $("#accident").wrapAll("<div style='overflow-x:auto'>");
 });
+    
 // 在整个页面左侧添加侧边栏
 $('#sidebar').click(function(){
     $('.ui.sidebar').sidebar('toggle');
 });
+    
 </script>
 
 

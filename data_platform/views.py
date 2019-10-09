@@ -1644,15 +1644,21 @@ class model_aircraft_data_index_view(ListView):
     
 class update_notes_index_view(ListView):
 	template_name = "update_notes_index.html"
-    
 
+    
+    
+#获取事故事件
+@csrf_exempt
 def get_accident_list(request):
+    #术语定义无需机型筛选
+    accident_list = accident.objects.all()
+    
     #判断请求方法是GET还是POST
     if request.method == 'GET':
         return render(request,"accident_list.html")
     else:
         #若是POST请求，则调用get_ajax_datatable()方法
-        column_length = 21#表格的列数
+        column_length = 21 #表格的列数
         #search_keys存放datatable各列的模型字段
         #对于用外键连接的字段，需要用__具体字段来查询
         search_keys = ['aircraft_registration_number',
@@ -1681,7 +1687,6 @@ def get_accident_list(request):
                                        accident_list,
                                        column_length,
                                        search_keys)
-        
         result_data = []
         for ls in result:
             data={
@@ -1694,7 +1699,7 @@ def get_accident_list(request):
                 "occurrence_time": str(ls.occurrence_time),
                 "flight_type": ls.flight_type,
                 "flight_phase": ls.flight_phase,
-                "death_toll": str(ls.death_toll),
+                "death_toll": ls.death_toll,
                 "occurrence_region": ls.occurrence_region,
                 "occurrence_place": ls.occurrence_place,
                 "departure": ls.departure,
@@ -1711,7 +1716,3 @@ def get_accident_list(request):
         # 此时的key名字就是aaData，不能变
         dataTable['aaData'] = result_data
         return HttpResponse(json.dumps(dataTable,cls=DecimalEncoder,ensure_ascii=False), content_type="application/json")
-#class get_accident_list(LoginRequiredMixin,ListView):
-#	model = accident
-#	template_name = "accident_list.html"
-#	context_object_name =  "accident_list"
