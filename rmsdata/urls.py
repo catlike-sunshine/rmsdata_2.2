@@ -25,6 +25,7 @@ urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     url(r'^$', view.index),
     url(r'^data_platform/', include('data_platform.urls')),
+    url(r'^intra_type_data/', include('intra_type_data.urls')),
     path('account/', include('account.urls',namespace='account')),
 ]
 

@@ -37,8 +37,6 @@ class aircraft_info(models.Model):
     aircraft_owner = models.TextField('飞机拥有者')
     cumulative_flight_cycles = models.DecimalField('飞行循环',max_digits = 7, decimal_places = 0)
     cumulative_flight_hours = models.DecimalField('飞行小时',max_digits = 9, decimal_places = 2)
-    record_date = models.DateField("记录时间")
-    monthly_available_days = models.DecimalField('在用架日',max_digits = 3, decimal_places = 0)
     flight_character = models.TextField('飞行性质')
     
     def __str__(self):

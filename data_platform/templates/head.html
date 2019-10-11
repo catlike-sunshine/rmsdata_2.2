@@ -58,14 +58,21 @@
           特性Big Data
       </a>
       <div class="ui simple dropdown item">
-        <a href="#">型号飞机数据</a> 
+        <a href="{% url 'intra_type_data:intra_type_data' %}">型号飞机数据</a> 
         <i class="dropdown icon"></i>
         <div class="menu">
-          <a class="item" href="#">C919</a>
+            <div class = "item">
+                <a style = "color:black" href="{% url 'intra_type_data:C919' %}">C919</a>
+                <i class = "dropdown icon"></i>
+                <div class = "menu">
+                    <a class = "item" href = "{% url 'intra_type_data:ATA_list' %}">ATA</a>
+                    <a class = "item" href = "{% url 'intra_type_data:aircraft_info_list' %}">航空器信息</a>
+                    <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">事件清单</a>
+                </div>
+            </div>
         </div>
       </div>
       <div class="ui simple dropdown item">
-        
         <a href="{% url 'data_platform:similarity_plane' %}">相似机型数据</a>
         <i class="dropdown icon"></i>
         <div class="menu">
