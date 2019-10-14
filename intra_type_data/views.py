@@ -177,7 +177,7 @@ def get_aircraft_info_list(request):
         return render(request,"intra_aircraft_info_list.html")
     else:
         #若是POST请求，则调用get_ajax_datatable()方法
-        column_length = 8 #表格的列数
+        column_length = 6 #表格的列数
         #search_keys存放datatable各列的模型字段
         #对于用外键连接的字段，需要用__具体字段来查询
         search_keys = ['aircraft_type__aircraft_type_number',
@@ -263,7 +263,7 @@ def get_event_info_list(request):
                 "flight_phase": ls.flight_phase,
                 "handling_suggestion": ls.handling_suggestion,
                 "if_tech_question": ls.if_tech_question,
-                "occurrence_time": ls.occurrence_time,
+                "occurrence_time": str(ls.occurrence_time),
                 "other_number": ls.other_number,
                 "task_classification": ls.task_classification,
                 "task_number": ls.task_number,

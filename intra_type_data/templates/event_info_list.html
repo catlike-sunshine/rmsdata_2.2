@@ -35,7 +35,7 @@
                 <th>故障件名称</th>
                 <th>故障件件号</th>
                 <th>飞行阶段</th>
-                <th>问题关闭情况</th>
+                <th>处理意见</th>
                 <th>是否技术问题</th>
                 <th>发生时间</th>
                 <th>其他编号</th>
@@ -62,7 +62,7 @@
                     <th>故障件名称</th>
                     <th>故障件件号</th>
                     <th>飞行阶段</th>
-                    <th>问题关闭情况</th>
+                    <th>处理意见</th>
                     <th>是否技术问题</th>
                     <th>发生时间</th>
                     <th>其他编号</th>
@@ -91,15 +91,15 @@ $(document).ready(function(){
 
     var urlParam = "{% url 'intra_type_data:event_info_list' %}";
     var columnsParam = [
-        {data:"aircraft_info.aircraft_serial_number"},
-        {data:"ATA.chapter"},
+        {data:"aircraft_info"},
+        {data:"ATA"},
         {data:"internal_number"},
         {data:"attachment_info"},
         {data:"corrective_action"},
         {data:"event_description"},
         {data:"failure_number"}, 
         {data:"failure_part_name"},
-        {data:"flight_part_number"},
+        {data:"failure_part_number"},
         {data:"flight_phase"},
         {data:"handling_suggestion"},
         {data:"if_tech_question"},
@@ -116,7 +116,7 @@ $(document).ready(function(){
     var table = $("#accident").DataTable(initDataTable(lengthMenuParam, urlParam, columnsParam));
 
 
-    //分列查找内容
+       //分列查找内容
     // Setup - add a text input to each footer cell
     $('#accident tfoot th').each( function () {
         var title = $('#accident thead th').eq( $(this).index() ).text();

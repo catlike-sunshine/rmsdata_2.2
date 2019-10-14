@@ -59,7 +59,7 @@ class event_info(models.Model):
     failure_part_name = models.TextField('故障件名称')
     failure_part_number = models.TextField('故障件件号')
     flight_phase = models.TextField('飞行阶段')
-    handling_suggestion = models.TextField('问题关闭情况')
+    handling_suggestion = models.TextField('处理意见')
     if_tech_question = models.BooleanField('是否技术问题', default = False)
     occurrence_time = models.DateField('发生时间')
     other_number = models.TextField('其他编号')
