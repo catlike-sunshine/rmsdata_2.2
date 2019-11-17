@@ -1,0 +1,54 @@
+{% load static %}
+{% include "head.html" %}
+
+<br /><br /><br /><br />
+<form action="" style="margin-top: 15px;">
+  <label>请输入EICAS信息：</label>
+  <input type="text" id="input_event">
+</form>
+<p>详细信息：</p>
+<table id="output_event" class="ui striped table" >
+  <thead>
+  <tr>
+    <th>EICAS信息</th>
+    <th>定义</th>
+    <th>等级分类</th>
+    <th>失效条件</th>
+    <th>FIM对应任务号</th>
+    <th>AMM对应任务号</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+        <br><br><br><br><br><br><br><br><br><br><br><br>
+{% include "foot.html" %}
+
+<script type="text/javascript">
+    
+$(document).ready(function(){
+    var urlparam = "{% url 'data_platform:EICAS' %}";
+    $("#input_event").keyup(function(){
+      $.post(urlparam,
+      {
+        input_event:$("#input_event").val()
+        //jQuery获取select标签选中的option中的文本。把val()替换text()获取value值
+      },
+      function(data){
+          $('#output_event').dataTable().fnClearTable();//清除表中原始的内容
+          $("#output_event").dataTable().fnDestroy();//在每次初始化之前destroy之前的初始化内容
+          var t = $("#output_event").DataTable({
+            dom:"t",
+            "bAutoWidth": false,
+            "columnDefs": [{ "width": "15%", "targets":[0,1,2,4,5]} ] 
+          });
+          for (let i=0; i<data['num']; i++){
+             t.row.add([data['result'][i][0],data['result'][i][1],data['result'][i][2],data['result'][i][3],data['result'][i][4],data['result'][i][5]]).draw();
+          }
+      });
+    });  
+})
+
+</script>
+
