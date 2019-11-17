@@ -1716,3 +1716,172 @@ def get_accident_list(request):
         # 此时的key名字就是aaData，不能变
         dataTable['aaData'] = result_data
         return HttpResponse(json.dumps(dataTable,cls=DecimalEncoder,ensure_ascii=False), content_type="application/json")
+
+
+    
+    
+#echart页面
+@csrf_exempt
+def get_echarts(request):
+    
+    aircraft_types = get_aircraft_types()
+    
+#    #判断请求方法是GET还是POST
+    if request.method == 'GET':
+        return render(request,"echarts3.html",{'aircraft_types':aircraft_types})
+    else:
+        acmodel_aircraft_type = request.POST.get("acmodel_aircraft_type")
+        data = {}#data存储返回网页的值
+        data['data1'] = [acmodel_aircraft_type]#放置x轴可选择的数据，如["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+        
+        #判断画图POST中所展示的机型数据
+        if  acmodel_aircraft_type == 'ALL':
+            abnormal_flight_report_list = abnormal_flight_report.objects.all()
+        else:
+            acmodels = acmodel.objects.filter(aircraft_type=acmodel_aircraft_type)
+            aircraft_list = []
+            for ls in acmodels:
+                aircraft_list.extend(aircraft.objects.filter(acmodel=ls))
+            #将list转为为queryset，便于在之后采用result.filter
+            #__in搜索表示存在于一个list范围内
+            abnormal_flight_report_list = abnormal_flight_report.objects.filter(aircraft__in=[x for x in aircraft_list])
+        data['data2'] = []
+        data['data2'].append(len(abnormal_flight_report_list))
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+    
+    
+import jieba 
+from gensim import corpora,models,similarities
+import xlrd
+import heapq
+import os
+
+#定义相似故障问题推荐函数
+def recommandation(input_event):
+    #读入源数据表格
+    viewsPath = os.path.realpath(__file__)
+    print(viewsPath)
+    filePath1 = viewsPath[:-8]+'similar_event/ARJ事件和问题清单_input.xls'
+    event_info=xlrd.open_workbook(filePath1)
+    event=event_info.sheet_by_name('事件和问题清单')
+    row=event.nrows
+    
+    input_cut=[]
+    filePath2 = viewsPath[:-8]+'similar_event/四性术语词典.txt'
+    jieba.load_userdict(filePath2)
+    input_cut=jieba.cut(input_event)
+    input_list=[]
+    for word in input_cut:
+        input_list.append(word)
+    
+    #从本地读取分完词的txt
+    event_list=[]
+    filePath3 = viewsPath[:-8]+'similar_event/wordcut.txt'
+    fileObject=open(filePath3,'r', encoding='utf-8',errors='ignore')
+    for line in fileObject:
+        line=line.rstrip('\n')
+        event_list_tem=line.split(' ')
+        event_list.append(event_list_tem)
+        #event_list.insert(2,line)
+        #print(event_list)
+        #for word in line:
+            #print(word)
+    
+    dictionary= corpora.Dictionary(event_list)#数据源生成词典
+    corpus = [dictionary.doc2bow(item) for item in event_list]#通过doc2bow稀疏向量生成语料库
+    tf = models.TfidfModel(corpus)#通过TF模型算法，计算出tf值
+    num_features = len(dictionary.token2id.keys())#通过token2id得到特征数（字典里面的键的个数）
+    index = similarities.MatrixSimilarity(tf[corpus], num_features=num_features)#计算稀疏矩阵相似度，建立一个索引
+    
+    new_vec = dictionary.doc2bow(input_list)#新的稀疏向量
+    sims = index[tf[new_vec]]#算出相似度
+    sims_list=list(sims)
+    re1 = map(sims_list.index, heapq.nlargest(3, sims_list)) #求最大的三个索引，索引加2为excel行数
+    max_three_index=list(re1)
+    #sim_list_sort=sims_list.sort()#降序排序
+    #print(max(sims_list))
+    sim_one=max_three_index[0]#找出与输入事件相似度最高的事件的序号
+    sim_two=max_three_index[1]
+    sim_three=max_three_index[2]
+    #print(sim_max)
+    #str_link=''
+    #output=str_link.join(event_list[sim_max])#将相似度最高的事件连接起来输出
+    # print(event_list)
+    unicode={}#描述-唯一编号字典
+    num=[]#唯一编号
+    for i in range(1,row):
+        unicode[tuple(event_list[i-1])]=event.cell_value(i,30)
+        num.append(event.cell_value(i,30))
+    #print(output)
+    num_one=unicode[tuple(event_list[sim_one])]#相似度最高的唯一编码
+    num_two=unicode[tuple(event_list[sim_two])]
+    num_three=unicode[tuple(event_list[sim_three])]
+    #print(num_max)
+    row_one=num.index(num_one)+1#excel表中的行数
+    row_two=num.index(num_two)+1
+    row_three=num.index(num_three)+1
+    output = []
+    order = [row_one,row_two,row_three]
+    for i in range(len(order)):
+        result = [i+1,
+                  event.cell_value(order[i],8),
+                  event.cell_value(order[i],6),
+                  event.cell_value(order[i],12),
+                  event.cell_value(order[i],13)]
+        output.append(result)
+    return output
+    
+#推送相似事件页面
+@csrf_exempt
+def get_similar_event(request):
+    #判断请求方法是GET还是POST
+    if request.method == 'GET':
+        return render(request,"similar_event.html")
+    else:
+        input_event = request.POST.get("input_event")
+        data = recommandation(input_event)#data存储返回网页的值
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    
+    
+#定义EICAS搜寻函数   
+def display(input_info):
+    original_info=[['ROLL CONTROLS DISCO','驾驶盘脱开','WARNING','正副驾驶驾驶盘脱开' ,'27-11-00-810-806','27-11-14-710-801'],
+    ['ELEV SPLIT','左右升降舵偏度不一致','WARNING','左右升降舵偏度不一致超过限制值，可能引起飞机结构损坏','27-91-04-810-801','27-91-04-000-801'],
+    ['ELEV SPLIT','左右升降舵偏度不一致','WARNING','左右升降舵偏度不一致超过限制值，可能引起飞机结构损坏','27-91-04-810-801','27-91-04-400-801'],
+    ['PITCH CONTROLS DISCO','驾驶杆脱开','WARNING','正副驾驶驾驶杆脱开','27-31-00-810-801','27-31-14-710-801'],
+    ['SINGLE AIL INOP','单个副翼不工作', 'CAUTION','左侧或右侧副翼漂浮或卡阻','27-91-21-810-801','27-91-21-000-801'],
+    ['SINGLE AIL INOP','单个副翼不工作', 'CAUTION','左侧或右侧副翼漂浮或卡阻','27-91-21-810-801','27-91-21-400-801'],
+    ['RUDDER JAM','方向舵卡阻','CAUTION','方向舵卡阻或漂浮','27-22-00-810-804','27-22-01-000-801'],
+    ['RUDDER JAM','方向舵卡阻','CAUTION','方向舵卡阻或漂浮','27-22-00-810-804','27-22-01-400-801'],
+    ['RUDDER JAM','方向舵卡阻','CAUTION','方向舵卡阻或漂浮','27-22-00-810-803','27-22-01-000-801'],
+    ['RUDDER JAM','方向舵卡阻','CAUTION','方向舵卡阻或漂浮','27-22-00-810-803','27-22-01-400-801'],
+    ['RUDDER JAM','方向舵卡阻','CAUTION','方向舵卡阻或漂浮','27-22-00-810-801','27-22-01-000-801'],
+    ['RUDDER JAM','方向舵卡阻','CAUTION','方向舵卡阻或漂浮','27-22-00-810-801','27-22-01-400-801'],
+    ['副翼驾驶盘：操作不灵活,卡阻/过松-正驾驶员','','观察到的故障','','27-11-00-810-803','27-11-00-710-801']]
+    input_info=input_info.upper()
+    a=0
+    data = {}
+    result = []
+    for line in original_info:
+        if input_info==line[0]:
+            result.append(line)
+            a=a+1
+    data['num'] = a
+    data["result"] = result
+    return data
+    
+    
+#推送EICAS消息
+@csrf_exempt
+def get_EICAS(request):
+    #判断请求方法是GET还是POST
+    if request.method == 'GET':
+        return render(request,"EICAS.html")
+    else:
+        input_event = request.POST.get("input_event")
+        data = display(input_event)#data存储返回网页的值
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    
+

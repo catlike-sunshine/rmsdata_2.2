@@ -148,6 +148,9 @@
         </div>
       </div>
       <a class="item" href="{% url 'data_platform:update_notes' %}">更新说明</a>
+      <a class="item" href="{% url 'data_platform:echarts' %}">ECharts</a>
+      <a class="item" href="{% url 'data_platform:similar_event' %}">相似故障问题推荐</a>
+      <a class="item" href="{% url 'data_platform:EICAS' %}">EICAS</a>
       <div class="ui simple dropdown right item">
             {% if user.is_authenticated %}
             {{ user.first_name }}<i class="dropdown icon"></i>

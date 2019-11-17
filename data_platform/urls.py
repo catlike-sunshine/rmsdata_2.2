@@ -42,7 +42,11 @@ urlpatterns = [
     url(r'^airline_maintenance_hours_statistics_list/(?P<acmodel_aircraft_type>\w+)$',views.get_airline_maintenance_hours_statistics_list, name="airline_maintenance_hours_statistics_list"),
     url(r'^model_aircraft_data/', TemplateView.as_view(template_name="model_aircraft_data.html"), 
         name="model_aircraft_data"),
-    url(r'^update_notes/', TemplateView.as_view(template_name="update_notes.html"), name="update_notes"),
+    url(r'^update_notes/', TemplateView.as_view, name="update_notes"),
     ##相似机型第三期------------------------------
     url(r'^accident_list/',views.get_accident_list, name="accident_list"),
+#    url(r'^echarts/',TemplateView.as_view(template_name="echarts2.html"),name="echarts"),
+    url(r'^echarts/',views.get_echarts, name="echarts"),
+    url(r'^similar_event/',views.get_similar_event, name="similar_event"),
+    url(r'^EICAS/',views.get_EICAS, name="EICAS"),
 ]
