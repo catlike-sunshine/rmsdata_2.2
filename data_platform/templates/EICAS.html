@@ -5,6 +5,7 @@
 <form action="" style="margin-top: 15px;">
   <label>请输入EICAS信息：</label>
   <input type="text" id="input_event">
+  <button type="button" id='event_search'>查询</button>
 </form>
 <p>详细信息：</p>
 <table id="output_event" class="ui striped table" >
@@ -29,7 +30,7 @@
     
 $(document).ready(function(){
     var urlparam = "{% url 'data_platform:EICAS' %}";
-    $("#input_event").keyup(function(){
+    $("#event_search").click(function(){
       $.post(urlparam,
       {
         input_event:$("#input_event").val()

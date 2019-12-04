@@ -87,5 +87,10 @@ def recommandation(input_event,row):
 
 
 #模拟新事件的输入
-input_event=input('请输入事件描述：')
-recommandation(input_event,row)
+flag = True
+while (flag):
+    input_event=input('请输入事件描述：')
+    if input_event == 'False':
+        flag = False
+        break
+    recommandation(input_event,row)

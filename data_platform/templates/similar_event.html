@@ -5,12 +5,14 @@
 <form action="" style="margin-top: 15px;">
   <label>请输入要查询的事件：</label>
   <input type="text" id="input_event">
+<!--  form表单中默认button类型是submit，点击后先走Ajax，然后显示表单提交后的结果，需要把button类型改为button-->
+  <button type="button" id='event_search'>查询</button>
 </form>
 <p>推荐的相似故障：</p>
 <table id="output_event" class="ui striped table" >
   <thead>
   <tr>
-    <th>相似性</th>
+    <th>相似度</th>
     <th>问题描述</th>
     <th>ATA</th>
     <th>纠正措施</th>
@@ -29,7 +31,7 @@
     
 $(document).ready(function(){
     var urlparam = "{% url 'data_platform:similar_event' %}";
-    $("#input_event").keyup(function(){
+    $("#event_search").click(function(){
       $.post(urlparam,
       {
         input_event:$("#input_event").val()

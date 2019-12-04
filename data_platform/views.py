@@ -1750,26 +1750,27 @@ def get_echarts(request):
 
         return HttpResponse(json.dumps(data), content_type="application/json")
 
-    
+
+		
+
     
 import jieba 
 from gensim import corpora,models,similarities
 import xlrd
 import heapq
 import os
+from sklearn.externals import joblib
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
 
 #定义相似故障问题推荐函数
 def recommandation(input_event):
-    #读入源数据表格
-    viewsPath = os.path.realpath(__file__)
-    print(viewsPath)
-    filePath1 = viewsPath[:-8]+'similar_event/ARJ事件和问题清单_input.xls'
+    filePath1 = os.path.join(os.path.dirname(__file__),'similar_event','ARJ事件和问题清单_input.xls')
     event_info=xlrd.open_workbook(filePath1)
     event=event_info.sheet_by_name('事件和问题清单')
     row=event.nrows
-    
     input_cut=[]
-    filePath2 = viewsPath[:-8]+'similar_event/四性术语词典.txt'
+    filePath2 = os.path.join(os.path.dirname(__file__),'similar_event','四性术语词典.txt')
     jieba.load_userdict(filePath2)
     input_cut=jieba.cut(input_event)
     input_list=[]
@@ -1778,7 +1779,7 @@ def recommandation(input_event):
     
     #从本地读取分完词的txt
     event_list=[]
-    filePath3 = viewsPath[:-8]+'similar_event/wordcut.txt'
+    filePath3 = os.path.join(os.path.dirname(__file__),'similar_event','wordcut.txt')
     fileObject=open(filePath3,'r', encoding='utf-8',errors='ignore')
     for line in fileObject:
         line=line.rstrip('\n')
@@ -1809,29 +1810,33 @@ def recommandation(input_event):
     #str_link=''
     #output=str_link.join(event_list[sim_max])#将相似度最高的事件连接起来输出
     # print(event_list)
-    unicode={}#描述-唯一编号字典
-    num=[]#唯一编号
-    for i in range(1,row):
-        unicode[tuple(event_list[i-1])]=event.cell_value(i,30)
-        num.append(event.cell_value(i,30))
-    #print(output)
-    num_one=unicode[tuple(event_list[sim_one])]#相似度最高的唯一编码
-    num_two=unicode[tuple(event_list[sim_two])]
-    num_three=unicode[tuple(event_list[sim_three])]
-    #print(num_max)
-    row_one=num.index(num_one)+1#excel表中的行数
-    row_two=num.index(num_two)+1
-    row_three=num.index(num_three)+1
     output = []
-    order = [row_one,row_two,row_three]
-    for i in range(len(order)):
-        result = [i+1,
-                  event.cell_value(order[i],8),
-                  event.cell_value(order[i],6),
-                  event.cell_value(order[i],12),
-                  event.cell_value(order[i],13)]
-        output.append(result)
-    return output
+    if max(sims_list)==0:
+        return output
+    else:
+        unicode={}#描述-唯一编号字典
+        num=[]#唯一编号
+        for i in range(1,row):
+            unicode[tuple(event_list[i-1])]=event.cell_value(i,30)
+            num.append(event.cell_value(i,30))
+        #print(output)
+        num_one=unicode[tuple(event_list[sim_one])]#相似度最高的唯一编码
+        num_two=unicode[tuple(event_list[sim_two])]
+        num_three=unicode[tuple(event_list[sim_three])]
+        #print(num_max)
+        row_one=num.index(num_one)+1#excel表中的行数
+        row_two=num.index(num_two)+1
+        row_three=num.index(num_three)+1
+        order = [row_one,row_two,row_three]
+        result = []
+        for i in range(3):
+            result = [i+1,
+                    event.cell_value(order[i],8),
+                    event.cell_value(order[i],6),
+                    event.cell_value(order[i],12),
+                    event.cell_value(order[i],13)]
+            output.append(result)
+        return output
     
 #推送相似事件页面
 @csrf_exempt
@@ -1842,6 +1847,7 @@ def get_similar_event(request):
     else:
         input_event = request.POST.get("input_event")
         data = recommandation(input_event)#data存储返回网页的值
+        print(data)
         return HttpResponse(json.dumps(data), content_type="application/json")
     
     
@@ -1884,4 +1890,135 @@ def get_EICAS(request):
         data = display(input_event)#data存储返回网页的值
         return HttpResponse(json.dumps(data), content_type="application/json")
     
+#定义风险识别算法
+def riskidentification(event_input):
+    risk= {'0':'无风险','1':'有风险','2':'存在重大风险','3':'存在重大风险'}
+    xpre=pd.DataFrame()
+    #停用词读入列表
+    stopwords_list=[]
+    filePath0 = os.path.join(os.path.dirname(__file__),'similar_event','stopwords.txt')
+    for word in open(filePath0, encoding='utf-8',errors='ignore'):
+        stopwords_list.append(word.strip()) 
+        
+    filePath1 = os.path.join(os.path.dirname(__file__),'similar_event','四性术语词典.txt')
+    jieba.load_userdict(filePath1)
+    seg_list=jieba.cut(event_input)
+    event_cut=[]
+    for word in seg_list:
+        if word not in stopwords_list:
+            event_cut.append(word)
+    eventdevide = ' '.join(event_cut)
+    xpre['text'] = eventdevide
 
+    filePath2 = os.path.join(os.path.dirname(__file__),'similar_event','data.xlsx')
+    trainDF = pd.read_excel(filePath2, index=False)
+    tfidf_vect_ngram = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', ngram_range=(2, 3), max_features=500)
+    #tfidf_vect_ngram.fit(df['问题描述'])
+    tfidf_vect_ngram.fit(trainDF['text'])
+
+    xpre_tfidf_ngram = tfidf_vect_ngram.transform(xpre)
+    
+    filePath3 = os.path.join(os.path.dirname(__file__),'similar_event','train_model.m')
+    clf = joblib.load(filePath3)
+    prediction=clf.predict(xpre_tfidf_ngram)
+    return risk[str(int(prediction))]
+
+
+#识别风险项
+@csrf_exempt
+def get_riskidentification(request):
+    #判断请求方法是GET还是POST
+    if request.method == 'GET':
+        return render(request,"risk_identification.html")
+    else:
+        input_event = request.POST.get("input_event")
+        result = riskidentification(input_event)#data存储返回网页的值
+        data = {}
+        data['result'] = result
+        print(data)
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    
+#引入GitHub ASRT语音识别算法
+import sys
+#os.path.dirname(__file__)获取该文件或目录所在文件夹的路径，os.path.realpath(__file__)获取该文件的绝对路径包括文件名
+#viewsFolderPath = os.path.dirname(__file__)
+#viewsPath = os.path.realpath(__file__)
+#viewsFolderPath,filename = os.path.split(viewsPath)
+#sys.path.append(os.path.join(viewsFolderPath,'ASRT'))
+#from test_speech_recognition_module import test_speech_recognition
+
+
+#调用百度语音识别API
+from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
+sys.path.append(os.path.dirname(__file__))
+from baiduAPI import get_word
+
+#语音文件上传并识别
+@csrf_exempt
+def get_speech_recognition(request):
+    #判断请求方法是GET还是POST
+    if request.method == 'GET':
+        return render(request,"speech_recognition.html")
+    else:
+        file_obj = request.FILES.get('file')
+        print()
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','audio',file_obj.name)
+        f = open(file_path,'wb')
+        print(file_obj,type(file_obj))
+#        在chunks()上循环而不是用read()保证大文件不会大量使用系统内存
+        for chunk in file_obj.chunks():
+            f.write(chunk)
+        f.close()
+        print('成功保存')
+        result = get_word(file_path)
+        print(result)
+#        data = {}
+#        data['result'] = result
+        return HttpResponse(json.dumps(result), content_type="application/json")
+    
+    
+
+
+#class GetWordview(GenericAPIView):
+#	"""
+#	音频转换
+#	"""
+#	def post(self, request):
+#    	# 获取音频文件
+#    	get_audio = request.data.get('audio', None)
+#        # 定义路径
+#        folder_path = os.path.realpath(__file__)
+#    	file_name = folder_path[:-8] + '/ASRT/testwav3.wav'
+#    	# 是否为空
+#    	if get_audio:
+#
+#        	# 百度音频接口
+#        	data = get_word(file_name, get_audio)
+#        	if data['err_no'] == 0:
+#
+#            	# 返回数据
+#            	data = {
+#                	'status': 200,
+#                	'msg': 'OK',
+#                	'data': data['result'][0].replace('。', '')
+#            	}
+#
+#            	return Response(data=data, status=status.HTTP_200_OK)
+#        	else:
+#            	# 返回数据
+#            	data = {
+#                	'status': data['err_no'],
+#                	'msg': data['err_msg'],
+#            	}
+#
+#            	return Response(data=data, status=status.HTTP_200_OK)
+#
+#    	else:
+#        	data = {
+#            	'status': 202,
+#            	'msg': '参数缺失'
+#        	}
+#
+#        	return Response(data=data, status=status.HTTP_200_OK)
