@@ -1,0 +1,59 @@
+{% load static %}
+{% include "head.html" %}
+<body>
+    <div class="ui pointing demo menu"><!-- demo 是自定义的类选择器名称-->
+        <a class="active item" data-tab="first">单机履历</a>
+        <a class="item" data-tab="second">事件清单</a>
+        <a class="item" data-tab="third">问题清单</a>
+    </div>
+    <div class="ui active tab segment" data-tab="first">
+            <div class="ui two column stackable center aligned grid">
+                    <div class="middle aligned row">
+                      <div class="column">
+                       <a href="{% url 'intra_type_data:resume_10101' %}">
+                           <div class="ui teal button">10101架机</div>
+                        </a>
+                      </div>
+                      <div class="column">
+                          <p> 机队飞行总时间对比 </p>
+                          <img class="ui large image" src="/static/images/flytime_plane.png">
+                       </div>
+                  </div>
+                </div>
+        <br><br><br><br>
+        <div class="ui teal button">10102架机</div>
+        <br><br><br><br>
+        <div class="ui teal button">10103架机</div>
+        <br><br><br><br>
+        <div class="ui teal button">10104架机</div>
+    </div>
+    <div class="ui tab segment" data-tab="second">
+        <h2 align=center>记载试飞，取证及运行过程中各方反馈的事件数据</h2>
+        <h2 align=center>下面是事件数据的图表展示</h2>
+        <a href="{% url 'intra_type_data:event_list_5G' %}">
+            <div class="ui right floated button" >查看所有事件</div>
+        </a>
+    <br>
+    <br>
+    </div>
+    <div class="ui tab segment" data-tab="third">
+        <h2 align=center>记载试飞，取证及运行过程中从事件中总结出的具体问题数据</h2>
+        <h2 align=center>下面是问题数据的图表展示</h2>
+        <a href="{% url 'intra_type_data:problem_list_5G' %}">
+            <div class="ui right floated button" >查看所有问题</div>
+        </a>
+    <br>
+    <br>
+    </div>
+
+
+    <script src="../../static/js/js_address.js"></script>
+    <script type="text/javascript">
+    //demo 是自定义的类选择器名称
+    $(function (){
+        //jQuery UI的Tab也是这样，可能也许大概说不准也依赖jquery.address
+        $('.demo.menu .item').tab();//menu与.item之间一定要有一个空格，才能实现切换tab的功能
+    })
+    </script>
+</body>
+{% include "foot.html" %}

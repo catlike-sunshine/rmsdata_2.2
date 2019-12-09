@@ -51,7 +51,8 @@
   </style>
 </head>
 <body>
-  <div class="ui fixed primary inverted menu">
+
+  <div class="ui primary inverted stackable menu"><!--这里去掉了fixed，为了适应手机页面-->
     <div class="ui container">
       <a href="{% url 'data_platform:index' %}" class="header item">
         <img class="logo" src="{% static 'logo.png' %}">
@@ -62,22 +63,23 @@
         <i class="dropdown icon"></i>
         <div class="menu">
             <div class = "item">
-                <a style = "color:black" href="{% url 'intra_type_data:C919' %}">C919</a>
+                <a style = "color:black">ARJ21</a>
+            </div>
+            <div class = "item">
+                <a style = "color:black" href="{% url 'intra_type_data:C919_5G' %}">C919</a>
                 <i class = "dropdown icon"></i>
                 <div class = "menu">
-                    <a class = "item" href = "{% url 'intra_type_data:ATA_list' %}">ATA</a>
-                    <a class = "item" href = "{% url 'intra_type_data:aircraft_info_list' %}">航空器信息</a>
-                    <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">事件清单</a>
+                    <a class = "item" href = "{% url 'intra_type_data:ATA_list' %}">单机履历表</a>
+                    <a class = "item" href = "{% url 'intra_type_data:aircraft_info_list' %}">事件数据</a>
+                    <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">问题数据</a>
+                    <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">飞行记录</a>
                 </div>
             </div>
             <div class = "item">
-                <a style = "color:black" href="{% url 'intra_type_data:C919' %}">ARJ21</a>
-                <i class = "dropdown icon"></i>
-                <div class = "menu">
-                    <a class = "item" href = "{% url 'intra_type_data:ATA_list' %}">ATA</a>
-                    <a class = "item" href = "{% url 'intra_type_data:aircraft_info_list' %}">航空器信息</a>
-                    <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">事件清单</a>
-                </div>
+              <a style = "color:black" >CR929</a>
+            </div>
+            <div class = "item">
+              <a style = "color:black" >公务机</a>
             </div>
         </div>
       </div>
@@ -150,7 +152,6 @@
       <a class="item" href="{% url 'data_platform:similar_event' %}">相似故障问题推荐</a>
       <a class="item" href="{% url 'data_platform:EICAS' %}">EICAS</a>
       <a class="item" href="{% url 'data_platform:riskIdentification' %}">风险识别</a>
-      <a class="item" href="{% url 'data_platform:speech_recognition' %}">语音识别</a>
       <div class="ui simple dropdown right item">
             {% if user.is_authenticated %}
             {{ user.first_name }}<i class="dropdown icon"></i>

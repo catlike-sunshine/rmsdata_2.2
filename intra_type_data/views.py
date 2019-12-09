@@ -31,6 +31,42 @@ class C919_view(ListView):
         now = datetime.datetime.now()
         text={'hello':'Hello world!','name':'J','nowtime':now}
         return(text)
+
+class C919_5G_view(ListView):
+    template_name = "C919_5G.html"
+    context_object_name = "text"
+
+    def get_queryset(self):
+        now = datetime.datetime.now()
+        text={'hello':'Hello world!','name':'J','nowtime':now}
+        return(text)
+
+class resume_10101_view(ListView):
+    template_name = "resume_10101.html"
+    context_object_name = "text"
+
+    def get_queryset(self):
+        now = datetime.datetime.now()
+        text={'hello':'Hello world!','name':'J','nowtime':now}
+        return(text)
+
+class event_list_5G_view(ListView):
+    template_name = "event_list_5G.html"
+    context_object_name = "text"
+
+    def get_queryset(self):
+        now = datetime.datetime.now()
+        text={'hello':'Hello world!','name':'J','nowtime':now}
+        return(text)
+
+class problem_list_5G_view(ListView):
+    template_name = "problem_list_5G.html"
+    context_object_name = "text"
+
+    def get_queryset(self):
+        now = datetime.datetime.now()
+        text={'hello':'Hello world!','name':'J','nowtime':now}
+        return(text)
 #转化小数
 class DecimalEncoder(json.JSONEncoder):
     def default(self, obj):

@@ -1,0 +1,32 @@
+{% load static %}
+{% include "head.html" %}
+<body>
+ <!-- 面包屑导航 -->
+ <div class="ui breadcrumb">
+        <a class="section" href="{% url 'data_platform:index' %}">主页</a>
+        <i class="right angle icon divider"></i>
+        <a class="section" style=color:black href="{% url 'intra_type_data:C919_5G'%}">型号飞机数据</a>
+        <i class="right angle icon divider"></i>
+        <a class="active section" style=color:black>10101架机履历表</a>
+</div>
+<br><br><br> 
+<div class="ui centered card">
+        <div class=" content">
+                <div class="center aligned header">10101架机最新讯息</div>
+                <div class=description>
+                <p>1.10101架机于XXXX年XX月XX日完成XX试验</p>
+                <p>2.10101架机于XXXX年XX月XX日试飞过程中发生XX问题</p>
+                <p>3.10101架机已累计飞行XX小时，总起落次数XX次</p>
+        </div>
+        </div>
+</div>
+<br>
+<HR align=center width="60%" SIZE=7>
+<br> 
+<h2 align=center>历史数据</h2>
+<h3 align=center>下面是历史数据图表展示</h3>
+
+
+
+</body>
+{% include "foot.html" %}

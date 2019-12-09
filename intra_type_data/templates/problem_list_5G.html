@@ -1,0 +1,12 @@
+{% load static %}
+{% include "head.html" %}
+<body>
+    <div class="ui breadcrumb">
+            <a class="section" href="{% url 'data_platform:index' %}">主页</a>
+            <i class="right angle icon divider"></i>
+            <a class="section" style=color:black href="{% url 'intra_type_data:C919_5G'%}">型号飞机数据</a>
+            <i class="right angle icon divider"></i>
+            <a class="active section" style=color:black>问题清单</a>
+    </div>
+</body>
+{% include "foot.html" %}
