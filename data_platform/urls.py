@@ -49,6 +49,5 @@ urlpatterns = [
     url(r'^echarts/',views.get_echarts, name="echarts"),
     url(r'^similar_event/',views.get_similar_event, name="similar_event"),
     url(r'^EICAS/',views.get_EICAS, name="EICAS"),
-    url(r'^riskIdentification/',views.get_riskidentification, name="riskIdentification"),
     url(r'^speech_recognition/',views.get_speech_recognition, name="speech_recognition"),
 ]
