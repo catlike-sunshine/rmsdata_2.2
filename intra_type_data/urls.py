@@ -12,4 +12,9 @@ urlpatterns = [
     url(r'^ATA_list/',views.get_ATA_list, name="ATA_list"),
     url(r'^event_info_list/',views.get_event_info_list, name="event_info_list"),
     url(r'^aircraft_info_list/',views.get_aircraft_info_list, name="aircraft_info_list"),
+    url(r'^C919_5G/', views.get_C919_5G, name="C919_5G"),
+    url(r'^resume_10101/', views.get_resume_10101, name="resume_10101"),
+    url(r'^problem_info_list/', views.get_problem_info_list, name="problem_info_list"),
+    url(r'^event_info/(?P<id>\d+)/', views.get_event_info.as_view(), name="event_info"),
+    url(r'^problem_info/(?P<problem_info_id>\d+)/', views.get_problem_info.as_view(), name="problem_info"),
 ]

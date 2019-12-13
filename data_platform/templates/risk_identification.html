@@ -1,0 +1,34 @@
+{% load static %}
+{% include "head.html" %}
+
+<br /><br /><br /><br />
+<form action="" style="margin-top: 15px;">
+  <label>请输入事件：</label>
+  <input type="text" id="input_event">
+  <button type="button" id='event_search'>查询</button>
+</form>
+<p>风险类别：</p>
+<p id="output_event_2"></p>
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+{% include "foot.html" %}
+
+<script type="text/javascript">
+    
+$(document).ready(function(){
+    var urlparam_2 = "{% url 'data_platform:riskIdentification' %}";
+    $("#event_search").click(function(){
+      $("#output_event_2").text('');
+      $.post(urlparam_2,
+      {
+        input_event:$("#input_event").val()
+        //jQuery获取select标签选中的option中的文本。把val()替换text()获取value值
+      },
+      function(data_2){
+        $("#output_event_2").text(data_2['result']);
+      }) 
+    })
+})
+
+</script>
+

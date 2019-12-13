@@ -12,16 +12,16 @@
                 <div class="item">
                     <a class = "header" href="{% url 'intra_type_data:intra_type_data' %}">型号飞机数据</a> 
                     <div class="item">
-                         <a class = "header" href="{% url 'intra_type_data:C919' %}">C919</a>
+                         <a class = "header" href="{% url 'intra_type_data:C919_5G' %}">C919</a>
                         <div class = "menu">
-                            <a class = "item" href = "{% url 'intra_type_data:ATA_list' %}">ATA</a>
-                            <a class = "item" href = "{% url 'intra_type_data:aircraft_info_list' %}">航空器信息</a>
-                            <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">事件清单</a>
+                            <a class = "item" href = "{% url 'intra_type_data:C919_5G' %}">单机履历表</a>
+                            <a class = "item" href = "{% url 'intra_type_data:C919_5G' %}">事件数据</a>
+                            <a class = "item" href = "{% url 'intra_type_data:C919_5G' %}">问题数据</a>
                         </div>
                     </div>
                 </div>              
     </div>
-    <br><br><br><br>
+    <br>
     <!-- 侧边栏图形 -->
     <i class = "big sidebar icon" id="sidebar"></i>
     <!-- 面包屑导航 -->
@@ -33,15 +33,43 @@
     <br> 
     <br> 
     <div class="ui container">
-            <h1 style="text-align:center">商飞机型数据展示</h1>
+            <h1 style="text-align:center">型号飞机数据</h1>
     </div>
-    <br> 
-    <br> 
-    <br> 
-    <br> 
-    <br> 
-    <br> 
-    <div class="ui six centered cards">
+    <br><br><br>
+    
+    <div class="ui three column grid">
+            <div class="column">
+              <div class="ui fluid card">
+                <div class="image">
+                  <img src="../../static/images/ARJ21.jpg">
+                </div>
+                <div class="content">
+                  <a class="header">ARJ21</a>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="ui fluid card">
+                <div class="image">
+                  <img src="../../static/images/C919.jpg">
+                </div>
+                <div class="content">
+                  <a class="header" href="{% url 'intra_type_data:C919_5G' %}">C919</a>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="ui fluid card">
+                <div class="image">
+                  <img src="../../static/images/CR929.jpg">
+                </div>
+                <div class="content">
+                  <a class="header">CR929</a>
+                </div>
+              </div>
+            </div>
+          </div>
+    <!--<div class="ui six centered cards">
         <div class="card">
             <a class="content" href="{% url 'intra_type_data:C919' %}" style="display: block; text-align: center;">
                 <i class='massive plane icon'></i>   
@@ -72,7 +100,7 @@
             <div class="description">
             </div>
         </div>
-    </div>
+    </div>-->
     <!--Semantic ui sidebar display-->
     <script>
         $('#sidebar').click(function(){

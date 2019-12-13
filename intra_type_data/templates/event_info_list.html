@@ -14,69 +14,222 @@
     <div class="ui breadcrumb">
         <a class="section" style=color:black href="{% url 'data_platform:index' %}">主页</a>
         <i class="right angle icon divider"></i>
-        <a class="section" style=color:black href="{% url 'intra_type_data:intra_type_data' %}">内部机型</a>
+        <a class="section" style=color:black href="{% url 'intra_type_data:intra_type_data' %}">型号飞机数据</a>
         <i class="right angle icon divider"></i>
-        <a class="section" style=color:black href="{% url 'intra_type_data:C919' %}">C919</a>
+        <a class="section" style=color:black href="{% url 'intra_type_data:C919_5G' %}">C919</a>
         <i class="right angle icon divider"></i>
         <a class="active section" style=color:black>事件清单</a>
     </div>
-    <div class="ui divider"></div>
-    <div class="ui container">
-          <table id="accident" class="ui striped table">
-              <thead>
-              <tr>
-                <th>航空器序列号</th>
-                <th>ATA章</th>
-                <th>内部编号</th>
-                <th>附件信息</th>
-                <th>纠正文本</th>
-                <th>问题描述</th>
-                <th>故障编号</th>
-                <th>故障件名称</th>
-                <th>故障件件号</th>
-                <th>飞行阶段</th>
-                <th>处理意见</th>
-                <th>是否技术问题</th>
-                <th>发生时间</th>
-                <th>其他编号</th>
-                <th>任务分类</th>
-                <th>任务编号</th>
-                <th>排故概况</th>
-                <th>故障处理</th>
-                <th>问题关闭情况</th>
-                <th>详细信息来源</th>
-                <th>备注</th>
-              </tr>
-              </thead>
-              <tbody>
-              </tbody>
-              <tfoot>
-                <tr>
-                    <th>航空器序列号</th>
-                    <th>ATA章</th>
-                    <th>内部编号</th>
-                    <th>附件信息</th>
-                    <th>纠正文本</th>
-                    <th>问题描述</th>
-                    <th>故障编号</th>
-                    <th>故障件名称</th>
-                    <th>故障件件号</th>
-                    <th>飞行阶段</th>
-                    <th>处理意见</th>
-                    <th>是否技术问题</th>
-                    <th>发生时间</th>
-                    <th>其他编号</th>
-                    <th>任务分类</th>
-                    <th>任务编号</th>
-                    <th>排故概况</th>
-                    <th>故障处理</th>
-                    <th>问题关闭情况</th>
-                    <th>详细信息来源</th>
-                    <th>备注</th>
-                </tr>
-              </tfoot>
-          </table>
+    <div class='ui container'>
+        <div class="ui right floated button">
+            新增事件
+        </div>
+
+        <div class="ui modal">
+                <i class="close icon"></i>
+                <form class='ui form'>
+                    <h4 class="ui dividing header">请输入新增事件信息</h4>
+                    <div class="fields">
+                        <div class='seven wide field'>
+                            <label>飞机型号</label>
+                            <select class="ui fluid dropdown">
+                                <option value="">请选择飞机型号</option>
+                                <option>10101</option>
+                                <option>10102</option>
+                                <option>10103</option>
+                                <option>10104</option>
+                                <option>10105</option>
+                                <option>10106</option>  
+                            </select>  
+                        </div>  
+                        <div class='nine wide field'>
+                            <label>发生时间</label>
+                            <div class='three fields'>
+                                <div class='field'>
+                                    <select class="ui fluid dropdown">
+                                        <option value="">年</option>
+                                        <option>2019</option>
+                                        <option>2020</option>
+                                        <option>2021</option>
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>2024</option>  
+                                    </select>
+                                </div> 
+                            <div class='field'>
+                                <select class="ui fluid dropdown">
+                                    <option value="">月</option>
+                                    <option>01</option>
+                                    <option>02</option>
+                                    <option>03</option>
+                                    <option>04</option>
+                                    <option>05</option>
+                                    <option>06</option>
+                                    <option>07</option>
+                                    <option>08</option>
+                                    <option>09</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>  
+                                </select> 
+                            </div>
+                            <div class='field'>
+                                <select class="ui fluid dropdown">
+                                    <option value="">日</option>
+                                    <option>01</option>
+                                    <option>02</option>
+                                    <option>03</option>
+                                    <option>04</option>
+                                    <option>05</option>
+                                    <option>06</option>
+                                    <option>07</option>
+                                    <option>08</option>
+                                    <option>09</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option> 
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                    <option>25</option>
+                                    <option>26</option>
+                                    <option>27</option>
+                                    <option>28</option>
+                                    <option>29</option>
+                                    <option>30</option> 
+                                    <option>31</option> 
+                                </select> 
+                                </div>
+                        </div>   
+                    </div>
+                    </div>
+
+                    <div class='two fields'>
+                        <div class='field'>
+                            <label>飞行阶段</label>
+                            <select class="ui fluid dropdown">
+                                <option value="">飞行阶段</option>
+                                <option>飞机到达/发动机关断(AES)</option>
+                                <option>进近(APR)</option> 
+                                <option>巡航(CRZ)</option>  
+                                <option>下降(DST)</option>  
+                                <option>航程中爬升(ECL)</option> 
+                                <option>飞机起飞/发动机启动(ESD)</option> 
+                                <option>飞行关闭(FLC)</option>  
+                                <option>飞行计划(FLP)</option>  
+                                <option>地面勤务(GDS)</option> 
+                                <option>复飞(GOA)</option> 
+                                <option>初始爬升(ICL)</option>  
+                                <option>降落(LND)</option>  
+                                <option>航前(PRF)</option> 
+                                <option>航后(PSF)</option> 
+                                <option>中断起飞(RTO)</option>  
+                                <option>起飞(TOF)</option>  
+                                <option>滑进(TXI)</option>
+                                <option>滑出(TXO)</option>  
+                            </select>
+                        </div>
+                        <div class='field'>
+                            <label>关闭情况</label>
+                            <select class="ui fluid dropdown">
+                                <option value="">关闭情况</option>
+                                <option>已关闭</option>
+                                <option>未关闭</option> 
+                            </select>
+                        </div>
+                    </div>
+                    <div class='field'>
+                        <label>事件描述</label>
+                        <input type="text" placeholder="请输入事件的具体描述">
+                    </div>
+                    <div class='field'>
+                            <label>处理措施</label>
+                            <input type="text" placeholder="请输入针对该事件的处理措施">
+                    </div>
+                    <div class='two fields'>
+                        <div class='field'>
+                            <label>故障件名称</label>
+                            <input type="text" placeholder="请输入故障件名称">
+                        </div>
+                        <div class='field'>
+                                <label>故障件件号</label>
+                                <input type="text" placeholder="请输入故障件件号">
+                        </div>
+                    </div>
+
+                    <div class='two fields'>
+                        <div class='field'>
+                            <label>安全性影响</label>
+                            <select class="ui fluid dropdown">
+                                <option value=" "></option>
+                                <option>有影响</option>
+                                <option>无影响</option> 
+                            </select>
+                        </div>
+                        <div class='field'>
+                            <label>可靠性影响</label>
+                            <select class="ui fluid dropdown">
+                                <option value=" "></option>
+                                <option value='有影响'>有影响</option>
+                                <option value='无影响'>无影响</option> 
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class='two fields'>
+                        <div class='field'>
+                            <label>ATA</label>
+                            <input type="text" placeholder="请输入ATA章节号">
+                        </div>
+                        <div class='field'>
+                                <label>章节名称</label>
+                                <input type="text" placeholder="请输入章节名称">
+                        </div>
+                    </div>
+                </form>
+                <div class="actions">
+                    <div class="ui right labeled icon button">
+                        提交
+                        <i class="checkmark icon"></i>
+                    </div>
+                </div>
+            </div>
     </div>
+    <div class="ui container">
+        <table id="accident" class="ui striped table">
+            <thead>
+            <tr>
+                <th>问题描述</th>
+                <th>ATA章</th>
+                <th>纠正文本</th>
+                <th>发生时间</th>
+                <th>查看详情</th>
+                <th>问题</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+              <tr>
+                  <th>问题描述</th>
+                <th>ATA章</th>
+                <th>纠正文本</th>
+                <th>发生时间</th>
+                <th>查看详情</th>
+                <th>问题</th>
+              </tr>
+            </tfoot>
+        </table>
+  </div>
 </body>
 {% include "foot.html" %}
 <!-- 脚本部分用来处理表格样式等内容, 整个datatables用两个部分来控制, table部分控制数据和交互, script部分控制展试, 分页和搜索等功能-->
@@ -91,27 +244,12 @@ $(document).ready(function(){
 
     var urlParam = "{% url 'intra_type_data:event_info_list' %}";
     var columnsParam = [
-        {data:"aircraft_info"},
-        {data:"ATA"},
-        {data:"internal_number"},
-        {data:"attachment_info"},
-        {data:"corrective_action"},
         {data:"event_description"},
-        {data:"failure_number"}, 
-        {data:"failure_part_name"},
-        {data:"failure_part_number"},
-        {data:"flight_phase"},
-        {data:"handling_suggestion"},
-        {data:"if_tech_question"},
+        {data:"ATA"},
+        {data:"corrective_action"},
         {data:"occurrence_time"},
-        {data:"other_number"},
-        {data:"task_classification"},
-        {data:"task_number"}, 
-        {data:"troubleshooting"},
-        {data:"failure_handling"},
-        {data:"event_state"}, 
-        {data:"detail_info_source"},
-        {data:"remarks"},
+        {data:"url"},
+        {data:"problem_info"},
     ];
     var table = $("#accident").DataTable(initDataTable(lengthMenuParam, urlParam, columnsParam));
 
@@ -159,8 +297,8 @@ $(document).ready(function(){
         })
 
 //    修改设置搜索框、显示框等位置
-    $('#accident_length').addClass('lengthToLeft')
-    $('#accident_filter').addClass('filterToLeft')
+    $('#accident_length').addClass('lengthToLeft_1')
+    $('#accident_filter').addClass('filterToMid')
     $('#accident_paginate').addClass('paginateToLeft')
 
 //  设置横向滚动条
@@ -171,5 +309,17 @@ $(document).ready(function(){
 $('#sidebar').click(function(){
     $('.ui.sidebar').sidebar('toggle');
 });
+
+ $(function (){
+       $(".ui.right.floated.button").on("click",function(){
+       $('.ui.modal').modal('show');
+       })
+    });
+
+ $(function(){
+     $(".ui.right.labeled.icon.button").on("click",function(){
+      $('.ui.modal').modal('hidden');
+     })
+ });
     
 </script>

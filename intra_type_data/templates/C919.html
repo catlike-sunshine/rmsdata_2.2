@@ -1,5 +1,22 @@
 {% load static %}
 {% include "head.html" %}
+<style>
+.teal.button {
+  border: none;
+  color: white;
+  padding: 20px 32px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.img.temp {
+    padding: 100px 200px;
+}
+</style>
+
 <body>
     <!-- Sidebar Menu -->
     <div class="ui  inverted left vertical sidebar menu">
@@ -27,12 +44,12 @@
             <i class="right angle icon divider"></i>
             <a class="section" href="{% url 'intra_type_data:intra_type_data' %}">型号飞机数据</a>
             <i class="right angle icon divider"></i>
-            <a class="active section" style=color:black>C919</a>
+            <a class="active section" style=color:black>ARJ21</a>
     </div>
     <br> 
     <br> 
     <div class="ui container">
-            <h1 style="text-align:center">C919数据</h1>
+            <h1 style="text-align:center">ARJ21数据</h1>
     </div>
     <br> 
     <br> 
@@ -40,6 +57,123 @@
     <br> 
     <br> 
     <br> 
+    <div class="ui placeholder segment">
+    <div class = 'row'>
+      <div class="ui two column stackable center aligned grid">
+        <div class="middle aligned row">
+          <div class="column">
+           <div class="ui teal button">101架机</div>
+                <div class="ui flowing popup">
+                  <div class="ui three column divided center aligned grid">
+                    <div class="column">
+                      <h4 class="ui header">单机履历</h4>
+                      <i class="fitted big book icon"></i>
+                      <br><br>
+                      <div class="ui small button">查看</div>
+                    </div>
+                    <div class="column">
+                      <h4 class="ui header">事件数据</h4>
+                      <i class="fitted big calendar icon"></i>
+                      <br><br>
+                      <div class="small ui button">
+                         <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">查看</a>
+                      </div>
+                    </div>
+                    <div class="column">
+                      <h4 class="ui header">问题数据</h4>
+                      <i class="fitted big exclamation icon"></i>
+                        <br><br>
+                      <div class="ui small button">
+                         <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">查看</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          </div>
+          <div class="column">
+              <p> 机队飞行总时间对比 </p>
+              <img class="ui large image" src="/static/images/flytime_plane.png">
+           </div>
+      </div>
+    </div>
+    <div class="ui horizontal divider"></div>
+    <div class = 'row'>
+      <div class="ui two column stackable center aligned grid">
+        <div class="middle aligned row">
+          <div class="column">
+           <div class="ui teal button">102架机</div>
+                <div class="ui flowing popup">
+                  <div class="ui three column divided center aligned grid">
+                    <div class="column">
+                      <h4 class="ui header">单机履历</h4>
+                      <i class="fitted big book icon"></i>
+                      <br><br>
+                      <div class="ui small button">查看</div>
+                    </div>
+                    <div class="column">
+                      <h4 class="ui header">事件数据</h4>
+                      <i class="fitted big calendar icon"></i>
+                      <br><br>
+                      <div class="small ui button">
+                         <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">查看</a>
+                      </div>
+                    </div>
+                    <div class="column">
+                      <h4 class="ui header">问题数据</h4>
+                      <i class="fitted big exclamation icon"></i>
+                        <br><br>
+                      <div class="ui small button">
+                         <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">查看</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          </div>
+          <div class="column">
+           </div>
+      </div>
+    </div>
+    </div>
+    <div class = 'row'>
+     <div class="ui two column stackable center aligned grid">
+        <div class="middle aligned row">
+          <div class="column">
+           <div class="ui teal button">103架机</div>
+                <div class="ui flowing popup">
+                  <div class="ui three column divided center aligned grid">
+                    <div class="column">
+                      <h4 class="ui header">单机履历</h4>
+                      <i class="fitted big book icon"></i>
+                      <br><br>
+                      <div class="ui small button">查看</div>
+                    </div>
+                    <div class="column">
+                      <h4 class="ui header">事件数据</h4>
+                      <i class="fitted big calendar icon"></i>
+                      <br><br>
+                      <div class="small ui button">
+                         <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">查看</a>
+                      </div>
+                    </div>
+                    <div class="column">
+                      <h4 class="ui header">问题数据</h4>
+                      <i class="fitted big exclamation icon"></i>
+                        <br><br>
+                      <div class="ui small button">
+                         <a class = "item" href = "{% url 'intra_type_data:event_info_list' %}">查看</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          </div>
+          <div class="column">
+               <p> 事件清单数量对比 </p>
+              <img class="ui large image" src="/static/images/event_numbers_ata.png">
+           </div>
+      </div>
+    </div>
+</div>
+<!--
     <div class="ui six centered cards">
         <div class="card">
             <a class="content" href="{% url 'intra_type_data:ATA_list'  %}" style="display: block; text-align: center;">
@@ -72,12 +206,20 @@
             </div>
         </div>
     </div>
+-->
     <!--Semantic ui sidebar display-->
     <script>
         $('#sidebar').click(function(){
     
             $('.ui.sidebar').sidebar('toggle');
         });
+        
+        //to create pop up function.
+        $('.teal.button')
+      .popup({
+        on: 'click',
+        position: 'bottom left',
+      });
     </script>
 </body>
 {% include "foot.html" %}

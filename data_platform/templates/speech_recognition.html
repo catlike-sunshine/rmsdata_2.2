@@ -1,0 +1,39 @@
+{% load static %}
+{% include "head.html" %}
+
+<br /><br /><br /><br />
+<form action="" tyle="margin-top: 15px;">
+  <label>请上传语音文件：</label>
+  <input type="file" name="file" id="input_event">
+  <button type="button" id="file_analysis">上传并分析</button>
+</form>
+<p>语音识别结果：</p>
+<p id="output_event"></p>
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+{% include "foot.html" %}
+
+<script type="text/javascript">
+    
+$(document).ready(function(){
+    var urlparam = "{% url 'data_platform:speech_recognition' %}";
+    $("#file_analysis").click(function(){
+      $("#output_event").text('上传文件并语音分析中...');
+      var form_data = new FormData();
+      var file_info = $("#input_event")[0].files[0];//要求一次仅上传一个文件
+      form_data.append('file',file_info);
+      $.ajax({
+        url:urlparam,
+        type:'POST',
+        data:form_data,
+        processData:false,
+        contentType:false,
+        success:function(data){
+          $("#output_event").text(data['result']);
+        } 
+      });
+    });
+})
+
+</script>
+
