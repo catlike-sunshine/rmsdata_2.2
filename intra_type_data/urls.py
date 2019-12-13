@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^resume_10101/', views.resume_10101_view.as_view(), name="resume_10101"),
     url(r'^event_list_5G/', views.event_list_5G_view.as_view(), name="event_list_5G"),
     url(r'^problem_list_5G/',views.problem_list_5G_view.as_view(), name="problem_list_5G"),
-	url(r'^problem_info_list/', views.get_problem_info_list, name="problem_info_list"),
-	url(r'^event_info/(?P<id>\d+)$', views.get_event_info.as_view(), name="event_info"),
+    url(r'^problem_info_list/', views.get_problem_info_list, name="problem_info_list"),
+    url(r'^event_info/(?P<id>\d+)/', views.get_event_info.as_view(), name="event_info"),
     url(r'^problem_info/(?P<problem_info_id>\d+)/', views.get_problem_info.as_view(), name="problem_info"),
 ]

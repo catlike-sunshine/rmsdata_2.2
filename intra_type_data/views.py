@@ -334,37 +334,134 @@ def get_event_info_list(request):
         return HttpResponse(json.dumps(dataTable, cls=DecimalEncoder, ensure_ascii=False),
                             content_type="application/json")
 
- # event_info视图
-@csrf_exempt
-def get_event_info(request):
-     # 判断请求方法是GET还是POST
-     if request.method == 'GET':
-         event_info = event_info.objects.filter(id)
-         return render(request, "event_info_list.html",)
 
- #class get_event_info(LoginRequiredMixin,  DetailView):
- #     template_name = "event_info.html"
- #     model = event_info
-# #     context_object_name = "event_info"
-# #     #pk_url_kwarg = 'id'
-# #     def get(self, **kwargs):
-# #         pk_url_kwarg = 'id'
-# #         event_info.event_description = 1
-# #         # risk =
-# #         return render(request, self.template_name, event_info)
+import jieba
+from gensim import corpora,models,similarities
+import xlrd
+import heapq
+import os
+from sklearn.externals import joblib
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
 
-class get_event_info(LoginRequiredMixin, DetailView):
+#定义相似故障问题推荐函数
+def recommandation(input_event):
+    filePath1 = os.path.join(os.path.dirname(__file__),'similar_event','ARJ事件和问题清单_input.xls')
+    event_info=xlrd.open_workbook(filePath1)
+    event=event_info.sheet_by_name('事件和问题清单')
+    row=event.nrows
+    input_cut=[]
+    filePath2 = os.path.join(os.path.dirname(__file__),'similar_event','四性术语词典.txt')
+    jieba.load_userdict(filePath2)
+    input_cut=jieba.cut(input_event)
+    input_list=[]
+    for word in input_cut:
+        input_list.append(word)
+
+    #从本地读取分完词的txt
+    event_list=[]
+    filePath3 = os.path.join(os.path.dirname(__file__),'similar_event','wordcut.txt')
+    fileObject=open(filePath3,'r', encoding='utf-8',errors='ignore')
+    for line in fileObject:
+        line=line.rstrip('\n')
+        event_list_tem=line.split(' ')
+        event_list.append(event_list_tem)
+
+    dictionary= corpora.Dictionary(event_list)#数据源生成词典
+    corpus = [dictionary.doc2bow(item) for item in event_list]#通过doc2bow稀疏向量生成语料库
+    tf = models.TfidfModel(corpus)#通过TF模型算法，计算出tf值
+    num_features = len(dictionary.token2id.keys())#通过token2id得到特征数（字典里面的键的个数）
+    index = similarities.MatrixSimilarity(tf[corpus], num_features=num_features)#计算稀疏矩阵相似度，建立一个索引
+
+    new_vec = dictionary.doc2bow(input_list)#新的稀疏向量
+    sims = index[tf[new_vec]]#算出相似度
+    sims_list=list(sims)
+    re1 = map(sims_list.index, heapq.nlargest(3, sims_list)) #求最大的三个索引，索引加2为excel行数
+    max_three_index=list(re1)
+    #sim_list_sort=sims_list.sort()#降序排序
+    #print(max(sims_list))
+    sim_one=max_three_index[0]#找出与输入事件相似度最高的事件的序号
+    sim_two=max_three_index[1]
+    sim_three=max_three_index[2]
+    #print(sim_max)
+    #str_link=''
+    #output=str_link.join(event_list[sim_max])#将相似度最高的事件连接起来输出
+    # print(event_list)
+    output = []
+    if max(sims_list)==0:
+        return output
+    else:
+        unicode={}#描述-唯一编号字典
+        num=[]#唯一编号
+        for i in range(1,row):
+            unicode[tuple(event_list[i-1])]=event.cell_value(i,30)
+            num.append(event.cell_value(i,30))
+        #print(output)
+        num_one=unicode[tuple(event_list[sim_one])]#相似度最高的唯一编码
+        num_two=unicode[tuple(event_list[sim_two])]
+        num_three=unicode[tuple(event_list[sim_three])]
+        #print(num_max)
+        row_one=num.index(num_one)+1#excel表中的行数
+        row_two=num.index(num_two)+1
+        row_three=num.index(num_three)+1
+        order = [row_one,row_two,row_three]
+        result = []
+        for i in range(3):
+            result = [i+1,
+                    event.cell_value(order[i],8),
+                    event.cell_value(order[i],6),
+                   event.cell_value(order[i],12),
+                    event.cell_value(order[i],13)]
+            output.append(result)
+        return output
+
+
+#定义风险识别算法
+def riskidentification(event_input):
+    risk= {'0':'无风险','1':'有风险','2':'存在重大风险','3':'存在重大风险'}
+    xpre=pd.DataFrame()
+    #停用词读入列表
+    stopwords_list=[]
+    filePath0 = os.path.join(os.path.dirname(__file__),'similar_event','stopwords.txt')
+    for word in open(filePath0, encoding='utf-8',errors='ignore'):
+        stopwords_list.append(word.strip())
+
+    filePath1 = os.path.join(os.path.dirname(__file__),'similar_event','四性术语词典.txt')
+    jieba.load_userdict(filePath1)
+    seg_list=jieba.cut(event_input)
+    event_cut=[]
+    for word in seg_list:
+        if word not in stopwords_list:
+            event_cut.append(word)
+    eventdevide = ' '.join(event_cut)
+    xpre['text'] = eventdevide
+
+    filePath2 = os.path.join(os.path.dirname(__file__),'similar_event','data.xlsx')
+    trainDF = pd.read_excel(filePath2, index=False)
+    tfidf_vect_ngram = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', ngram_range=(2, 3), max_features=500)
+    #tfidf_vect_ngram.fit(df['问题描述'])
+    tfidf_vect_ngram.fit(trainDF['text'])
+
+    xpre_tfidf_ngram = tfidf_vect_ngram.transform(xpre)
+
+    filePath3 = os.path.join(os.path.dirname(__file__),'similar_event','train_model.m')
+    clf = joblib.load(filePath3)
+    prediction=clf.predict(xpre_tfidf_ngram)
+    return risk[str(int(prediction))]
+
+
+class get_event_info(LoginRequiredMixin, View):
     template_name = "event_info.html"
     model = event_info
     context_object_name = "event_info"
     pk_url_kwarg = 'id'
-    #def get(self,request,id=None):
-        #if id is None:
-            #return render(request, "event_info.html")
-        #else:
-            #event_info.objects.filter(problem_info__id=id)
-            # risk =
-            #return render(request, "event_info.html", event_info)
+
+    def get(self, request, id=None):
+        event_info_chosen = event_info.objects.filter(id=id)
+        input_event = event_info_chosen[0].event_description
+        s1 = recommandation(input_event)  #s1指相似事件
+        s2 = riskidentification(input_event)  #s2指风险识别
+        return render(request, "event_info.html", {'s1': s1,'s2': s2,'event_info': event_info_chosen[0]})
 
 
 class get_problem_info(LoginRequiredMixin, DetailView):
