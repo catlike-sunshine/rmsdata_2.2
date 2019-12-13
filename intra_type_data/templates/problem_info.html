@@ -1,0 +1,72 @@
+{% load static %}
+{% include "head.html" %}
+<div class="ui invisible inverted left vertical sidebar menu"
+  </div>
+</div>
+<div class="ui main container">
+    <div class="column">
+      <div class="ui grid">
+          <div class = "row">
+            <div class = "one wide column">
+              <div class="pusher">
+                  <div class="ui container">
+                  <div id = "toggle" class="ui small basic icon buttons">
+                  <div class="ui button"><i class = "sidebar icon"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ui basic buttons">
+              <div class="ui button"><a class="section" href="{% url 'data_platform:index' %}">主页</a></div>
+              <div class="ui button"><a class="section" href="{% url 'intra_type_data:problem_info_list' %}">问题清单</a></div>
+              <div class="ui button">{{problem_info.problem_number}}</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <form class="ui form">
+      <div class="fields">
+          <div class="eight wide field">
+               <div class="ui raised padded container segment">
+                   <h4 >问题详情</h4>
+                    <div class="ui divider"></div>
+                   <h5>问题描述：{{problem_info.problem_description}}</h5>
+                   <div class="ui divider"></div>
+                   <h5>故障件名称：{{problem_info.failure_part_name | safe}}</h5>
+                   <div class="ui divider"></div>
+                   <h5>故障件件号：{{problem_info.failure_part_number | safe}}</h5>
+                   <div class="ui divider"></div>
+                   <h5>处理意见：{{problem_info.handling_action | safe}}</h5>
+                   <div class="ui divider"></div>
+                   <h5>是否影响安全性：{{problem_info.if_affect_safety | safe}} </h5>
+                   <h5>是否影响可靠性：{{problem_info.if_affect_reliability | safe}}</h5>
+               </div>
+          </div>
+          <div class="eight wide field">
+              <h4 style="display:inline-block">风险类别：</h4>
+              <h5 id="output_event_2"  style="color:red;display:inline-block">{{ event_info. }}</h5>
+
+            <h4>可参考的相似事件：</h4>
+            <table id="output_event" class="ui striped table" >
+             <thead>
+              <tr>
+                <th>相似度</th>
+                <th>问题描述</th>
+                <th>ATA</th>
+                <th>纠正措施</th>
+                <th>排故措施</th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </form>
+{% include "foot.html" %}
+<script type="text/javascript">
+    $('#toggle').click(function(){
+        $('.ui.sidebar').sidebar('toggle');
+    });
+</script>

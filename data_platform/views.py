@@ -1837,7 +1837,40 @@ def recommandation(input_event):
                     event.cell_value(order[i],13)]
             output.append(result)
         return output
+
+#定义风险识别算法
+def riskidentification(event_input):
+    risk= {'0':'无风险','1':'有风险','2':'存在重大风险','3':'存在重大风险'}
+    xpre=pd.DataFrame()
+    #停用词读入列表
+    stopwords_list=[]
+    filePath0 = os.path.join(os.path.dirname(__file__),'similar_event','stopwords.txt')
+    for word in open(filePath0, encoding='utf-8',errors='ignore'):
+        stopwords_list.append(word.strip()) 
+        
+    filePath1 = os.path.join(os.path.dirname(__file__),'similar_event','四性术语词典.txt')
+    jieba.load_userdict(filePath1)
+    seg_list=jieba.cut(event_input)
+    event_cut=[]
+    for word in seg_list:
+        if word not in stopwords_list:
+            event_cut.append(word)
+    eventdevide = ' '.join(event_cut)
+    xpre['text'] = eventdevide
+
+    filePath2 = os.path.join(os.path.dirname(__file__),'similar_event','data.xlsx')
+    trainDF = pd.read_excel(filePath2, index=False)
+    tfidf_vect_ngram = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', ngram_range=(2, 3), max_features=500)
+    #tfidf_vect_ngram.fit(df['问题描述'])
+    tfidf_vect_ngram.fit(trainDF['text'])
+
+    xpre_tfidf_ngram = tfidf_vect_ngram.transform(xpre)
     
+    filePath3 = os.path.join(os.path.dirname(__file__),'similar_event','train_model.m')
+    clf = joblib.load(filePath3)
+    prediction=clf.predict(xpre_tfidf_ngram)
+    return risk[str(int(prediction))]
+
 #推送相似事件页面
 @csrf_exempt
 def get_similar_event(request):
@@ -1846,8 +1879,11 @@ def get_similar_event(request):
         return render(request,"similar_event.html")
     else:
         input_event = request.POST.get("input_event")
-        data = recommandation(input_event)#data存储返回网页的值
-        print(data)
+        data = {}
+        data['s1'] = recommandation(input_event)#data['s1']指相似事件
+        data['s2'] = riskidentification(input_event)#data['s2']指风险识别
+        print(data['s1'])
+        print(data['s2'])
         return HttpResponse(json.dumps(data), content_type="application/json")
     
     
@@ -1890,53 +1926,7 @@ def get_EICAS(request):
         data = display(input_event)#data存储返回网页的值
         return HttpResponse(json.dumps(data), content_type="application/json")
     
-#定义风险识别算法
-def riskidentification(event_input):
-    risk= {'0':'无风险','1':'有风险','2':'存在重大风险','3':'存在重大风险'}
-    xpre=pd.DataFrame()
-    #停用词读入列表
-    stopwords_list=[]
-    filePath0 = os.path.join(os.path.dirname(__file__),'similar_event','stopwords.txt')
-    for word in open(filePath0, encoding='utf-8',errors='ignore'):
-        stopwords_list.append(word.strip()) 
-        
-    filePath1 = os.path.join(os.path.dirname(__file__),'similar_event','四性术语词典.txt')
-    jieba.load_userdict(filePath1)
-    seg_list=jieba.cut(event_input)
-    event_cut=[]
-    for word in seg_list:
-        if word not in stopwords_list:
-            event_cut.append(word)
-    eventdevide = ' '.join(event_cut)
-    xpre['text'] = eventdevide
 
-    filePath2 = os.path.join(os.path.dirname(__file__),'similar_event','data.xlsx')
-    trainDF = pd.read_excel(filePath2, index=False)
-    tfidf_vect_ngram = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', ngram_range=(2, 3), max_features=500)
-    #tfidf_vect_ngram.fit(df['问题描述'])
-    tfidf_vect_ngram.fit(trainDF['text'])
-
-    xpre_tfidf_ngram = tfidf_vect_ngram.transform(xpre)
-    
-    filePath3 = os.path.join(os.path.dirname(__file__),'similar_event','train_model.m')
-    clf = joblib.load(filePath3)
-    prediction=clf.predict(xpre_tfidf_ngram)
-    return risk[str(int(prediction))]
-
-
-#识别风险项
-@csrf_exempt
-def get_riskidentification(request):
-    #判断请求方法是GET还是POST
-    if request.method == 'GET':
-        return render(request,"risk_identification.html")
-    else:
-        input_event = request.POST.get("input_event")
-        result = riskidentification(input_event)#data存储返回网页的值
-        data = {}
-        data['result'] = result
-        print(data)
-        return HttpResponse(json.dumps(data), content_type="application/json")
     
 #引入GitHub ASRT语音识别算法
 import sys

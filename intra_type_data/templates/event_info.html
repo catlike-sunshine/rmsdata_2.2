@@ -1,0 +1,96 @@
+{% load static %}
+{% include "head.html" %}
+
+<div class="ui main container">
+    <div class="column">
+      <div class="ui grid">
+          <div class = "row">
+            <div class = "one wide column">
+              <div class="pusher">
+                  <div class="ui container">
+                  <div id = "toggle" class="ui small basic icon buttons">
+                  <div class="ui button"><i class = "sidebar icon"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ui basic buttons">
+              <div class="ui button"><a class="section" href="{% url 'data_platform:index' %}">主页</a></div>
+              <div class="ui button"><a class="section" href="{% url 'intra_type_data:event_info_list' %}">事件清单</a></div>
+              <div class="ui button">{{event_info.failure_number}}</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+
+    <form class="ui form">
+      <div class="fields">
+          <div class="eight wide field">
+               <div class="ui raised padded container segment">
+                   <h4 >事件详情</h4>
+                    <div class="ui divider"></div>
+                   <h5>飞机型号：{{event_info.aircraft_info}}　　　 发生时间：{{event_info.occurrence_time}}</h5>
+                   <div class="ui divider"></div>
+                   <h5>飞行阶段：{{event_info.flight_phase}}　　　　                         关闭情况：{{event_info.event_state}}</h5>
+                   <div class="ui divider"></div>
+                   <h5 id="input_event">事件描述：{{event_info.event_description}}</h5>
+                   <div class="ui divider"></div>
+                   <h5>处理意见：{{event_info.handling_suggestion | safe}}</h5>
+                   <div class="ui divider"></div>
+                   <h5>故障件名称：{{event_info.failure_part_name}}　 故障件件号：{{event_info.failure_part_number}}</h5>
+                   <div class="ui divider"></div>
+                   <h5>ATA：{{event_info.ATA}}　　　             是否技术问题：{{event_info.if_tech_question}}</h5>
+               </div>
+          </div>
+          <div class="eight wide field">
+              <h4 style="display:inline-block">风险类别：</h4>
+              <h5 id="output_event_2"  style="color:red;display:inline-block">{{ event_info.event_description }}</h5>
+
+            <h4>可参考的相似事件：</h4>
+            <table id="output_event" class="ui striped table" >
+             <thead>
+              <tr>
+                <th>相似度</th>
+                <th>问题描述</th>
+                <th>ATA</th>
+                <th>纠正措施</th>
+                <th>排故措施</th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </form>
+
+
+{% include "foot.html" %}
+<script type="text/javascript">
+    $('#toggle').click(function(){
+        $('.ui.sidebar').sidebar('toggle');
+    })
+
+    //$(document).ready(function() {
+        {#$.post(urlparam,#}
+        {#    {#}
+        {#        input_event: {{event_info.event_description}}#}
+        {#    },#}
+        {#    function (data) {#}
+        {#        $('#output_event').dataTable().fnClearTable();//清除表中原始的内容#}
+        {#        $("#output_event").dataTable().fnDestroy();//在每次初始化之前destroy之前的初始化内容#}
+        {#        var t = $("#output_event").DataTable({#}
+        {#            dom: "t",#}
+        {#            "bAutoWidth": false,#}
+        {#            "columnDefs": [{"width": "10%", "targets": [0, 2, 3]}]#}
+        {#        });#}
+        {#        data1 = data['s1']#}
+        {#        t.row.add([data1[0][0], data1[0][1], data1[0][2], data1[0][3], data1[0][4]]).draw();#}
+        {#        t.row.add([data1[1][0], data1[1][1], data1[1][2], data1[1][3], data1[1][4]]).draw();#}
+        {#        t.row.add([data1[2][0], data1[2][1], data1[2][2], data1[2][3], data1[2][4]]).draw();#}
+        {##}
+        {#        $("#output_event_2").text(data['s2']);#}
+        {#    });#}
+    })//
+</script>
