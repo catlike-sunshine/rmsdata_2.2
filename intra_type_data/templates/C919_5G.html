@@ -1,6 +1,7 @@
 {% load static %}
 {% include "head.html" %}
 <body>
+    <br><br><br><br>
     <div class="ui pointing demo menu"><!-- demo 是自定义的类选择器名称-->
         <a class="active item" data-tab="first">单机履历</a>
         <a class="item" data-tab="second">事件清单</a>
@@ -11,21 +12,35 @@
                     <div class="middle aligned row">
                       <div class="column">
                        <a href="{% url 'intra_type_data:resume_10101' %}">
-                           <div class="ui teal button">10101架机</div>
-                        </a>
+                           <div id="10101" class="ui teal button" val="10101">10101架机</div>
+                       </a>
+                       <br><br><br>
+                       <a href="{% url 'intra_type_data:resume_10101' %}">
+                           <div id="10102" class="ui teal button" val="10102">10102架机</div>
+                       </a>
+                       <br><br><br>
+                       <a href="{% url 'intra_type_data:resume_10101' %}">
+                           <div id="10103" class="ui teal button" val="10103">10103架机</div>
+                       </a>
+                       <br><br><br>
+                       <a href="{% url 'intra_type_data:resume_10101' %}">
+                           <div id="10104" class="ui teal button" val="10104">10104架机</div>
+                       </a>
                       </div>
                       <div class="column">
-                          <p> 机队飞行总时间对比 </p>
-                          <img class="ui large image" src="/static/images/flytime_plane.png">
-                       </div>
-                  </div>
-                </div>
-        <br><br><br><br>
-        <div class="ui teal button">10102架机</div>
-        <br><br><br><br>
-        <div class="ui teal button">10103架机</div>
-        <br><br><br><br>
-        <div class="ui teal button">10104架机</div>
+                          <br>
+                          <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                          <div>
+                            <div id="events_all" style="width: 600px;height:400px;"></div>
+<!--
+                            <div id="plane_echarts"></div>
+                              <div id="events_month" style="width: 600px;height:400px;"></div>
+                              <div id="events_ATA" style="width: 600px;height:400px;"></div>
+-->
+                          </div>
+                      </div>
+                    </div>
+            </div>
     </div>
     <div class="ui tab segment" data-tab="second">
         <h2 align=center>记载试飞，取证及运行过程中各方反馈的事件数据</h2>
@@ -57,3 +72,94 @@
     </script>
 </body>
 {% include "foot.html" %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+    var option = {
+        title: {
+            text: '机队事件数量对比',
+            x:"center",
+            y:"top"
+        },
+        tooltip: {},
+        legend: {
+            data:['事件数'],
+            top:"6%"
+        },
+        xAxis: {
+            data:[{% for i in C919_fleet %}{{i}},{% endfor %}]
+        },
+        yAxis: {},
+        series: [{
+            name: '事件数',
+            type: 'bar',
+            data:[{% for i in eve_num %}{{i}},{% endfor %}]
+        }]
+    };
+    var myChart = echarts.init(document.getElementById('events_all'))
+    myChart.setOption(option)
+    
+//    获取鼠标移动到按钮上的图表
+    $("#10101").mouseover(function(){
+        var option = {
+            title: {
+                text: '10101架机分ATA章节事件数',
+                x:"center",
+                y:"top"
+            },
+            tooltip: {},
+            legend: {
+                data:['事件数'],
+                top:"6%"
+            },
+            xAxis: {
+                data:[{% for i in eve_ATA %}{{i}},{% endfor %}]
+            },
+            yAxis: {},
+            series: [{
+                name: '数量',
+                type: 'bar',
+                data:[{% for i in eve_ATA_num %}{{i}},{% endfor %}]
+            }]
+        };   
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('events_all'));
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+      });
+    
+//    获取鼠标移开按钮时的图表
+    $("#10101").mouseout(function(){
+      var option = {
+        title: {
+            text: '机队事件数量对比',
+            x:"center",
+            y:"top"
+        },
+        tooltip: {},
+        legend: {
+            data:['事件数']
+        },
+        xAxis: {
+            data:[{% for i in C919_fleet %}{{i}},{% endfor %}]
+        },
+        yAxis: {},
+        series: [{
+            name: '事件数',
+            type: 'bar',
+            data:[{% for i in eve_num %}{{i}},{% endfor %}]
+        }]
+      }; 
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('events_all'));
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    });
+    
+    
+});
+</script>

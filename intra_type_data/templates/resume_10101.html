@@ -24,9 +24,432 @@
 <HR align=center width="60%" SIZE=7>
 <br> 
 <h2 align=center>历史数据</h2>
-<h3 align=center>下面是历史数据图表展示</h3>
+<div class="ui container">
+<div class="ui two column stackable center aligned grid">
+    <div class="middle aligned row">
+      <div class="ten wide column">
+        <div class="ui form">
+          <div class='fields'> 
+              <div class='one wide field'>
+                 <p>from</p>
+              </div>
+              <div class='four wide field'>
+                <select id="start_y" class="field">
+                  {% for y in years %}
+                    <option class="start_y_option">{{y}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class='four wide field' >
+                <select id="start_m" class="field">
+                  {% for m in months %}
+                    <option class="start_m_option">{{m}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class='four wide field'>
+                <select id="start_d" class="field">
+                  {% for d in days %}
+                    <option class="start_d_option">{{d}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class='one wide field'>
+                 <p>to</p>
+              </div>
+              <div class='four wide field'>
+                <select id="end_y" class="field">
+                  {% for y in years %}
+                    <option class="end_y_option">{{y}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class='four wide field'>
+                <select id="end_m" class="field">
+                  {% for m in months %}
+                    <option class="end_m_option">{{m}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class='four wide field'>
+                <select id="end_d" class="field">
+                  {% for d in days %}
+                    <option class="end_d_option">{{d}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+          </div>
+          <div class='fields'>
+            <div class='two wide field'>
+              <p>飞行架次</p>
+            </div>
+            <div class='four wide field'>
+              <select id="plane_no" class="field">
+                  {% for plane in C919_fleet %}
+                    <option class="plane_no_option">{{plane}}</option>
+                  {% endfor %}
+              </select>
+            </div>
+            <div class='two wide field'>
+              <p>
+              <button id='search'>查询</button>
+              </p>
+            </div> 
+          </div>
+        </div>
+        <div style="width:700px;height:400px;background-color:#D7D7D7">
+        <div style="padding-left:40px;padding-right:40px;padding-bottom:20px;padding-top:20px">
+          <div class="ui form">
+            <div class='fields' id="tab_menu">
+              <div class='three wide field'>
+                 <a class="active item" data-tab="first" style="color:black"><h3>飞行器概况</h3></a>
+              </div>
+              <div class='three wide field'>
+                 <a class="item" data-tab="second" style="color:black"><h3>飞行记录</h3></a>
+              </div>
+              <div class='three wide field'>
+                 <a class="item" data-tab="third" style="color:black"><h3>事件记录</h3></a>
+              </div>
+              <div class='four wide field'>
+                 <a class="item" data-tab="forth" style="color:black"><h3>部件失效记录</h3></a>
+              </div>
+            </div>
+          </div>
+          <div class="ui active tab segment" style="border:1px solid #797979;width:620px;height:310px" data-tab="first">
+            <div class="ui form">
+              <div class="fields">
+                <div class="field"><p>机型：</p></div>
+                <div class="field"><p></p></div>
+              </div>
+              <div class="fields">
+                <div class="field"><p>飞机注册号：</p></div>
+                <div class="field"><p></p></div>
+              </div>
+              <div class="fields">
+                <div class="field"><p>飞机生产序列号：</p></div>
+                <div class="field"><p></p></div>
+              </div>
+              <div class="fields">
+                <div class="field"><p>发动机序列号：</p></div>
+                <div class="field"><p></p></div>
+              </div>
+              <div class="fields">
+                <div class="field"><p>飞机拥有者：</p></div>
+                <div class="field"><p></p></div>
+              </div>
+              <div class="fields">
+                <div class="field"><p>飞行循环：</p></div>
+                <div class="field"><p></p></div>
+              </div>
+              <div class="fields">
+                <div class="field"><p>飞行时间：</p></div>
+                <div class="field"><p></p></div>
+              </div>
+            </div> 
+          </div>
+          <div class="ui tab segment"  style="border:1px solid #797979;width:620px;height:310px" data-tab="second">
+          <table id="fly_record" class="ui striped table" style="width:590px;height:280px">
+              <thead>
+              <tr>
+                <th>飞行日期</th>
+                <th>飞行类型</th>
+                <th>着陆时间</th>
+                <th>起飞时间</th>
+                <th>飞行时间</th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+          </table>
+          <button type='button' style='background-color:skyblue!important;border:0px;width:120px;height:30px;position:relative;top:190px;left:230px'>查看详细信息</button>
+          </div>
+          <div class="ui tab segment"  style="border:1px solid #797979;width:620px;height:310px" data-tab="third">
+          <table id="event_record" class="ui striped table" style="width:590px;height:280px">
+              <thead>
+              <tr>
+                <th>问题描述</th>
+                <th>发生时间</th>
+                <th>ATA章节</th>
+                <th>排故概况</th>
+                <th>关闭情况</th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+          </table>
+          <a href="{% url 'intra_type_data:event_info_list' %}"><button type='button' style='background-color:skyblue!important;border:0px;width:120px;height:30px;position:relative;top:190px;left:230px'>查看详细信息</button></a>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="six wide column">
+          <br>
+            <select id="echarts_type" class="field" style="position:relative;left:-130px">
+              <option value="bar" selected="selected">柱状图</option>
+              <option value="pie">饼图</option>
+            </select>
+<!--           为ECharts准备一个具备大小（宽高）的Dom -->
+            <div id="events_all" style="width: 400px;height:400px;"></div>
+      </div>
+    </div>
+</div>
+</div>
 
 
-
+    <script src="../../static/js/js_address.js"></script>
+    <script type="text/javascript">
+    //demo 是自定义的类选择器名称
+    $(function (){
+        //jQuery UI的Tab也是这样，可能也许大概说不准也依赖jquery.address
+        $('#tab_menu .item').tab();//menu与.item之间一定要有一个空格，才能实现切换tab的功能
+    })
+    </script>
 </body>
 {% include "foot.html" %}
+
+<script>
+$(document).ready(function(){
+    //确定下拉框初始选中的选项
+    $(".end_y_option:last").attr("selected","selected");
+    $(".end_m_option:last").attr("selected","selected");
+    $(".end_d_option:last").attr("selected","selected");
+    $(".plane_no_option:last").attr("selected","selected");
+    
+    //绘制原始图像
+    var option = {
+        title: {
+            text: '各ATA章节事件数',
+            x:"center",
+            y:"top"
+        },
+        tooltip: {},
+        legend: {
+            data:['事件数'],
+            top:"6%"
+        },
+        xAxis: {
+            data:[{% for i in eve_ATA_origin %}{{i}},{% endfor %}]
+        },
+        yAxis: {},
+        series: [{
+            name: '数量',
+            type: 'bar',
+            data:[{% for i in eve_ATA_num_origin %}{{i}},{% endfor %}]
+        }]
+    }; 
+    var myChart = echarts.init(document.getElementById('events_all'))
+    myChart.setOption(option)
+    
+    //url
+    var urlparam = "{% url 'intra_type_data:resume_10101' %}"
+    
+    //设置函数判断echarts类型而修改绘图的option
+    function choose_option (etype,data){
+        if (etype=='bar'){
+            var option = {
+                title: {
+                    text: '各ATA章节事件数',
+                    x:"center",
+                    y:"top"
+                },
+                tooltip: {                
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c}"
+                },
+                legend: {
+                    data:['事件数'],
+                    top:"6%"
+                },
+                xAxis: {
+                    data:data['eve_ATA'],
+                    show:true
+                },
+                yAxis: {show:true},
+                series: [{
+                    name: '数量',
+                    type: 'bar',
+                    data:data['eve_ATA_num']
+                }]
+            };   
+        }
+        else if (etype=='pie'){
+          var series_data=[];
+          for (var i=0;i<data['eve_ATA'].length;i++){
+            series_data.push({
+                name:data['eve_ATA'][i],
+                value:data['eve_ATA_num'][i],
+            })
+          }
+          option = {
+            title: {
+                text: '各ATA章节事件数',
+                left: 'center',
+            },
+            //隐藏饼图的横纵坐标
+            xAxis : [{
+                show : false,
+            }],
+            yAxis : [{
+                show : false,
+            }],
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend:{
+                show:true,
+                type:"scroll",
+                orient:'horizontal',
+                left:'center',
+                top:40,
+                data:data['eve_ATA']
+            },
+            color:['red','blue'],
+            series:[{
+                    name:'数量',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '50%'],
+                    label:{
+                        normal:{
+                            formatter:'{b|{b}} {per|{d}%}',
+                            rich:{
+                                b:{
+                                    color:'white',
+                                    fontSize:14,
+                                    lineHeight:33
+                                },
+                                per:{
+                                    color:"#00B4FB",
+                                    fonSize:14,
+                                    borderRadius:2
+                                }
+                            }
+                        }
+                    },
+                    data:series_data,
+                    itemStyle:{
+                        emphasis:{
+                            shadowBlur:10,
+                            shadowOffsetX:0,
+                            shadowColor:'rbdd(0,0,0,0.5)'
+                        }
+                    }
+            }]
+          };
+        }
+        return option;
+    };
+    //绘制改变飞机架次号和日期后的图像
+    $("#search").click(function(){
+      $.post(urlparam,
+      {
+        start_y:$("#start_y").find("option:selected").text(),
+        start_m:$("#start_m").find("option:selected").text(),
+        start_d:$("#start_d").find("option:selected").text(),
+        end_y:$("#end_y").find("option:selected").text(),
+        end_m:$("#end_m").find("option:selected").text(),
+        end_d:$("#end_d").find("option:selected").text(),
+        plane_no:$("#plane_no").find("option:selected").text()
+        //jQuery获取select标签选中的option中的文本
+      },
+      function(data){
+        etype = $("#echarts_type").find("option:selected").val()
+        option = choose_option(etype,data);
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('events_all'));
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+      }) 
+ 
+    });
+    
+    //更改echart类型也要重新绘制
+    $("#echarts_type").change(function(data){
+      $.post(urlparam,
+      {
+        start_y:$("#start_y").find("option:selected").text(),
+        start_m:$("#start_m").find("option:selected").text(),
+        start_d:$("#start_d").find("option:selected").text(),
+        end_y:$("#end_y").find("option:selected").text(),
+        end_m:$("#end_m").find("option:selected").text(),
+        end_d:$("#end_d").find("option:selected").text(),
+        plane_no:$("#plane_no").find("option:selected").text()
+        //jQuery获取select标签选中的option中的文本
+      },
+      function(data){
+        etype = $("#echarts_type").find("option:selected").val()
+        option = choose_option(etype,data);
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('events_all'));
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+      });
+    });
+    //设置tab页面中的datatable表格
+//    function initDataTable(lengthMenuParam,urlParam,columnsParam){
+//      return{
+//          "pagingType":"simple_numbers",
+//          destroy:true,
+//          "searching":false,
+//          serverSide:true,//开启服务器模式
+//          bProcessing:true,//开启读取服务器数据时显示正在加载中......
+//          sAjaxSource:urlParam,//ajax向后端请求的网址
+//          "fnServerData":function(sSource,aoData,fnCallback){
+//            $.ajax({
+//                "dataType":'json',
+//                "type":"post",
+//                "url":sSource,
+//                "data":{"aoData":JSON.stringify(aoData)},
+//                "success":function(resp){
+//                    fnCallback(resp);
+//                },
+//            });
+//          },
+//          "columns":columnsParam,
+//          dom:"flrtip",
+//          "language": {
+//            "sProcessing": "处理中...",
+//            "sLengthMenu": "显示 _MENU_ 项结果",
+//            "sZeroRecords": "没有匹配结果",
+//            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+//            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+//            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+//            "sInfoPostFix": "",
+//            "sSearch": "搜索:",
+//            "sUrl": "",
+//            "sEmptyTable": "表中数据为空",
+//            "sLoadingRecords": "载入中...",
+//            "sInfoThousands": ",",
+//            "oPaginate": {
+//                "sFirst": "首页",
+//                "sPrevious": "上页",
+//                "sNext": "下页",
+//                "sLast": "末页"
+//            },
+//            "oAria": {
+//                "sSortAscending": ": 以升序排列此列",
+//                "sSortDescending": ": 以降序排列此列"
+//            },
+//          },
+//      }
+//    };
+//
+//    var lengthMenuParam = 
+//        '<div class="btn-group">'
+//        '</div>';
+//    
+//    var columnsParam_event_record = [
+//        {data:"event_description"},
+//        {data:"occurrence_time"},
+//        {data:"ata_chapter"},
+//        {data:"troubleshooting"},
+//        {data:"event_state"},
+//        {data:"problem_info_id"},  
+//    ];
+//    var table_event_record = $("#event_record").DataTable(initDataTable(lengthMenuParam, urlParam, columnsParam_event_record));
+//    
+});
+</script>
