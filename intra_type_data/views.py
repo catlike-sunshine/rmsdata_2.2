@@ -14,6 +14,8 @@ import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 import json
 import decimal
+import datetime
+import time
 
 
 class intra_type_data_view(ListView):
@@ -47,24 +49,6 @@ class C919_5G_view(ListView):
 
 class resume_10101_view(ListView):
     template_name = "resume_10101.html"
-    context_object_name = "text"
-
-    def get_queryset(self):
-        now = datetime.datetime.now()
-        text={'hello':'Hello world!','name':'J','nowtime':now}
-        return(text)
-
-class event_list_5G_view(ListView):
-    template_name = "event_list_5G.html"
-    context_object_name = "text"
-
-    def get_queryset(self):
-        now = datetime.datetime.now()
-        text={'hello':'Hello world!','name':'J','nowtime':now}
-        return(text)
-
-class problem_list_5G_view(ListView):
-    template_name = "problem_list_5G.html"
     context_object_name = "text"
 
     def get_queryset(self):
@@ -526,3 +510,158 @@ def get_problem_info_list(request):
         dataTable['aaData'] = result_data
         return HttpResponse(json.dumps(dataTable, cls=DecimalEncoder, ensure_ascii=False),
                             content_type="application/json")
+    
+    
+#定义获取C919全部架机注册号的方法
+def get_C919_fleet():
+    C919_No = aircraft_info.objects.all()
+    C919_fleet = []
+    #得到全部架机的航空器注册号
+    for ls in C919_No:
+        C919_fleet.append(ls.aircraft_serial_number)
+    return C919_fleet
+    
+    
+#C919_5G页面
+@csrf_exempt
+def get_C919_5G(request):
+#    print(request)
+#    #判断请求方法是GET还是POST
+    if request.method == 'GET':    
+        C919_fleet = get_C919_fleet()
+        eve_num = []
+        for plane in C919_fleet:
+            eves = event_info.objects.filter(aircraft_info=plane)
+            eve_num.append(len(eves))
+            
+        plane_eves = event_info.objects.filter(aircraft_info='10101')
+        eve_ATA = []
+        eve_ATA_num = []
+        for eve in plane_eves:
+            temp = str(eve.ATA).split('.')[0]#ATA章节号是25.0.0的形式，只取最前面的第一级ATA章节号
+            if temp not in eve_ATA:
+                eve_ATA.append(temp)
+        eve_ATA.sort()#对ATA章节号进行排序
+        for ata in eve_ATA:
+            plane_eves_ata=[i for i in plane_eves if str(i.ATA).split('.')[0]==ata]
+            eve_ATA_num.append(len(plane_eves_ata))
+        
+        eve_ATA = eve_ATA#放置x轴可选择的数据
+        eve_ATA_num = eve_ATA_num#放置y轴可选择的数据
+        print(eve_ATA)
+        print(eve_ATA_num)
+        return render(request,"C919_5G.html",{'C919_fleet':C919_fleet,'eve_num':eve_num,'eve_ATA':eve_ATA,'eve_ATA_num':eve_ATA_num})
+
+
+
+#resume_10101页面
+@csrf_exempt   
+def get_resume_10101(request):
+    
+    if request.method == 'GET':
+        years = [2017,2018,2019]
+        months = [1,2,3,4,5,6,7,8,9,10,11,12]
+        days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+        C919_fleet = get_C919_fleet()
+        C919_fleet.sort()
+        C919_fleet.append('所有架次')
+        #传递绘制原始图像的数据
+        plane_eves = event_info.objects.all()
+        eve_ATA_origin = []
+        eve_ATA_num_origin = []
+        for eve in plane_eves:
+            temp = str(eve.ATA).split('.')[0]#ATA章节号是25.0.0的形式，只取最前面的第一级ATA章节号
+            if temp not in eve_ATA_origin:
+                eve_ATA_origin.append(temp)
+        eve_ATA_origin.sort()#对ATA章节号进行排序
+        for ata in eve_ATA_origin:
+            plane_eves_ata=[i for i in plane_eves if str(i.ATA).split('.')[0]==ata]
+            eve_ATA_num_origin.append(len(plane_eves_ata))
+        return render(request,"resume_10101.html",{'years':years,'months':months,'days':days,'C919_fleet':C919_fleet,'eve_ATA_origin':eve_ATA_origin,'eve_ATA_num_origin':eve_ATA_num_origin})
+    
+    else:
+        start_y = request.POST.get("start_y")
+        start_m = request.POST.get("start_m")
+        start_d = request.POST.get("start_d")
+        end_y = request.POST.get("end_y")
+        end_m = request.POST.get("end_m")
+        end_d = request.POST.get("end_d")
+        plane_no = request.POST.get("plane_no")
+        start_date_str = start_y+'-'+start_m+'-'+start_d
+        start_date = datetime.datetime.strptime(start_date_str,'%Y-%m-%d')#起始时间
+        end_date_str = end_y+'-'+end_m+'-'+end_d
+        end_date = datetime.datetime.strptime(end_date_str,'%Y-%m-%d')#结束时间
+
+        
+        #比较飞机架次号取出合适的数据
+        if plane_no=="所有架次":
+            eves = event_info.objects.all()
+        else:
+            eves = event_info.objects.filter(aircraft_info=plane_no)
+        
+        #在比较飞机架次的基础上比较时间取出合适的数据
+        eve_chosen = []#符合架次号和时间的数据
+        for eve in eves:
+            temp_t = eve.occurrence_time.replace(tzinfo=None)#把时区转为不含时区的datetime
+            if ((temp_t-start_date).days>=0) & ((temp_t-end_date).days<=0):
+                eve_chosen.append(eve)
+        
+        data = {}#存储返回页面的数据
+        eve_ATA = []#符合条件的数据的所有事件的ATA章节范围
+        eve_ATA_num = []#各ATA章节的事件数
+        for eve in eve_chosen:
+            temp = str(eve.ATA).split('.')[0]#ATA章节号是25.0.0的形式，只取最前面的第一级ATA章节号
+            if temp not in eve_ATA:
+                eve_ATA.append(temp)
+        eve_ATA.sort()#对ATA章节号进行排序
+        data['eve_ATA'] = eve_ATA
+        for ata in eve_ATA:
+            eve_chosen_ata=[i for i in eve_chosen if str(i.ATA).split('.')[0]==ata]
+            eve_ATA_num.append(len(eve_chosen_ata))
+        data['eve_ATA_num'] = eve_ATA_num
+        
+#        #处理datatable的数据
+#        aodata = json.loads(request.POST.get("aoData"))
+#        print(aodata)
+#        aodata_new = {}#存放aodata得到的各个参数
+#        sSearch_list = []#存放各列搜索框的输入内容
+#        for item in aodata:
+#            if item['name'] == "sEcho":
+#                sEcho = int(item['value'])#客户端发送的标识
+#            if item['name'] == "iDisplayStart":
+#                iDisplayStart = int(item['value'])#起始索引
+#            if item['name'] == "iDisplayLength":
+#                iDisplayLength = int(item['value'])#每页显示的行数
+#            if item['name'] == "sSearch":
+#                sSearch = (item['value']).strip()#整体搜索内容
+#            #sSearch_list存放各列搜索内容
+#            for i in range(column_length):
+#                if item['name'] == "sSearch_"+str(i):
+#                    sSearch_list.append((item['value']).strip())
+#                    
+#                # 对eve_chosen进行分页
+#        iDisplayLength = 10#设置为每10个分一页
+#        paginator = Paginator(eve_chosen,iDisplayLength)
+#        # 把数据分成10个一页,这里的result指分页后的每一页的数据
+#        try:
+#            result = paginator.page(iDisplayStart/10+1)
+#        #请求页数错误
+#        except PageNotAnInteger:
+#            result = paginator.page(1)
+#        except EmptyPage:
+#            result = paginator.page(paginator.num_pages)
+#            
+#        table_data = []
+#        #result存储datatable返回的一页的数据
+#        for eve in result:
+#            data={
+#                "event_description": eve.event_description,
+#                "occurrence_time": str(eve.occurrence_time),
+#                "ata_chapter": eve.ATA.chapter,
+#                "troubleshooting": eve.troubleshooting,
+#                "event_state": eve.event_state,
+#            }
+#            table_data.append(data)
+#        print(data['aaData'])
+#        data['aaData'] = table_data 
+        return HttpResponse(json.dumps(data,cls=DecimalEncoder,ensure_ascii=False), content_type="application/json")

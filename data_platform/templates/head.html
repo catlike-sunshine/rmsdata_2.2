@@ -20,6 +20,7 @@
   <script type="text/javascript" src="{% static 'js/semantic.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/mineDatatable.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
 
 <!--  <script type="text/javascript" src="{% static 'js/dataTables.scroller.min.js"></script>-->
   <!--[if lt IE 9]>
@@ -52,7 +53,7 @@
 </head>
 <body>
 
-  <div class="ui primary inverted stackable menu"><!--这里去掉了fixed，为了适应手机页面-->
+  <div class="ui primary inverted fixed stackable menu"><!--这里去掉了fixed，为了适应手机页面-->
     <div class="ui container">
       <a href="{% url 'data_platform:index' %}" class="header item">
         <img class="logo" src="{% static 'logo.png' %}">
