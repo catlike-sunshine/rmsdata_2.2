@@ -151,6 +151,7 @@
       </div>
       <a class="item" href="{% url 'data_platform:similar_event' %}">运营事件评估</a>
       <a class="item" href="{% url 'data_platform:EICAS' %}">EICAS</a>
+      <a class="item" href="{% url 'data_platform:get_report_list' %}">效能月报</a>
       <div class="ui simple dropdown right item">
             {% if user.is_authenticated %}
             {{ user.first_name }}<i class="dropdown icon"></i>

@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^model_data/',views.get_model_data.as_view(), name="model_data"),
     url(r'^failure_mode_bank_list/(?P<acmodel_aircraft_type>\w+)$',views.get_failure_mode_bank_list, name="failure_mode_bank_list"),
     url(r'^download/(?P<category_slug>\d+)$', views.get_file_list.as_view(), name="get_file_list"),
+    url(r'^report/', views.get_report_list.as_view(), name="get_report_list"),
     url(r'^arc_list/',views.get_arc_list, name="get_arc_list"),
     url(r'^cahm/',views.cahm.as_view(), name="cahm"),
     

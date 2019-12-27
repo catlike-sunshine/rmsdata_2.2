@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from data_platform.models import *
 from type_data.models import *
 from term.models import *
-from dlfile.models import file, file_category
+from dlfile.models import file, file_category, report
 
 import json
 import decimal
@@ -201,11 +201,22 @@ class get_model_data(ListView):
 class get_file_list(LoginRequiredMixin,View):
 	model = file
 	template_name = "download.html"
-	def  get(self, request, category_slug):
+	def get(self, request, category_slug):
 		categories =  file_category.objects.all()
 		category = get_object_or_404(file_category, slug = category_slug)
 		files = file.objects.filter(category=category)
 		return render(request, self.template_name, {'categories': categories, 'category': category, 'files': files})
+
+
+#获取月报文件列表及相关的介绍信息
+class get_report_list(LoginRequiredMixin,View):
+	model = report
+	template_name = "report.html"
+	def get(self, request):
+		reports = report.objects.all()
+		latereport = report.objects.last()
+		return render(request, self.template_name, {'reports': reports, 'latereport': latereport})
+
 
 #获取缩略语列表
 @csrf_exempt

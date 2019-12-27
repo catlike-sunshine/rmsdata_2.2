@@ -1,0 +1,139 @@
+{% load static %}
+{% include "head.html" %}
+    <!-- Page Contents -->
+    <div class = "ui grid">
+        <div class = "sixteen wide column">
+            <div class="ui teal inverted vertical masthead center aligned segment">
+                <div class="ui text container">
+                     <h2>COMAC Fleets Operational Effectiveness Monthly Report</h2>
+                    <h1 style="color: #8abc1e">中国商飞全机队运行效能月报下载</h1>
+                    <p>总结了中国商飞全机队的运行效能状态及进展。全机队包括所有型号的试飞机和交付客户的运营。
+                        运行效能包括在试验、试飞、运营等各个阶段的各种运行状况和主要故障问题状况。</p>
+                    <a href="{{latereport.file.url}}",style="color:white">最新一期</a>
+                </div>
+            </div>
+        </div>
+        <div class = 'column centered row'>
+            <div class = 'thirteen wide column'>
+            <table id="accident" class="ui striped table">
+                  <thead>
+                  <tr>
+                    <th>发布日期</th>
+                    <th>说明</th>
+                    <th>下载</th>
+                  </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>发布日期</th>
+                      <th>说明</th>
+                      <th>下载</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    {% for report in reports %}
+                      <tr>
+                        <td>{{report.date}}</td>
+                        <td>{{report.content | safe}}</td>
+                        <td><a class="section" href="{{report.file.url}}">下载</a></td>
+                     </tr>
+                   {% endfor %}
+                  </tbody>
+              </table>
+              <p>
+                <button id="addRow" class = "ui button">添加行</button>
+                <button id="delRow" class = "ui button">删除选中的行</button>
+              </p>
+            </div>
+        </div>
+    </div>
+
+<!-- Always Put Js and Css before the closing tag </body> to maintain consistency. Don't put before the tag <body>, or it won't make any use.-->
+ <!-- Js for datatables. -->
+<script type="text/javascript">
+    $(document).ready(function() {
+      var table = $('#accident').DataTable({
+          "language": {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+          }
+     });
+
+    //分列查找内容
+    // Setup - add a text input to each footer cell
+    $('#accident tfoot th').each( function () {
+        var title = $('#accident thead th').eq( $(this).index() ).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    });
+
+    // Apply the search
+    table.columns().eq( 0 ).each( function ( colIdx ) {
+        $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+            table.column( colIdx ).search( this.value ).draw();
+        });
+    });
+    //将tfoot挪到表格上方
+    $('#accident tfoot tr').appendTo('#accident thead');
+
+    //高亮鼠标停留的行和列
+    var lastIdx = null;
+    $('#accident tbody')
+        .on( 'mouseover', 'td', function () {
+            var colIdx = table.cell(this).index().column;
+            if ( colIdx !== lastIdx ) {
+                $( table.cells().nodes() ).removeClass( 'highlight' );
+                $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
+            }
+        } )
+        .on( 'mouseleave',  function () {
+            $( table.cells().nodes() ).removeClass( 'highlight' );
+        } );
+
+
+    } );
+</script>
+
+<!-- css for datatables. -->
+<style type="text/css">
+    .highlight {
+        background-color: skyblue!important;
+    }
+</style>
+
+<!--Semantic ui sidebar display-->
+<script>
+    $('#sidebar').click(function(){
+
+        $('.ui.sidebar').sidebar('toggle');
+    });
+</script>
+
+<style type = "text/css">
+       .masthead.segment {
+      min-height: 300px;
+      padding: 1em 0em;
+    }
+</style>
+
+</body>
+{% include "foot.html" %}

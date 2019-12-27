@@ -1,4 +1,5 @@
-from extra_apps import xadmin 
+from dlfile.models import report
+from extra_apps import xadmin
 from .models import acmodel
     
 class acmodel_Admin(object):
@@ -8,3 +9,8 @@ class acmodel_Admin(object):
 xadmin.site.register(acmodel, acmodel_Admin)
 
 
+class report_Admin(object):
+    list_display = ('content', 'file')
+    list_filter = ('content',)
+    search_fields = ('content',)
+xadmin.site.register(report, report_Admin)
