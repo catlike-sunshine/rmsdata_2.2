@@ -554,7 +554,7 @@ def get_C919_5G(request):
 
 
 
-#resume_10101页面
+#resume_10101页面基础内容和echarts图像
 @csrf_exempt   
 def get_resume_10101(request):
     
@@ -577,9 +577,11 @@ def get_resume_10101(request):
         for ata in eve_ATA_origin:
             plane_eves_ata=[i for i in plane_eves if str(i.ATA).split('.')[0]==ata]
             eve_ATA_num_origin.append(len(plane_eves_ata))
+        
         return render(request,"resume_10101.html",{'years':years,'months':months,'days':days,'C919_fleet':C919_fleet,'eve_ATA_origin':eve_ATA_origin,'eve_ATA_num_origin':eve_ATA_num_origin})
     
     else:
+#        print(request.POST)
         start_y = request.POST.get("start_y")
         start_m = request.POST.get("start_m")
         start_d = request.POST.get("start_d")
@@ -620,48 +622,110 @@ def get_resume_10101(request):
             eve_ATA_num.append(len(eve_chosen_ata))
         data['eve_ATA_num'] = eve_ATA_num
         
-#        #处理datatable的数据
-#        aodata = json.loads(request.POST.get("aoData"))
-#        print(aodata)
-#        aodata_new = {}#存放aodata得到的各个参数
-#        sSearch_list = []#存放各列搜索框的输入内容
-#        for item in aodata:
-#            if item['name'] == "sEcho":
-#                sEcho = int(item['value'])#客户端发送的标识
-#            if item['name'] == "iDisplayStart":
-#                iDisplayStart = int(item['value'])#起始索引
-#            if item['name'] == "iDisplayLength":
-#                iDisplayLength = int(item['value'])#每页显示的行数
-#            if item['name'] == "sSearch":
-#                sSearch = (item['value']).strip()#整体搜索内容
-#            #sSearch_list存放各列搜索内容
-#            for i in range(column_length):
-#                if item['name'] == "sSearch_"+str(i):
-#                    sSearch_list.append((item['value']).strip())
-#                    
-#                # 对eve_chosen进行分页
-#        iDisplayLength = 10#设置为每10个分一页
-#        paginator = Paginator(eve_chosen,iDisplayLength)
-#        # 把数据分成10个一页,这里的result指分页后的每一页的数据
-#        try:
-#            result = paginator.page(iDisplayStart/10+1)
-#        #请求页数错误
-#        except PageNotAnInteger:
-#            result = paginator.page(1)
-#        except EmptyPage:
-#            result = paginator.page(paginator.num_pages)
-#            
-#        table_data = []
-#        #result存储datatable返回的一页的数据
-#        for eve in result:
-#            data={
-#                "event_description": eve.event_description,
-#                "occurrence_time": str(eve.occurrence_time),
-#                "ata_chapter": eve.ATA.chapter,
-#                "troubleshooting": eve.troubleshooting,
-#                "event_state": eve.event_state,
-#            }
-#            table_data.append(data)
-#        print(data['aaData'])
-#        data['aaData'] = table_data 
         return HttpResponse(json.dumps(data,cls=DecimalEncoder,ensure_ascii=False), content_type="application/json")
+    
+    
+#resume_10101页面的月份和日期选择
+@csrf_exempt   
+def getdate(request):
+    if request.method == 'GET':
+        month = request.GET.get('month')
+        days_m = 31
+        for m in [4,6,9,11]:
+            if month == str(m):
+                days_m = 30
+                break
+        if month == '2':
+            days_m = 28
+        return HttpResponse(json.dumps(days_m,cls=DecimalEncoder,ensure_ascii=False), content_type="application/json")
+    
+    
+#resume_10101页面的datatable
+@csrf_exempt   
+def getdatatable(request):
+    if request.method == 'POST':
+        print(request.POST)
+        start_y = request.POST.get("start_y")
+        start_m = request.POST.get("start_m")
+        start_d = request.POST.get("start_d")
+        end_y = request.POST.get("end_y")
+        end_m = request.POST.get("end_m")
+        end_d = request.POST.get("end_d")
+        plane_no = request.POST.get("plane_no")
+        start_date_str = start_y+'-'+start_m+'-'+start_d
+        start_date = datetime.datetime.strptime(start_date_str,'%Y-%m-%d')#起始时间
+        end_date_str = end_y+'-'+end_m+'-'+end_d
+        end_date = datetime.datetime.strptime(end_date_str,'%Y-%m-%d')#结束时间
+
+        
+        #比较飞机架次号取出合适的数据
+        if plane_no=="所有架次":
+            eves = event_info.objects.all()
+        else:
+            eves = event_info.objects.filter(aircraft_info=plane_no)
+        
+        #在比较飞机架次的基础上比较时间取出合适的数据
+        eve_chosen = []#符合架次号和时间的数据
+        for eve in eves:
+            temp_t = eve.occurrence_time.replace(tzinfo=None)#把时区转为不含时区的datetime
+            if ((temp_t-start_date).days>=0) & ((temp_t-end_date).days<=0):
+                eve_chosen.append(eve)
+        
+        data = {}#存储返回页面的数据
+        eve_ATA = []#符合条件的数据的所有事件的ATA章节范围
+        eve_ATA_num = []#各ATA章节的事件数
+        for eve in eve_chosen:
+            temp = str(eve.ATA).split('.')[0]#ATA章节号是25.0.0的形式，只取最前面的第一级ATA章节号
+            if temp not in eve_ATA:
+                eve_ATA.append(temp)
+        eve_ATA.sort()#对ATA章节号进行排序
+        data['eve_ATA'] = eve_ATA
+        for ata in eve_ATA:
+            eve_chosen_ata=[i for i in eve_chosen if str(i.ATA).split('.')[0]==ata]
+            eve_ATA_num.append(len(eve_chosen_ata))
+        data['eve_ATA_num'] = eve_ATA_num
+        
+        #处理datatable的数据
+        #获取datatable传输的POST参数
+        aodata = json.loads(request.POST.get('aoData'))
+        for item in aodata:
+            if item['name'] == "sEcho":
+                sEcho = int(item['value'])#客户端发送的标识
+            if item['name'] == "iDisplayStart":
+                iDisplayStart = int(item['value'])#起始索引
+            if item['name'] == "sSearch":
+                sSearch = (item['value']).strip()#整体搜索内容
+                    
+        # 对eve_chosen进行分页
+        iDisplayLength = 10#设置为每10个分一页
+        paginator = Paginator(eve_chosen,iDisplayLength)
+        # 把数据分成10个一页,这里的result指分页后的每一页的数据
+        try:
+            result = paginator.page(iDisplayStart/10+1)
+        #请求页数错误
+        except PageNotAnInteger:
+            result = paginator.page(1)
+        except EmptyPage:
+            result = paginator.page(paginator.num_pages)
+        
+        #获取翻页时的第X项到第X项
+        #未过滤前的数据总条数total records without any filtering/limits
+        data['iTotalRecords'] = len(event_info.objects.all())
+        data['sEcho'] = sEcho + 1
+        #过滤后的数据总条数filtered result count
+        data['iTotalDisplayRecords'] = len(eve_chosen)
+
+        table_data = []
+        #result存储datatable返回的一页的数据
+        for eve in result:
+            eve_data={
+                "event_description": eve.event_description,
+                "occurrence_time": str(eve.occurrence_time)[:10],
+                "ata_chapter": eve.ATA.chapter,
+                "troubleshooting": eve.troubleshooting,
+                "event_state": eve.event_state,
+            }
+            table_data.append(eve_data)
+        data['aaData'] = table_data
+        return HttpResponse(json.dumps(data,cls=DecimalEncoder,ensure_ascii=False), content_type="application/json")
+    

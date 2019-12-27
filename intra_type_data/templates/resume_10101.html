@@ -108,7 +108,7 @@
                  <a class="item" data-tab="second" style="color:black"><h3>飞行记录</h3></a>
               </div>
               <div class='three wide field'>
-                 <a class="item" data-tab="third" style="color:black"><h3>事件记录</h3></a>
+                 <a class="item" id="tab_event_record" data-tab="third" style="color:black"><h3>事件记录</h3></a>
               </div>
               <div class='four wide field'>
                  <a class="item" data-tab="forth" style="color:black"><h3>部件失效记录</h3></a>
@@ -161,11 +161,10 @@
               <tbody>
               </tbody>
           </table>
-          <button type='button' style='background-color:skyblue!important;border:0px;width:120px;height:30px;position:relative;top:190px;left:230px'>查看详细信息</button>
           </div>
-          <div class="ui tab segment"  style="border:1px solid #797979;width:620px;height:310px" data-tab="third">
-          <table id="event_record" class="ui striped table" style="width:590px;height:280px">
-              <thead>
+          <div class="ui tab segment" style="border:1px solid #797979;width:620px;height:310px" data-tab="third">
+          <table id="event_record" class="ui striped table">
+              <thead id="event_record_head">
               <tr>
                 <th>问题描述</th>
                 <th>发生时间</th>
@@ -174,10 +173,10 @@
                 <th>关闭情况</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody id="event_record_body">
               </tbody>
           </table>
-          <a href="{% url 'intra_type_data:event_info_list' %}"><button type='button' style='background-color:skyblue!important;border:0px;width:120px;height:30px;position:relative;top:190px;left:230px'>查看详细信息</button></a>
+          <a href="{% url 'intra_type_data:event_info_list' %}"><button id="detail_button" type='button'>查看详细信息</button></a>
           </div>
         </div>
         </div>
@@ -204,7 +203,6 @@
         $('#tab_menu .item').tab();//menu与.item之间一定要有一个空格，才能实现切换tab的功能
     })
     </script>
-</body>
 {% include "foot.html" %}
 
 <script>
@@ -340,7 +338,118 @@ $(document).ready(function(){
         }
         return option;
     };
-    //绘制改变飞机架次号和日期后的图像
+    
+    
+    //设置tab页面中的datatable表格
+    function initDataTable(lengthMenuParam,urlparam,columnsParam){
+      return{
+          "pagingType":"simple_numbers",
+          destroy:true,
+          "searching":false,
+          "bPaginate" : true,// 分页按钮
+          "scroll":true,
+          serverSide:true,//开启服务器模式
+          bProcessing:true,//开启读取服务器数据时显示正在加载中......
+          sAjaxSource:urlparam,//ajax向后端请求的网址
+          "fnServerData":function(sSource,aoData,fnCallback){
+            $.ajax({
+                "dataType":'json',
+                "type":"post",
+                "url":sSource,
+                "data":{"aoData":JSON.stringify(aoData),
+                        start_y:$("#start_y").find("option:selected").text(),
+                        start_m:$("#start_m").find("option:selected").text(),
+                        start_d:$("#start_d").find("option:selected").text(),
+                        end_y:$("#end_y").find("option:selected").text(),
+                        end_m:$("#end_m").find("option:selected").text(),
+                        end_d:$("#end_d").find("option:selected").text(),
+                        plane_no:$("#plane_no").find("option:selected").text()},
+                "success":function(resp){
+                    fnCallback(resp);
+                },
+            });
+          },
+          "columns":columnsParam,
+          dom:"frtip",
+          "language": {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            },
+          },
+      }
+    };
+    
+    
+    //点击事件记录会出现datatable数据
+    $("#tab_event_record").click(function(){ 
+      var lengthMenuParam = 
+        '<div class="btn-group">'
+        '</div>';
+      
+      var urlparam_datatable = "{% url 'intra_type_data:getdatatable' %}";
+        
+      var columnsParam_event_record = [
+            {data:"event_description"},
+            {data:"occurrence_time"},
+            {data:"ata_chapter"},
+            {data:"troubleshooting"},
+            {data:"event_state"}];
+      var table_event_record = $("#event_record").DataTable(initDataTable(lengthMenuParam, urlparam_datatable, columnsParam_event_record));
+    });
+    
+    
+    //更改日期选择框中的月份后，可选择的日子需要更改，如10月有31号，而11月仅有30号
+    $("#start_m").change(function(){
+      $.get("{% url 'intra_type_data:getdate' %}",
+      {
+        month:$(this).find("option:selected").text(),
+        //jQuery获取select标签选中的月份
+      },
+            
+      function(days_m){
+        var content = '';
+        for(let i=1;i<(days_m+1);i++){
+            content += '<option class="start_d_option">'+i+'</option>';
+        }
+        $('#start_d').html(content);
+      })
+    });
+    $("#end_m").change(function(){
+      $.get("{% url 'intra_type_data:getdate' %}",
+      {
+        month:$(this).find("option:selected").text(),
+        //jQuery获取select标签选中的月份
+      },
+            
+      function(days_m){
+        var content = '';
+        for(let i=1;i<(days_m+1);i++){
+            content += '<option class="end_d_option">'+i+'</option>';
+        }
+        $('#end_d').html(content);
+      })
+    });
+    
+    //绘制改变飞机架次号和日期后的echarts图像
     $("#search").click(function(){
       $.post(urlparam,
       {
@@ -350,7 +459,7 @@ $(document).ready(function(){
         end_y:$("#end_y").find("option:selected").text(),
         end_m:$("#end_m").find("option:selected").text(),
         end_d:$("#end_d").find("option:selected").text(),
-        plane_no:$("#plane_no").find("option:selected").text()
+        plane_no:$("#plane_no").find("option:selected").text(),
         //jQuery获取select标签选中的option中的文本
       },
       function(data){
@@ -359,10 +468,28 @@ $(document).ready(function(){
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('events_all'));
 
-        // 使用刚指定的配置项和数据显示图表。
+        // 使用刚指定的配置项和数据显示echarts图像
         myChart.setOption(option);
-      }) 
- 
+      })
+    });
+    
+    
+    //绘制改变飞机架次号和日期后的datatable图表
+    //需重新设置views.py和url来绘制datatable
+    $("#search").click(function(){
+      var lengthMenuParam = 
+        '<div class="btn-group">'
+        '</div>';
+      
+      var urlparam_datatable = "{% url 'intra_type_data:getdatatable' %}";
+          
+      var columnsParam_event_record = [
+            {data:"event_description"},
+            {data:"occurrence_time"},
+            {data:"ata_chapter"},
+            {data:"troubleshooting"},
+            {data:"event_state"}];
+      var table_event_record = $("#event_record").DataTable(initDataTable(lengthMenuParam, urlparam_datatable, columnsParam_event_record));
     });
     
     //更改echart类型也要重新绘制
@@ -387,69 +514,63 @@ $(document).ready(function(){
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
       });
+
     });
-    //设置tab页面中的datatable表格
-//    function initDataTable(lengthMenuParam,urlParam,columnsParam){
-//      return{
-//          "pagingType":"simple_numbers",
-//          destroy:true,
-//          "searching":false,
-//          serverSide:true,//开启服务器模式
-//          bProcessing:true,//开启读取服务器数据时显示正在加载中......
-//          sAjaxSource:urlParam,//ajax向后端请求的网址
-//          "fnServerData":function(sSource,aoData,fnCallback){
-//            $.ajax({
-//                "dataType":'json',
-//                "type":"post",
-//                "url":sSource,
-//                "data":{"aoData":JSON.stringify(aoData)},
-//                "success":function(resp){
-//                    fnCallback(resp);
-//                },
-//            });
-//          },
-//          "columns":columnsParam,
-//          dom:"flrtip",
-//          "language": {
-//            "sProcessing": "处理中...",
-//            "sLengthMenu": "显示 _MENU_ 项结果",
-//            "sZeroRecords": "没有匹配结果",
-//            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-//            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-//            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-//            "sInfoPostFix": "",
-//            "sSearch": "搜索:",
-//            "sUrl": "",
-//            "sEmptyTable": "表中数据为空",
-//            "sLoadingRecords": "载入中...",
-//            "sInfoThousands": ",",
-//            "oPaginate": {
-//                "sFirst": "首页",
-//                "sPrevious": "上页",
-//                "sNext": "下页",
-//                "sLast": "末页"
-//            },
-//            "oAria": {
-//                "sSortAscending": ": 以升序排列此列",
-//                "sSortDescending": ": 以降序排列此列"
-//            },
-//          },
-//      }
-//    };
-//
-//    var lengthMenuParam = 
-//        '<div class="btn-group">'
-//        '</div>';
-//    
-//    var columnsParam_event_record = [
-//        {data:"event_description"},
-//        {data:"occurrence_time"},
-//        {data:"ata_chapter"},
-//        {data:"troubleshooting"},
-//        {data:"event_state"},
-//        {data:"problem_info_id"},  
-//    ];
-//    var table_event_record = $("#event_record").DataTable(initDataTable(lengthMenuParam, urlParam, columnsParam_event_record));
-//    
+
 });
 </script>
+
+
+<!--设置tab页面datatable的格式-->
+<style type="text/css">
+#event_record {
+    table-layout: fixed;
+    text-align: center;
+/*    width: 100%;*/
+    width:590px;
+    height:170px;
+}
+#event_record_head th {
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+/*    对于显示不完的内容用...表示*/
+    overflow: hidden;
+/*    是否有显示条*/
+}
+#event_record_body td {
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+#event_record_body {
+    display: block;
+    height:170px;
+    overflow-y: scroll;
+}
+#event_record_head tr, #event_record_body tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+    
+#detail_button {
+    background-color:skyblue!important;
+    border:0px;
+    width:120px;
+    height:30px;
+    position:relative;
+    top:-30px;
+    left:230px;
+}
+    
+#event_record_paginate {
+    position:relative;
+    left:-80px;
+}
+#event_record_info {
+    position:relative;
+    left:-80px;
+}
+</style>
