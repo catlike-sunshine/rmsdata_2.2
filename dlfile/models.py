@@ -30,3 +30,16 @@ class file(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class report(models.Model):
+    content = RichTextField("数据说明")
+    date = models.DateField("数据产生时间")
+    file = models.FileField(upload_to='report', blank=True)
+
+    class Meta:
+        verbose_name = '月报列表'
+        verbose_name_plural = '月报列表'
+
+    def __str__(self):
+        return self.content
