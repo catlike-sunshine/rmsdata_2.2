@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^report/', views.get_report_list.as_view(), name="get_report_list"),
     url(r'^arc_list/',views.get_arc_list, name="get_arc_list"),
     url(r'^cahm/',views.cahm.as_view(), name="cahm"),
+    url(r'^update_notes/',views.update_notes.as_view(), name="update_notes"),
     
     ##相似机型第一期数据------------------------------------------------------------------------------
     url(r'^aircraft_info_list/(?P<acmodel_aircraft_type>\w+)$',views.get_aircraft_info_list, name="aircraft_info_list"),
