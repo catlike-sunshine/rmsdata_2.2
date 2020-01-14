@@ -78,9 +78,9 @@
             <div class = "item">
               <a style = "color:black" >CR929</a>
             </div>
-            <div class = "item">
+            <!--<div class = "item">
               <a style = "color:black" >公务机</a>
-            </div>
+            </div>-->
         </div>
       </div>
       <div class="ui simple dropdown item">
@@ -150,8 +150,9 @@
         </div>
       </div>
       <a class="item" href="{% url 'data_platform:similar_event' %}">运营事件评估</a>
-      <a class="item" href="{% url 'data_platform:EICAS' %}">EICAS</a>
+      <!--<a class="item" href="{% url 'data_platform:EICAS' %}">EICAS</a>-->
       <a class="item" href="{% url 'data_platform:get_report_list' %}">效能月报</a>
+      <a class="item" href="{% url 'data_platform:update_notes' %}">更新说明</a>
       <div class="ui simple dropdown right item">
             {% if user.is_authenticated %}
             {{ user.first_name }}<i class="dropdown icon"></i>

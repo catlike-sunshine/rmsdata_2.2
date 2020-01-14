@@ -2023,3 +2023,12 @@ def get_speech_recognition(request):
 #        	}
 #
 #        	return Response(data=data, status=status.HTTP_200_OK)
+
+class update_notes(ListView):
+    template_name='update_notes.html'
+    context_object_name='text'
+
+    def get_queryset(self):
+        now=datetime.datetime.now()
+        text={'hello':'Hello world!','name':'J','nowtime':now}
+        return(text)

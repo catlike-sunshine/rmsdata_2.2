@@ -2,58 +2,160 @@
 {% include "head.html" %}
 
 
-
-<div class="ui main container">
+<!--<div class="ui main container">
     <h1>特性工程大数据平台</h1>
     <div class="ui text container">
       <p>特性工程大数据平台提供特性工程各专业在型号研制全寿命周期中的数据基础.</p>
-      <p>现在是: {{ text.nowtime | date }} </p>
-      <p>欢迎...</p>
-    </div>
+    </div> 
+</div>-->
+<br><br><br><br><br>
+<div style='text-align: center;font-weight: normal;'>
+  <h1>特性工程大数据平台</h1>
+  <br>
+    <div>
+      <p>特性工程大数据平台提供特性工程各专业在型号研制全寿命周期中的数据基础</p>
+    </div> 
     <br>
-    <br>
-    <div class="ui container">
-      <div class='ui centered card'>  
-        <div class="ui card">
-            <div class="content">
-              <div class="header" style=color:deepskyblue >特性大数据平台更新了</div>
-              <br>
-              <div class="ui test container">
-                <div class="ui ordered list">
-                  <div class="item">新上线了C919系统划分表（ATA），基本信息表及试飞事件清单</div>
-                  <br/>
-                  <div class="item">新上线了事故事件情况，可以在相似机型数据>异常事件>事故事件中查看</div>
-                  <br/>
-                  <div class="item">Bug fixed: 修复了部分网页打开过慢甚至崩溃的情况</div>
-                </div>
-                <br/>
-                <br/>
-                <div>详细更新信息请点击下方了解更多</div>
-              </div>
-            </div>
-            <div class="extra content">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <div class="ui blue button">
-              <a href="{% url 'data_platform:update_notes' %}" style=color:white>了解更多</a> 
-              </div>
-                <div class="right floated author">
-                  <img class="ui avatar image" src="{% static 'images/login/icon.png' %}"> SIA
-                </div>
-          </div>
-        </div>
-      </div>    
-    </div>
-  <p><strong class="Afghanistan flag"> </strong></p>
 </div>
+<div style="text-align: center;
+border: 1px solid gray;
+width:800px;
+height:25px;
+border-radius:5px;
+margin:auto;">
+  <p>更新通知：1.C919架机事件-问题数据链；2.相似事件查找功能；3.更多数据可视化功能；4.效能月报下载
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="{% url 'data_platform:update_notes' %}">了解更多</a></p>
+</div>
+<br>
+<div class='seven wide column' style="border:none;">
+  <div style="margin-left:85px;">
+  <h4><i class="big plane icon"></i>型号园地</h4>
+    <div class="ui demo tabular menu" style="width:223px;margin-bottom:-1px;"><!-- demo 是自定义的类选择器名称-->
+      <a class="active item" data-tab="first"><p>C919</p></a>
+      <a class="item" data-tab="second"><p>ARJ21</p></a>
+      <a class="item" data-tab="third"><p>CR929</p></a>
+    </div>   
+  </div>
+</div>
+
+<div class="ui bottom attached active tab segment" data-tab="first" style="border:none">
+  <div class="ui divided equal height sixteen column grid" style='margin-left:70px;'>
+    <div class="six wide column " style="border:none;">
+     <h5>架机概况</h5>
+     <table class="ui celled table">
+      <thead>
+        <tr><th>序列号</th>
+        <th>首飞日期</th>
+        <th>总飞行小时</th>
+        <th>总起落次数</th>
+        <th>统计日期</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td>10101</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>10102</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>10103</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>10104</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>10105</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>10106</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <a href="{% url 'intra_type_data:C919_5G' %}"><div class="ui teal tiny button">查看详细</div></a>
+    </div>
+    <div class="four wide column" style="border:none;">
+      <h5>事件概况</h5>
+      <p>1.截止2019年12月底，平台共收录2700余项事件</p>
+      <a href="{% url 'intra_type_data:C919_5G' %}"><div class="ui teal tiny button">查看详细</div></a>
+    </div>
+    <div class="four wide column" style="margin-right:-31px;">
+      <h5>问题概况</h5>
+      <p>截止2019年12月底，平台共收录频发的TOP18问题，部分如下：</p>
+      <p>1. 驾驶员座椅调节功能失效（电动调节功能/腰靠调节/靠背调节）<br>
+        2. 舱门传感器和靶标位移引发DOOR UNSAFE告警<br>
+        3. IDU黑屏<br>
+        4. GIPC故障<br>
+        5. 发动机无派遣/短派遣/长派遣等告警问题
+      </p>
+      <a href="{% url 'intra_type_data:C919_5G' %}"><div class="ui teal tiny button">查看详细</div></a>
+    </div>
+  </div>
+</div>
+
+<div class="ui bottom attached tab segment" data-tab="second" style='margin-left:70px;border:none;'><h4>敬请期待ARJ21数据</h4></div>
+<div class="ui bottom attached tab segment" data-tab="third" style='margin-left:70px;border:none'><h4>敬请期待CR929数据</h4></div> 
+<br>
+<div ui='grid'>
+  <div class='four wide column' style="margin-left:30px;width: 400px;">
+    <div style="margin-left:50px"><h3><i class="big chart bar icon"></i>数读</h3></div>
+  </div>
+</div>
+<br>
+<div style='width:600px;height:20px;margin-left:80px'>
+  <p>2019年1-10期效能月报已发布,欢迎<a href="{% url 'data_platform:get_report_list' %}">下载</a>查阅</p>
+ 
+
+</div>
+
+
+
 {% include "foot.html" %}
+<script src="../../static/js/js_address.js"></script>
+    <script type="text/javascript">
+    //demo 是自定义的类选择器名称
+    $(function (){
+        //jQuery UI的Tab也是这样，可能也许大概说不准也依赖jquery.address
+        $('.demo.menu .item').tab();//menu与.item之间一定要有一个空格，才能实现切换tab的功能
+    })
+</script>
 <!--以下是只在本页面中适用的css和js等内容-->
 <style type="text/css">
-  .ui.text.container  {
+  #div1  {
     text-align: center;
     font-weight: normal;
+  }
+
+  #div2{
+    text-align: center;
+    border: 1px solid gray;
+    width:800px;
+    height:25px;
+    border-radius:5px;
+    margin:auto;
   }
 </style>
