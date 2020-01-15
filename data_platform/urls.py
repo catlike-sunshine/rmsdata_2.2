@@ -52,4 +52,6 @@ urlpatterns = [
     url(r'^similar_event/',views.get_similar_event, name="similar_event"),
     url(r'^EICAS/',views.get_EICAS, name="EICAS"),
     url(r'^speech_recognition/',views.get_speech_recognition, name="speech_recognition"),
+
+    url(r'^ARJ21/', views.get_ARJ21, name="ARJ21"),
 ]

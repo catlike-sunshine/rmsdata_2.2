@@ -56,6 +56,23 @@ class resume_10101_view(ListView):
         text={'hello':'Hello world!','name':'J','nowtime':now}
         return(text)
 
+class ARJ21_view(ListView):
+    template_name = "ARJ21.html"
+    context_object_name = "text"
+
+    def get_queryset(self):
+        now = datetime.datetime.now()
+        text={'hello':'Hello world!','name':'J','nowtime':now}
+        return(text)
+
+class CR929_view(ListView):
+    template_name = "CR929.html"
+    context_object_name = "text"
+
+    def get_queryset(self):
+        now = datetime.datetime.now()
+        text={'hello':'Hello world!','name':'J','nowtime':now}
+        return(text)
 
 # 转化小数
 class DecimalEncoder(json.JSONEncoder):

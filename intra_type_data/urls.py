@@ -19,4 +19,6 @@ urlpatterns = [
     url(r'^problem_info_list/', views.get_problem_info_list, name="problem_info_list"),
     url(r'^event_info/(?P<id>\d+)/', views.get_event_info.as_view(), name="event_info"),
     url(r'^problem_info/(?P<problem_info_id>\d+)/', views.get_problem_info.as_view(), name="problem_info"),
+    url(r'^ARJ21/', views.ARJ21_view.as_view(), name="ARJ21"),
+    url(r'^CR929/', views.CR929_view.as_view(), name="CR929"),
 ]
