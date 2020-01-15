@@ -136,6 +136,15 @@ class get_accident_list(LoginRequiredMixin,ListView):
 	template_name = "accident_list.html"
 	context_object_name = "accident_list"
 
+class get_ARJ21(ListView):
+    template_name = "ARJ21.html"
+    context_object_name = "text"
+
+    def get_queryset(self):
+        now = datetime.datetime.now()
+        text={'hello':'Hello world!','name':'J','nowtime':now}
+        return(text)
+
     
 #获取术语定义列表
 @csrf_exempt

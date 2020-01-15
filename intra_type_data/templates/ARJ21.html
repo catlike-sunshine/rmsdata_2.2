@@ -1,18 +1,18 @@
 {% load static %}
 {% include "head.html" %}
-
 <body>
     <div id='bgp'>
-        <div style='padding-left: 120px;padding-top: 20px;width:350px;'>
-            <h1 >C919</h1>
-            <p>
-                C919大型客机是我国按照国际民航规章自行研制、具有自主知识产权的大型喷气式民用飞机，座级158-168座，
-                航程4075-5555公里。目前，已经完成立项论证、可行性论证、预发展阶段工作，转入工程发展阶段。
-                2015年11月2日完成总装下线。2017年5月5日成功首飞。
+        <div style='padding-left: 120px;padding-top: 50px;width:400px;'>
+            <h1 style='color:silver' >ARJ21</h1>
+            <p style='color:silver'>
+                ARJ21新支线飞机是中国首次按照国际民航规章自行研制、具有自主知识产权的中短程新型涡扇支线飞机，
+                座级78座至90座，航程2225公里至3700公里，主要用于满足从中心城市向周边中小城市辐射型航线的使用。 
+                飞机最大起飞重量40500千克，最大使用高度11900米，最大航程3700公里，
+                设计经济寿命为60000飞行小时/20个日历年。
             </p>
-        </div>
-        
+        </div>     
     </div><!--放背景图-->
+   
     <div class="ui pointing demo menu"><!-- demo 是自定义的类选择器名称-->
         <a class="active item" data-tab="first">单机履历</a>
         <a class="item" data-tab="second">事件清单</a>
@@ -56,7 +56,7 @@
     <div class="ui tab segment" data-tab="second">
         <h2 align=center>记载试飞，取证及运行过程中各方反馈的事件数据</h2>
         <h2 align=center>下面是事件数据的图表展示</h2>
-        <a href="{% url 'intra_type_data:event_info_list' %}">
+        <a href="#">
             <div class="ui right floated button" >查看所有事件</div>
         </a>
     <br>
@@ -65,7 +65,7 @@
     <div class="ui tab segment" data-tab="third">
         <h2 align=center>记载试飞，取证及运行过程中从事件中总结出的具体问题数据</h2>
         <h2 align=center>下面是问题数据的图表展示</h2>
-        <a href="{% url 'intra_type_data:problem_info_list' %}">
+        <a href="#">
             <div class="ui right floated button" >查看所有问题</div>
         </a>
     <br>
@@ -81,106 +81,14 @@
         $('.demo.menu .item').tab();//menu与.item之间一定要有一个空格，才能实现切换tab的功能
     })
     </script>
-</body>
-{% include "foot.html" %}
-
-<script type="text/javascript">
-$(document).ready(function(){
-    var option = {
-        title: {
-            text: '机队事件数量对比',
-            x:"center",
-            y:"top"
-        },
-        tooltip: {},
-        legend: {
-            data:['事件数'],
-            top:"6%"
-        },
-        xAxis: {
-            data:[{% for i in C919_fleet %}{{i}},{% endfor %}]
-        },
-        yAxis: {},
-        series: [{
-            name: '事件数',
-            type: 'bar',
-            data:[{% for i in eve_num %}{{i}},{% endfor %}]
-        }]
-    };
-    var myChart = echarts.init(document.getElementById('events_all'))
-    myChart.setOption(option)
-    
-//    获取鼠标移动到按钮上的图表
-    $("#10101").mouseover(function(){
-        var option = {
-            title: {
-                text: '10101架机分ATA章节事件数',
-                x:"center",
-                y:"top"
-            },
-            tooltip: {},
-            legend: {
-                data:['事件数'],
-                top:"6%"
-            },
-            xAxis: {
-                data:[{% for i in eve_ATA %}{{i}},{% endfor %}]
-            },
-            yAxis: {},
-            series: [{
-                name: '数量',
-                type: 'bar',
-                data:[{% for i in eve_ATA_num %}{{i}},{% endfor %}]
-            }]
-        };   
-
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('events_all'));
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-      });
-    
-//    获取鼠标移开按钮时的图表
-    $("#10101").mouseout(function(){
-      var option = {
-        title: {
-            text: '机队事件数量对比',
-            x:"center",
-            y:"top"
-        },
-        tooltip: {},
-        legend: {
-            data:['事件数']
-        },
-        xAxis: {
-            data:[{% for i in C919_fleet %}{{i}},{% endfor %}]
-        },
-        yAxis: {},
-        series: [{
-            name: '事件数',
-            type: 'bar',
-            data:[{% for i in eve_num %}{{i}},{% endfor %}]
-        }]
-      }; 
-
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('events_all'));
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-    });
-    
-    
-});
-</script>
 <style>
     #bgp{
-        background-image: url('../../static/images/C919.jpg');
+        background-image: url('../../static/images/ARJ21.jpg');
         background-repeat:no-repeat;
         height: 550px;
         background-size:100% 100%;
         margin-top: 32px;
     };
-
 </style>
+</body>
+{% include "foot.html" %}
