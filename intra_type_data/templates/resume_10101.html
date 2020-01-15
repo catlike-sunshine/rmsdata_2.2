@@ -60,21 +60,21 @@
               <div class='four wide field'>
                 <select id="end_y" class="field">
                   {% for y in years %}
-                    <option class="end_y_option">{{y}}</option>
+                    <option class="end_y_option" selected = "False">{{y}}</option>
                   {% endfor %}
                 </select>
               </div>
               <div class='four wide field'>
                 <select id="end_m" class="field">
                   {% for m in months %}
-                    <option class="end_m_option">{{m}}</option>
+                    <option class="end_m_option" selected = "False">{{m}}</option>
                   {% endfor %}
                 </select>
               </div>
               <div class='four wide field'>
                 <select id="end_d" class="field">
                   {% for d in days %}
-                    <option class="end_d_option">{{d}}</option>
+                    <option class="end_d_option" selected = "False">{{d}}</option>
                   {% endfor %}
                 </select>
               </div>
@@ -86,7 +86,7 @@
             <div class='four wide field'>
               <select id="plane_no" class="field">
                   {% for plane in C919_fleet %}
-                    <option class="plane_no_option">{{plane}}</option>
+                    <option class="plane_no_option" selected = "False">{{plane}}</option>
                   {% endfor %}
               </select>
             </div>
