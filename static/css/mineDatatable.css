@@ -6,13 +6,13 @@
 /*    设置搜索框、显示框等位置*/
     .lengthToLeft{
         position:relative;
-        top:-35px;
+        top:-38px;
         left:0px;
     }
     .filterToLeft{
         position:relative;
         top:0px;
-        left:auto;
+        left:900px;
     }
     .buttonToLeft{
         position:relative;
